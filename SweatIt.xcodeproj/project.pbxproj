@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		071467632D3D8632003B0213 /* CoachPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 071467622D3D8632003B0213 /* CoachPage.swift */; };
+		073B967C2D3F888200376ED0 /* WorkoutPageComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073B967B2D3F888200376ED0 /* WorkoutPageComponents.swift */; };
+		077F32C22D3E47A2003BE342 /* ChallengeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077F32C12D3E47A2003BE342 /* ChallengeCard.swift */; };
+		0794B5B52D3C398800B345C5 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5B42D3C398800B345C5 /* HomePage.swift */; };
+		0794B5CA2D3C5C9D00B345C5 /* AppBackgroundBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5C92D3C5C9D00B345C5 /* AppBackgroundBlur.swift */; };
+		0794B5D62D3C840400B345C5 /* PageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5D52D3C840400B345C5 /* PageHeader.swift */; };
+		0794B5D82D3C845000B345C5 /* PageNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5D72D3C845000B345C5 /* PageNavigationBar.swift */; };
+		0794B5DA2D3C848B00B345C5 /* SecondaryHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5D92D3C848B00B345C5 /* SecondaryHeading.swift */; };
+		0794B5DC2D3C84DB00B345C5 /* HomePageComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5DB2D3C84DB00B345C5 /* HomePageComponents.swift */; };
+		0794B5E02D3C86B800B345C5 /* ActivitiesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5DF2D3C86B800B345C5 /* ActivitiesPage.swift */; };
+		0794B5E22D3C8A8600B345C5 /* HealthComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5E12D3C8A8600B345C5 /* HealthComponents.swift */; };
+		07AAFA0C2D3D7CA300B47D04 /* ExerciseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0B2D3D7CA300B47D04 /* ExerciseCard.swift */; };
+		07AAFA0E2D3D7CD400B47D04 /* AccentPageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0D2D3D7CD400B47D04 /* AccentPageHeader.swift */; };
+		07AAFA102D3D7D4800B47D04 /* ExerciseStatsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */; };
+		07AAFA122D3D7D6200B47D04 /* HeadingWithLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA112D3D7D6200B47D04 /* HeadingWithLink.swift */; };
+		07AAFA142D3D7D8A00B47D04 /* StepTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA132D3D7D8A00B47D04 /* StepTrackerView.swift */; };
+		07ABA1642D3E15C8005591B6 /* ProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ABA1632D3E15C8005591B6 /* ProfilePage.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		071467622D3D8632003B0213 /* CoachPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoachPage.swift; sourceTree = "<group>"; };
+		072EEB512D39897D0046B229 /* SweatIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SweatIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		073B967B2D3F888200376ED0 /* WorkoutPageComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutPageComponents.swift; sourceTree = "<group>"; };
+		077F32C12D3E47A2003BE342 /* ChallengeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChallengeCard.swift; sourceTree = "<group>"; };
+		0794B5B42D3C398800B345C5 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
+		0794B5C92D3C5C9D00B345C5 /* AppBackgroundBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBackgroundBlur.swift; sourceTree = "<group>"; };
+		0794B5D52D3C840400B345C5 /* PageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageHeader.swift; sourceTree = "<group>"; };
+		0794B5D72D3C845000B345C5 /* PageNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageNavigationBar.swift; sourceTree = "<group>"; };
+		0794B5D92D3C848B00B345C5 /* SecondaryHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryHeading.swift; sourceTree = "<group>"; };
+		0794B5DB2D3C84DB00B345C5 /* HomePageComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageComponents.swift; sourceTree = "<group>"; };
+		0794B5DF2D3C86B800B345C5 /* ActivitiesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesPage.swift; sourceTree = "<group>"; };
+		0794B5E12D3C8A8600B345C5 /* HealthComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthComponents.swift; sourceTree = "<group>"; };
+		07AAFA0B2D3D7CA300B47D04 /* ExerciseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCard.swift; sourceTree = "<group>"; };
+		07AAFA0D2D3D7CD400B47D04 /* AccentPageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentPageHeader.swift; sourceTree = "<group>"; };
+		07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsPage.swift; sourceTree = "<group>"; };
+		07AAFA112D3D7D6200B47D04 /* HeadingWithLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingWithLink.swift; sourceTree = "<group>"; };
+		07AAFA132D3D7D8A00B47D04 /* StepTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerView.swift; sourceTree = "<group>"; };
+		07ABA1632D3E15C8005591B6 /* ProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePage.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		072EEB632D39897E0046B229 /* Exceptions for "SweatIt" folder in "SweatIt" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 072EEB502D39897D0046B229 /* SweatIt */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		072EEB532D39897D0046B229 /* SweatIt */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				072EEB632D39897E0046B229 /* Exceptions for "SweatIt" folder in "SweatIt" target */,
+			);
+			path = SweatIt;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		072EEB4E2D39897D0046B229 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		072EEB482D39897D0046B229 = {
+			isa = PBXGroup;
+			children = (
+				072EEB532D39897D0046B229 /* SweatIt */,
+				072EEB522D39897D0046B229 /* Products */,
+				0794B5B32D3C397700B345C5 /* SwiftUIScreens */,
+			);
+			sourceTree = "<group>";
+		};
+		072EEB522D39897D0046B229 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				072EEB512D39897D0046B229 /* SweatIt.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0794B5B32D3C397700B345C5 /* SwiftUIScreens */ = {
+			isa = PBXGroup;
+			children = (
+				0794B5B42D3C398800B345C5 /* HomePage.swift */,
+				0794B5C82D3C5C8B00B345C5 /* Components */,
+				0794B5DF2D3C86B800B345C5 /* ActivitiesPage.swift */,
+				07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */,
+				071467622D3D8632003B0213 /* CoachPage.swift */,
+				07ABA1632D3E15C8005591B6 /* ProfilePage.swift */,
+			);
+			path = SwiftUIScreens;
+			sourceTree = "<group>";
+		};
+		0794B5C82D3C5C8B00B345C5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0794B5C92D3C5C9D00B345C5 /* AppBackgroundBlur.swift */,
+				0794B5D52D3C840400B345C5 /* PageHeader.swift */,
+				0794B5D72D3C845000B345C5 /* PageNavigationBar.swift */,
+				0794B5D92D3C848B00B345C5 /* SecondaryHeading.swift */,
+				0794B5DB2D3C84DB00B345C5 /* HomePageComponents.swift */,
+				0794B5E12D3C8A8600B345C5 /* HealthComponents.swift */,
+				07AAFA0B2D3D7CA300B47D04 /* ExerciseCard.swift */,
+				07AAFA0D2D3D7CD400B47D04 /* AccentPageHeader.swift */,
+				07AAFA112D3D7D6200B47D04 /* HeadingWithLink.swift */,
+				07AAFA132D3D7D8A00B47D04 /* StepTrackerView.swift */,
+				077F32C12D3E47A2003BE342 /* ChallengeCard.swift */,
+				073B967B2D3F888200376ED0 /* WorkoutPageComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		072EEB502D39897D0046B229 /* SweatIt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 072EEB642D39897E0046B229 /* Build configuration list for PBXNativeTarget "SweatIt" */;
+			buildPhases = (
+				072EEB4D2D39897D0046B229 /* Sources */,
+				072EEB4E2D39897D0046B229 /* Frameworks */,
+				072EEB4F2D39897D0046B229 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				072EEB532D39897D0046B229 /* SweatIt */,
+			);
+			name = SweatIt;
+			packageProductDependencies = (
+			);
+			productName = SweatIt;
+			productReference = 072EEB512D39897D0046B229 /* SweatIt.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		072EEB492D39897D0046B229 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					072EEB502D39897D0046B229 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 072EEB4C2D39897D0046B229 /* Build configuration list for PBXProject "SweatIt" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 072EEB482D39897D0046B229;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 072EEB522D39897D0046B229 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				072EEB502D39897D0046B229 /* SweatIt */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		072EEB4F2D39897D0046B229 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		072EEB4D2D39897D0046B229 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0794B5CA2D3C5C9D00B345C5 /* AppBackgroundBlur.swift in Sources */,
+				07ABA1642D3E15C8005591B6 /* ProfilePage.swift in Sources */,
+				07AAFA0E2D3D7CD400B47D04 /* AccentPageHeader.swift in Sources */,
+				0794B5DA2D3C848B00B345C5 /* SecondaryHeading.swift in Sources */,
+				07AAFA142D3D7D8A00B47D04 /* StepTrackerView.swift in Sources */,
+				071467632D3D8632003B0213 /* CoachPage.swift in Sources */,
+				0794B5D62D3C840400B345C5 /* PageHeader.swift in Sources */,
+				07AAFA0C2D3D7CA300B47D04 /* ExerciseCard.swift in Sources */,
+				077F32C22D3E47A2003BE342 /* ChallengeCard.swift in Sources */,
+				0794B5E02D3C86B800B345C5 /* ActivitiesPage.swift in Sources */,
+				0794B5D82D3C845000B345C5 /* PageNavigationBar.swift in Sources */,
+				07AAFA122D3D7D6200B47D04 /* HeadingWithLink.swift in Sources */,
+				073B967C2D3F888200376ED0 /* WorkoutPageComponents.swift in Sources */,
+				0794B5E22D3C8A8600B345C5 /* HealthComponents.swift in Sources */,
+				0794B5DC2D3C84DB00B345C5 /* HomePageComponents.swift in Sources */,
+				07AAFA102D3D7D4800B47D04 /* ExerciseStatsPage.swift in Sources */,
+				0794B5B52D3C398800B345C5 /* HomePage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		072EEB652D39897E0046B229 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PR68D3CTA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SweatIt/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uddeshya.SweatIt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		072EEB662D39897E0046B229 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PR68D3CTA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SweatIt/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.uddeshya.SweatIt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		072EEB672D39897E0046B229 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		072EEB682D39897E0046B229 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		072EEB4C2D39897D0046B229 /* Build configuration list for PBXProject "SweatIt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				072EEB672D39897E0046B229 /* Debug */,
+				072EEB682D39897E0046B229 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		072EEB642D39897E0046B229 /* Build configuration list for PBXNativeTarget "SweatIt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				072EEB652D39897E0046B229 /* Debug */,
+				072EEB662D39897E0046B229 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 072EEB492D39897D0046B229 /* Project object */;
+}
