@@ -17,7 +17,7 @@ struct PageHeader: View {
             Text(pageHeaderTitle)
                 .font(.custom("Oswald-Regular", size: 50))
                 .foregroundStyle(.white)
-                .offset(x: 24, y: 15)
+                .offset(x: 24, y: 20)
             
             
             Spacer()

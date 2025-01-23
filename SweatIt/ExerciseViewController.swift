@@ -8,10 +8,51 @@
 import UIKit
 import SwiftUI
 
-class ExerciseViewController: UIViewController {
+class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    let workouts: Array<(String, String, String, CGFloat)> = [("Upper Body", "Easy", "upperbody", 20), ("Lower Body", "Easy", "lowerbody", 20), ("Arm Builder", "Medium", "arms", 20), ("Core Create", "Hard", "core", 20), ("Delto Blast", "Hard", "shoulderone", 20), ("Delto Blast II", "Hard", "shouldertwo", 20)]
+    
+    
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.showsVerticalScrollIndicator = false
+        return tableView
+        
+    }()
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.workouts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.contentView.subviews.forEach{ $0.removeFromSuperview() }
+       
+        let workoutCard = UIHostingController(rootView: WorkoutCard(image: workouts[indexPath.row].2, name: workouts[indexPath.row].0, difficulty: workouts[indexPath.row].1, wantMargin: indexPath.row == 0 ? false : true, sideOffset: workouts[indexPath.row].3))
+        
+        workoutCard.view.backgroundColor = .clear
+        cell.contentView.addSubview(workoutCard.view)
+        cell.contentView.backgroundColor = .clear
+        
+        workoutCard.view.frame = CGRect(origin: .zero, size: workoutCard.sizeThatFits(in: cell.contentView.bounds.size))
+        
+        workoutCard.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            workoutCard.view.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+            workoutCard.view.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
+            workoutCard.view.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
+            workoutCard.view.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+            
+        ])
+        
+        cell.selectionStyle = .none
+        return cell
+    }
+    
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
     
@@ -20,12 +61,15 @@ class ExerciseViewController: UIViewController {
         return contentView
     }()
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addLinearGradient(colorOne: UIColor(named: "DarkBG") ?? .black, colorTwo: .black, from: CGPoint(x: 0.5, y: 0), to: CGPoint(x: 0.5, y: 1.6))
         
         let pageHeading = self.addPageHeading(headingTitle: "Workout")
-        self.addNavigationBar(whichPage: "Workout")
+        let navigationBar = self.addNavigationBar(whichPage: "Workout")
         
         self.setupScrollView()
         
@@ -33,8 +77,8 @@ class ExerciseViewController: UIViewController {
         self.buttonZone()
 
         self.view.bringSubviewToFront(pageHeading)
+        self.view.bringSubviewToFront(navigationBar)
 
-        
     }
     
     
@@ -43,7 +87,7 @@ class ExerciseViewController: UIViewController {
         self.view.addSubview(self.scrollView)
         self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.view.addSubview(self.contentView)
+        self.scrollView.addSubview(self.contentView)
         self.contentView.translatesAutoresizingMaskIntoConstraints = false
         
         
@@ -58,7 +102,7 @@ class ExerciseViewController: UIViewController {
             self.contentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
             self.contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
             self.contentView.widthAnchor.constraint(equalTo: self.scrollView.widthAnchor),
-            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, multiplier: 1.5),
+            self.contentView.heightAnchor.constraint(equalTo: self.scrollView.heightAnchor, multiplier: 1.9),
         ])
     }
     
@@ -95,7 +139,7 @@ class ExerciseViewController: UIViewController {
     }
     
     
-    private func addNavigationBar(whichPage: String) {
+    private func addNavigationBar(whichPage: String) -> UIView {
         @State var something = 0
         let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $something, currentPage: "Workout", wantOffset: false))
         navigationBar.view.frame = CGRect(origin: .zero, size: navigationBar.sizeThatFits(in: self.view.bounds.size))
@@ -111,39 +155,45 @@ class ExerciseViewController: UIViewController {
             navigationBar.view.heightAnchor.constraint(equalToConstant: 180),
         ])
         
+        return navigationBar.view
+        
     }
     
     private func buttonZone() {
         
-        let workouts: Array<(String, String)> = [("Upper Body", "Easy"), ("Lower Body", "Easy"), ("Arm Builder", "Medium"), ("Core Create", "Hard"), ("Shoulder Boulder", "Hard"), ("Shoulder Boulder II", "Hard")]
         let firstButton = UIHostingController(rootView: PrimaryButton(title: "Challenges", icon: "xbox", colors: [Color("AppRedLight"), Color("AppRedDark")]))
-        let secondButton = UIHostingController(rootView: PrimaryButton(title: "Today's Split", icon: "bucket", colors: [Color("AppThanosLight"), Color("AppThanosDark")]))
+        let secondButton = UIHostingController(rootView: PrimaryButton(title: "Split Today", icon: "bucket", colors: [Color("AppThanosLight"), Color("AppThanosDark")]))
         let searchButton = UIHostingController(rootView: WorkoutPageSearchBar())
         
         let workoutHeading = UIHostingController(rootView: SecondaryHeading(title: "Workouts"))
+        let exerciseOfTheDayHeading = UIHostingController(rootView: SecondaryHeading(title: "Exercise of the day"))
         
         firstButton.view.frame = CGRect(origin: .zero, size: firstButton.sizeThatFits(in: self.contentView.bounds.size))
         secondButton.view.frame = CGRect(origin: .zero, size: secondButton.sizeThatFits(in: self.contentView.bounds.size))
         searchButton.view.frame = CGRect(origin: .zero, size: searchButton.sizeThatFits(in: self.contentView.bounds.size))
         workoutHeading.view.frame = CGRect(origin: .zero, size: workoutHeading.sizeThatFits(in: self.contentView.bounds.size))
+        exerciseOfTheDayHeading.view.frame = CGRect(origin: .zero, size: exerciseOfTheDayHeading.sizeThatFits(in: self.contentView.bounds.size))
         
         firstButton.view.backgroundColor = .clear
         secondButton.view.backgroundColor = .clear
         searchButton.view.backgroundColor = .clear
         workoutHeading.view.backgroundColor = .clear
+        exerciseOfTheDayHeading.view.backgroundColor = .clear
        
         firstButton.view.translatesAutoresizingMaskIntoConstraints = false
         secondButton.view.translatesAutoresizingMaskIntoConstraints = false
         searchButton.view.translatesAutoresizingMaskIntoConstraints = false
         workoutHeading.view.translatesAutoresizingMaskIntoConstraints = false
+        exerciseOfTheDayHeading.view.translatesAutoresizingMaskIntoConstraints = false
         
         self.contentView.addSubview(firstButton.view)
         self.contentView.addSubview(secondButton.view)
         self.contentView.addSubview(searchButton.view)
         self.contentView.addSubview(workoutHeading.view)
+        self.contentView.addSubview(exerciseOfTheDayHeading.view)
         
         NSLayoutConstraint.activate([
-            searchButton.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 170),
+            searchButton.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 105),
             searchButton.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             searchButton.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
            
@@ -158,6 +208,55 @@ class ExerciseViewController: UIViewController {
             workoutHeading.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
 
         ])
+        
+        
+        
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(self.tableView)
+        
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        NSLayoutConstraint.activate([
+            self.tableView.topAnchor.constraint(equalTo: workoutHeading.view.bottomAnchor, constant: 5),
+            self.tableView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            self.tableView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            self.tableView.heightAnchor.constraint(equalToConstant: 900),
+            
+         
+            exerciseOfTheDayHeading.view.topAnchor.constraint(equalTo: self.tableView.bottomAnchor, constant: -10),
+            exerciseOfTheDayHeading.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            exerciseOfTheDayHeading.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+
+        ])
+        
+        let exerciseOne = UIHostingController(rootView: ExerciseOfTheDayCard(isTop: true, title: "Pushups", tags: ["Chest", "Triceps", "Shoulders"]))
+        let exerciseTwo = UIHostingController(rootView: ExerciseOfTheDayCard(isTop: false, title: "Pullups", tags: ["Back", "Biceps"], url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShb8VZi2YQ1R4rXOSk1OZ4YuppENuRQtrBnA-Rh__mOeOWP4IqAF2jSsD90xMdYbekj9Q&usqp=CAU"))
+        
+        exerciseOne.view.frame = CGRect(origin: .zero, size: exerciseOne.sizeThatFits(in: self.contentView.bounds.size))
+        exerciseTwo.view.frame = CGRect(origin: .zero, size: exerciseOne.sizeThatFits(in: self.contentView.bounds.size))
+
+        exerciseOne.view.backgroundColor = .clear
+        exerciseTwo.view.backgroundColor = .clear
+
+        exerciseOne.view.translatesAutoresizingMaskIntoConstraints = false
+        exerciseTwo.view.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.addSubview(exerciseOne.view)
+        self.contentView.addSubview(exerciseTwo.view)
+
+        NSLayoutConstraint.activate([
+            exerciseOne.view.topAnchor.constraint(equalTo: exerciseOfTheDayHeading.view.bottomAnchor, constant: 5),
+            exerciseOne.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            exerciseOne.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            exerciseTwo.view.topAnchor.constraint(equalTo: exerciseOne.view.bottomAnchor),
+            exerciseTwo.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            exerciseTwo.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+        ])
+        
+        
         
         
     }

@@ -57,6 +57,21 @@
             </objects>
             <point key="canvasLocation" x="1993" y="-2"/>
         </scene>
+        <!--Home Page View Controller-->
+        <scene sceneID="eDO-J2-frE">
+            <objects>
+                <viewController id="D4R-PI-KAx" customClass="HomePageViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xeb-Qz-xhS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="NL4-ka-jAG"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Obn-8y-s4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138" y="-691"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
