@@ -14,6 +14,7 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     
     let tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .black
         tableView.showsVerticalScrollIndicator = false
         return tableView
         
@@ -29,7 +30,7 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
        
         let workoutCard = UIHostingController(rootView: WorkoutCard(image: workouts[indexPath.row].2, name: workouts[indexPath.row].0, difficulty: workouts[indexPath.row].1, wantMargin: indexPath.row == 0 ? false : true, sideOffset: workouts[indexPath.row].3))
         
-        workoutCard.view.backgroundColor = .clear
+        workoutCard.view.backgroundColor = .black
         cell.contentView.addSubview(workoutCard.view)
         cell.contentView.backgroundColor = .clear
         
@@ -255,10 +256,6 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
             exerciseTwo.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             exerciseTwo.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
         ])
-        
-        
-        
-        
     }
     
 }

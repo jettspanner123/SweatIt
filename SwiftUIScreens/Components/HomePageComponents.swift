@@ -53,6 +53,10 @@ struct HomePageStepCounter: View {
     }
 }
 
+#Preview {
+    HomePageCalories(caloriesConsumed: 1900, caloriesBurned: 200, totalCalories: 2500)
+}
+
 struct HomePageCalories: View {
     @State var caloriesConsumed: Int
     @State var caloriesBurned: Int
@@ -75,15 +79,21 @@ struct HomePageCalories: View {
                     
                     Text("Burned")
                         .foregroundStyle(.white)
-                        .font(.system(size: 20, weight: .regular, design: .rounded))
+                        .font(.system(size: 18, weight: .regular, design: .rounded))
                 }
-                .offset(x: -20, y: -30)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .offset(y: -30)
                 
                 
                 Text("\(caloriesBurned) kCal")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
                     .foregroundStyle(.white.opacity(0.75))
                     .font(.custom("Oswald-Regular", size: 30))
-                    .offset(x: -22, y: 15)
+                    .offset(y: 15)
+                    .zIndex(100)
+                
                 
                 Text("🔥")
                     .font(.system(size: 100))
@@ -111,9 +121,11 @@ struct HomePageCalories: View {
                     
                     Text("Consumed")
                         .foregroundStyle(.white)
-                        .font(.system(size: 20, weight: .regular, design: .rounded))
+                        .font(.system(size: 18, weight: .regular, design: .rounded))
                 }
-                .offset(x: -4, y: -30)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 20)
+                .offset(y: -30)
                 
                 
                 HStack {
@@ -127,9 +139,12 @@ struct HomePageCalories: View {
                     
                     Text("\(totalCalories)")
                         .foregroundStyle(.white.opacity(0.75))
-                        .font(.custom("Oswald-Regular", size: 15))
-                        .offset(y: 5)
+                        .font(.custom("Oswald-Regular", size: 20))
+                        .offset(y: 0)
+                        .zIndex(100)
                 }
+                .padding(.horizontal, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .offset(y: 15)
                 
                 

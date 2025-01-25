@@ -35,6 +35,14 @@ struct PageHeader: View {
                 .offset(x: -24, y: 25)
                 
             }
+            
+            if self.pageHeaderTitle == "Profile" {
+                Image("Settings")
+                    .resizable()
+                    .frame(width: 34, height: 35)
+                    .offset(x: -24, y: 25)
+                
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: 137)
         .border(.white.opacity(0.08), width: 1)
@@ -44,5 +52,9 @@ struct PageHeader: View {
         .offset(y: wantOffset ? -424 : 0)
         .zIndex(100)
     }
+}
+
+#Preview {
+    PageHeader(pageHeaderTitle: "Profile", wantOffset: false)
 }
 

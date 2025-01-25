@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 class HomePageViewController: UIViewController {
-    @State var currentPage: Int = 0
+    
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -32,7 +32,8 @@ class HomePageViewController: UIViewController {
         let navigationBar = self.addNavigationBar(whichPage: "Home")
         
         self.setupScrollView()
-        
+        self.addHomePageStepCounter()
+
         self.view.bringSubviewToFront(pageHeading)
         self.view.bringSubviewToFront(navigationBar)
     }
@@ -71,38 +72,20 @@ class HomePageViewController: UIViewController {
         
     }
     
-    private func addNavigationBar() -> UIView {
-        let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $currentPage, currentPage: "Home"))
-        navigationBar.view.frame = CGRect(origin: .zero, size: navigationBar.sizeThatFits(in: self.contentView.bounds.size))
-        navigationBar.view.backgroundColor = .clear
-        
-        navigationBar.view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(navigationBar.view)
-        
-        NSLayoutConstraint.activate([
-            navigationBar.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            navigationBar.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            navigationBar.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            navigationBar.view.widthAnchor.constraint(equalToConstant: self.view.bounds.width),
-            navigationBar.view.heightAnchor.constraint(equalToConstant: 180),
-        ])
-        
-        return navigationBar.view
-    }
     
     private func setupScrollView() {
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(self.scrollView)
-        
-        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
+
         self.scrollView.addSubview(self.contentView)
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
+
         
         NSLayoutConstraint.activate([
             self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            
             
             self.contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
             self.contentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
@@ -131,6 +114,40 @@ class HomePageViewController: UIViewController {
         ])
         
         return pageHeading.view
+        
+    }
+    
+    private func addHomePageStepCounter() {
+        @State var currentStepCount: Int = 8000
+        @State var goalStepCount: Int = 15000
+        
+        let homePageStepCounter = UIHostingController(rootView: HomePageStepCounter(currentStepCount: currentStepCount, goalStepCount: goalStepCount))
+        let homePageCalories = UIHostingController(rootView: HomePageCalories(caloriesConsumed: 195, caloriesBurned: 1900, totalCalories: 2500))
+        
+        homePageStepCounter.view.frame = CGRect(origin: .zero, size: homePageStepCounter.sizeThatFits(in: self.contentView.bounds.size))
+        homePageCalories.view.frame = CGRect(origin: .zero, size: homePageCalories.sizeThatFits(in: self.contentView.bounds.size))
+        
+        
+        homePageStepCounter.view.backgroundColor = .clear
+        homePageCalories.view.backgroundColor = .clear
+        homePageStepCounter.view.translatesAutoresizingMaskIntoConstraints = false
+        homePageCalories.view.translatesAutoresizingMaskIntoConstraints = false
+
+        
+        self.contentView.addSubview(homePageStepCounter.view)
+        self.contentView.addSubview(homePageCalories.view)
+
+        NSLayoutConstraint.activate([
+            homePageStepCounter.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 160),
+            homePageStepCounter.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            homePageStepCounter.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            
+            homePageCalories.view.topAnchor.constraint(equalTo: homePageStepCounter.view.bottomAnchor, constant: 15),
+            homePageCalories.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            homePageCalories.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+        ])
+        
+        
         
     }
     
