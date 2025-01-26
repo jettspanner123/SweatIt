@@ -9,20 +9,21 @@ import UIKit
 import SwiftUI
 
 class ProfileViewController: UIViewController {
-    
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = false
-//        scrollView.backgroundColor = .red.withAlphaComponent(0.5)
         return scrollView
     }()
     
     let contentView: UIView = {
         let contentView = UIView()
-//        contentView.backgroundColor = .yellow.withAlphaComponent(0.5)
         return contentView
     }()
-
+    
+    
+    
+    let options: Array<(String, String, Int)> = [("User Details", "User", 0), ("Notifications", "Bell", 1), ("Recommendations", "Like", 2)]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,7 +36,7 @@ class ProfileViewController: UIViewController {
         
         self.view.bringSubviewToFront(pageHeader)
         self.view.bringSubviewToFront(navigationBar)
-
+        
         
     }
     
@@ -116,17 +117,92 @@ class ProfileViewController: UIViewController {
     
     private func addItems() {
         let profileHeader = UIHostingController(rootView: ProfilePageImageHeader())
-        profileHeader.view.frame = CGRect(origin: .zero, size: profileHeader.sizeThatFits(in: self.contentView.bounds.size))
+        let profileLevelView = UIHostingController(rootView: ProfilePageLevelsCard())
         
-        profileHeader.view.backgroundColor = .clear
-        profileHeader.view.translatesAutoresizingMaskIntoConstraints = false
+        let firstTile = UIHostingController(rootView: SettingLable(text: "User Details", imageName: "User", isTop: true))
+        let secondTile = UIHostingController(rootView: SettingLable(text: "Notifications", imageName: "Bell"))
+        let thirdTile = UIHostingController(rootView: SettingLable(text: "Recommendations", imageName: "Like", isBottom: true))
+        
+        let pastStatisticsHeading = UIHostingController(rootView: HeadingWithLink(titleHeading: "Past Statistics", extraHeading: "", showExtraHeading: false))
+        let stepCountGraph = UIHostingController(rootView: AvgStepCountGraph())
+        let topPerformersHeading = UIHostingController(rootView: HeadingWithLink(titleHeading: "Top Performers", extraHeading: "", showExtraHeading: false))
+        
+        let firstPerformer = UIHostingController(rootView: Performer(name: "jettspanner123", points: 1000, imageName: "jettspanner", isTop: true, rank: 1))
+        let secondPerformer = UIHostingController(rootView: Performer(name: "ronny_irani", points: 2000, imageName: "ronny", rank: 2))
+        let thirdPerformer = UIHostingController(rootView: Performer(name: "soham_lobo66", points: 3000, imageName: "soham", isBottom: true, rank: 3))
+        
+        profileHeader.view.frame = CGRect(origin: .zero, size: profileHeader.sizeThatFits(in: self.contentView.bounds.size))
+        profileLevelView.view.frame = CGRect(origin: .zero, size: profileLevelView.sizeThatFits(in: self.contentView.bounds.size))
+        pastStatisticsHeading.view.frame = CGRect(origin: .zero, size: pastStatisticsHeading.sizeThatFits(in: self.contentView.bounds.size))
+        stepCountGraph.view.frame = CGRect(origin: .zero, size: stepCountGraph.sizeThatFits(in: self.contentView.bounds.size))
+        topPerformersHeading.view.frame = CGRect(origin: .zero, size: topPerformersHeading.sizeThatFits(in: self.contentView.bounds.size))
+        
+        firstTile.view.frame = CGRect(origin: .zero, size: firstTile.sizeThatFits(in: self.contentView.bounds.size))
+        secondTile.view.frame = CGRect(origin: .zero, size: secondTile.sizeThatFits(in: self.contentView.bounds.size))
+        thirdTile.view.frame = CGRect(origin: .zero, size: thirdTile.sizeThatFits(in: self.contentView.bounds.size))
+        
+        [profileHeader.view, profileLevelView.view, pastStatisticsHeading.view, stepCountGraph.view, topPerformersHeading.view, firstTile.view, secondTile.view, thirdTile.view, firstPerformer.view, secondPerformer.view, thirdPerformer.view].forEach {
+            $0?.backgroundColor = .clear
+            $0?.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         self.contentView.addSubview(profileHeader.view)
+        self.contentView.addSubview(profileLevelView.view)
+        self.contentView.addSubview(firstTile.view)
+        self.contentView.addSubview(secondTile.view)
+        self.contentView.addSubview(thirdTile.view)
+        self.contentView.addSubview(pastStatisticsHeading.view)
+        self.contentView.addSubview(stepCountGraph.view)
+        self.contentView.addSubview(topPerformersHeading.view)
+        self.contentView.addSubview(firstPerformer.view)
+        self.contentView.addSubview(secondPerformer.view)
+        self.contentView.addSubview(thirdPerformer.view)
         
         NSLayoutConstraint.activate([
             profileHeader.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 100),
             profileHeader.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             profileHeader.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            profileLevelView.view.topAnchor.constraint(equalTo: profileHeader.view.bottomAnchor, constant: 25),
+            profileLevelView.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            profileLevelView.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            firstTile.view.topAnchor.constraint(equalTo: profileLevelView.view.bottomAnchor, constant: 25),
+            firstTile.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            firstTile.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            secondTile.view.topAnchor.constraint(equalTo: firstTile.view.bottomAnchor),
+            secondTile.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            secondTile.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            thirdTile.view.topAnchor.constraint(equalTo: secondTile.view.bottomAnchor),
+            thirdTile.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            thirdTile.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            pastStatisticsHeading.view.topAnchor.constraint(equalTo: thirdTile.view.bottomAnchor, constant: 0),
+            pastStatisticsHeading.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            pastStatisticsHeading.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            stepCountGraph.view.topAnchor.constraint(equalTo: pastStatisticsHeading.view.bottomAnchor, constant: -10),
+            stepCountGraph.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            stepCountGraph.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            topPerformersHeading.view.topAnchor.constraint(equalTo: stepCountGraph.view.bottomAnchor, constant: 10),
+            topPerformersHeading.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            topPerformersHeading.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            firstPerformer.view.topAnchor.constraint(equalTo: topPerformersHeading.view.bottomAnchor, constant: -10),
+            firstPerformer.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            firstPerformer.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            secondPerformer.view.topAnchor.constraint(equalTo: firstPerformer.view.bottomAnchor),
+            secondPerformer.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            secondPerformer.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            thirdPerformer.view.topAnchor.constraint(equalTo: secondPerformer.view.bottomAnchor),
+            thirdPerformer.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            thirdPerformer.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
         ])
     }
     

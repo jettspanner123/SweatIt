@@ -31,7 +31,7 @@ struct HeadingWithLink: View {
                 Text("See All >")
                     .font(.system(size: 15, weight: .light, design: .rounded))
                     .foregroundStyle(Color("AppGreyLight").opacity(1))
-                    .offset(y: -10)
+                    .offset(y: -6)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

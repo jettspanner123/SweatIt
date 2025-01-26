@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CoachPage: View {
     
-    @Binding var currentPage: Int
+//    @Binding var currentPage: Int
+    var currentPage: Int = 1
     
     var body: some View {
         ZStack {
@@ -48,8 +49,8 @@ struct CoachPage: View {
                 .padding(.bottom, 150)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Coach")
-                .zIndex(100)
+//            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Coach")
+//                .zIndex(100)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
@@ -437,5 +438,9 @@ struct TertiaryHeading: View {
         .padding(.top, 37)
         .padding(.bottom, self.bottomSpace ? 21 : 0)
     }
+}
+
+#Preview {
+    CoachPage()
 }
 

@@ -16,7 +16,7 @@ struct HomePage: View {
             } else if currentPage == 1 {
                 
             } else if currentPage == 2 {
-                CoachPage(currentPage: $currentPage)
+                CoachPage()
             } else if currentPage == 3 {
                 
             } else {

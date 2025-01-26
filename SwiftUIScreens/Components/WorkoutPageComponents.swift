@@ -13,6 +13,8 @@ struct PrimaryButton : View{
     var icon: String
     var colors: Array<Color>
     
+    var action: () -> Void
+    
     var body: some View{
         HStack {
             Image(icon)
@@ -41,6 +43,9 @@ struct PrimaryButton : View{
             LinearGradient(gradient: Gradient(colors: [self.colors.first ?? .black, self.colors.last ?? .black]), startPoint: .top, endPoint: .bottom)
         )
         .cornerRadius(17)
+        .onTapGesture {
+            self.action()
+        }
     }
 }
 
@@ -129,16 +134,15 @@ struct WorkoutCard: View {
     
     var body: some View {
         ZStack {
-            
             Image(self.image)
                 .offset(x: sideOffset)
+            
             HStack(alignment: .top) {
                 VStack(spacing: 10) {
                     Text(self.name)
                         .font(.custom("RobotoCondensed-Regular", size: 30))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
                     
                     Text(self.difficulty)
                         .padding(.vertical, 6)
