@@ -53,9 +53,6 @@ struct HomePageStepCounter: View {
     }
 }
 
-#Preview {
-    HomePageCalories(caloriesConsumed: 1900, caloriesBurned: 200, totalCalories: 2500)
-}
 
 struct HomePageCalories: View {
     @State var caloriesConsumed: Int
@@ -131,7 +128,7 @@ struct HomePageCalories: View {
                 HStack {
                     Text("\(caloriesConsumed)")
                         .foregroundStyle(.white.opacity(0.75))
-                        .font(.custom("Oswald-Regular", size: 30))
+                        .font(.custom("Oswald-Regular", size: 25))
                     
                     Text("/")
                         .foregroundStyle(.white.opacity(0.75))
@@ -359,4 +356,64 @@ struct RecentActivitiesTwinButton: View {
             
         }
     }
+}
+
+
+struct ActivityCard: View {
+    
+    var isTop: Bool = true
+    var isBottom: Bool = false
+    var heading: String = "Chest Workout"
+    var secondaryHeading: String = "Chest, Triceps"
+    var tertiaryHeading: String = "🔥 320 kCal"
+    var image: String
+    
+    var body: some View {
+        HStack {
+            HStack {
+                Image(self.image)
+                    .resizable()
+                
+            }
+            .frame(width: 149, height: 149)
+            
+            VStack(alignment: .leading) {
+                Text(self.heading)
+                    .font(.system(size: 20, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Text(self.secondaryHeading)
+                    .font(.system(size: 15, weight: .light, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .padding(.horizontal, 2)
+                
+                Spacer()
+
+                Text(self.tertiaryHeading)
+                    .font(.system(size: 20, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                
+
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 15)
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(width: UIScreen.main.bounds.width * 0.9, height: 150)
+        .background(.darkBG.opacity(0.54))
+        .clipShape(
+            UnevenRoundedRectangle(cornerRadii: .init(topLeading: isTop ? 17 : 0, bottomLeading: isBottom ? 17 : 0, bottomTrailing: isBottom ? 17 : 0, topTrailing: isTop ? 17 : 0))
+        )
+        .overlay(
+            UnevenRoundedRectangle(cornerRadii: .init(topLeading: isTop ? 17 : 0, bottomLeading: isBottom ? 17 : 0, bottomTrailing: isBottom ? 17 : 0, topTrailing: isTop ? 17 : 0))
+                .stroke(.white.opacity(0.08))
+        )
+    }
+}
+
+
+#Preview {
 }

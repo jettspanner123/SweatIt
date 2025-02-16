@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vnr-sR-lg3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VXg-3M-7sF">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
@@ -11,7 +11,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="ChallengesPage" id="BYZ-38-t0r" customClass="ViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CPage" id="BYZ-38-t0r" customClass="ViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -60,22 +60,23 @@
         <!--Home Page View Controller-->
         <scene sceneID="eDO-J2-frE">
             <objects>
-                <viewController id="D4R-PI-KAx" customClass="HomePageViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomePage" id="D4R-PI-KAx" customClass="HomePageViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xeb-Qz-xhS">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="NL4-ka-jAG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="wLp-Gy-kw0"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Obn-8y-s4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="138" y="-691"/>
+            <point key="canvasLocation" x="1063.3587786259541" y="-691.54929577464793"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="dK6-6E-cEd">
             <objects>
-                <viewController id="VXg-3M-7sF" customClass="ProfileViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfilePage" id="VXg-3M-7sF" customClass="ProfileViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Wnt-ET-ZgI">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -85,7 +86,85 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aY3-CW-i0l" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="856" y="-692"/>
+            <point key="canvasLocation" x="1782.4427480916029" y="-692.25352112676057"/>
+        </scene>
+        <!--Today Split View Controller-->
+        <scene sceneID="fjD-1s-OeL">
+            <objects>
+                <viewController storyboardIdentifier="TodaySplitPage" id="MOd-gW-h3d" customClass="TodaySplitViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yK7-nn-9Xy">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="i34-8M-CcQ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jPk-pt-R2Y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2631.2977099236641" y="-692.25352112676057"/>
+        </scene>
+        <!--Exercise Routine View Controller-->
+        <scene sceneID="LuY-v2-f2D">
+            <objects>
+                <viewController storyboardIdentifier="ExerciseRoutinePage" id="SWW-uf-i4a" customClass="ExerciseRoutineViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nfe-5C-VVd">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="229-oa-d6U"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jNP-hn-rQP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="863" y="-1369"/>
+        </scene>
+        <!--Coach View Controller-->
+        <scene sceneID="xbK-a2-Tru">
+            <objects>
+                <viewController storyboardIdentifier="CoachPage" id="CEd-5d-Pil" customClass="CoachViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Upu-0Z-6ms">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="eNa-gD-VFk"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qja-fO-I6u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1532" y="-1369"/>
+        </scene>
+        <!--Diet View Controller-->
+        <scene sceneID="Wts-Q3-twG">
+            <objects>
+                <viewController storyboardIdentifier="DietPage" id="3tR-a2-m3F" customClass="DietViewController" customModule="SweatIt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QeC-o0-mPM">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="AQJ-Oi-zBr"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SvC-lG-A2I" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1543" y="-2046"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="E2v-GF-KJR">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="F8Y-k6-Y96" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TgT-M6-TQz">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="D4R-PI-KAx" kind="relationship" relationship="rootViewController" id="q7D-WX-m9J"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9g2-jt-F6e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.64122137404578" y="-691.54929577464793"/>
         </scene>
     </scenes>
     <resources>

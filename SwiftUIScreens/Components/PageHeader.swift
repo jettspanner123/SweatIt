@@ -36,7 +36,7 @@ struct PageHeader: View {
                 
             }
             
-            if self.pageHeaderTitle == "Profile" {
+            if self.pageHeaderTitle == "Profile" || self.pageHeaderTitle == "Diet" {
                 Image("Settings")
                     .resizable()
                     .frame(width: 34, height: 35)

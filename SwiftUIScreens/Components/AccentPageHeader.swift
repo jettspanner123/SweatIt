@@ -31,7 +31,8 @@ struct AccentPageHeader: View {
             }
             .offset(y: 25)
         }
-        .frame(maxWidth: .infinity, maxHeight: 136)
+        .frame(maxWidth: .infinity)
+        .frame(height: 137)
         .border(.white.opacity(0.08), width: 1)
         .background(AppBackgroundBlur(radius: 50, opaque: true))
         .background(Color("DarkBG").opacity(0.55))
@@ -42,3 +43,7 @@ struct AccentPageHeader: View {
     }
 }
 
+
+#Preview {
+    AccentPageHeader(pageHeaderTitle: "Something", action: {})
+}

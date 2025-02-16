@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct Text_t: View {
+    var text: String
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(self.text)
+            .font(.custom("RobotoCondensed-Regular", size: 25))
+            .frame(maxWidth: UIScreen.main.bounds.width * 0.85, alignment: .leading)
+            .foregroundStyle(.white)
     }
 }
 
-#Preview {
-    Text_t()
-}

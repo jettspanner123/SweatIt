@@ -11,8 +11,6 @@ import SwiftUI
 class ExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let workouts: Array<(String, String, String, CGFloat)> = [("Upper Body", "Easy", "upperbody", 50), ("Lower Body", "Easy", "lowerbody", 65), ("Arm Builder", "Medium", "arms", 40), ("Core Create", "Hard", "core", 70), ("Delto Blast", "Hard", "shoulderone", 10), ("Delto Blast II", "Hard", "shouldertwo", 60)]
     
-    
-    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .clear
@@ -142,7 +140,26 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     
     private func addNavigationBar(whichPage: String) -> UIView {
         @State var something = 0
-        let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $something, currentPage: "Workout", wantOffset: false))
+        let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $something, currentPage: "Workout", wantOffset: false, homeScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, workoutScreenAction: {
+            
+        }, coachScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CoachPage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, dietScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DietPage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, profileScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProfilePage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }))
+
         navigationBar.view.frame = CGRect(origin: .zero, size: navigationBar.sizeThatFits(in: self.view.bounds.size))
         navigationBar.view.backgroundColor = .clear
         
@@ -164,11 +181,19 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
         
         let firstButton = UIHostingController(rootView: PrimaryButton(title: "Challenges", icon: "xbox", colors: [Color("AppRedLight"), Color("AppRedDark")]) {
             print("Navigation Started")
-            self.navigationController?.pushViewController(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChallengesPage"), animated: true)
-            print("Navigation Ended")
-
+            let destVc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CPage") as! ViewController
+            destVc.modalPresentationStyle = .overFullScreen
+            destVc.transitioningDelegate = self
+            
+            self.present(destVc, animated: true)
         })
         let secondButton = UIHostingController(rootView: PrimaryButton(title: "Split Today", icon: "bucket", colors: [Color("AppThanosLight"), Color("AppThanosDark")]) {
+            print("Navigation Started")
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TodaySplitPage") as! TodaySplitViewController
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            destinationViewController.transitioningDelegate = self
+            
+            self.present(destinationViewController, animated: true)
             
         })
         let searchButton = UIHostingController(rootView: WorkoutPageSearchBar())
@@ -264,6 +289,14 @@ class ExerciseViewController: UIViewController, UITableViewDelegate, UITableView
     
 }
 
-#Preview {
-    ExerciseViewController()
+
+extension ExerciseViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return RightSlideTransition(isPresenting: false)
+    }
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return RightSlideTransition(isPresenting: true)
+    }
 }
+

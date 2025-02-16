@@ -38,7 +38,7 @@ struct PrimaryButton : View{
             .rotationEffect(.degrees(180))
         }
         .padding(.horizontal, 10)
-        .frame(width: UIScreen.main.bounds.width / 2 - 30, height: 77)
+        .frame(width: UIScreen.main.bounds.width / 2 - 32, height: 77)
         .background(
             LinearGradient(gradient: Gradient(colors: [self.colors.first ?? .black, self.colors.last ?? .black]), startPoint: .top, endPoint: .bottom)
         )
@@ -181,7 +181,9 @@ struct WorkoutCard: View {
 }
 
 #Preview {
-    ExerciseOfTheDayCard()
+    PrimaryButton(title: "Something", icon: "bell", colors: [.blue, .black], action: {
+        
+    })
 }
 
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CoachPage: View {
     
-//    @Binding var currentPage: Int
+    //    @Binding var currentPage: Int
     var currentPage: Int = 1
     
     var body: some View {
@@ -42,6 +42,9 @@ struct CoachPage: View {
                     
                     StepsPerDayGraph(stepsThroughoutWeek: [(0.5, 12754, 1), (0.35, 11187, 2), (0.7, 13025, 3), (0.8, 13245, 4), (0.6, 15003, 5)], avgSteps: 1325, goalSteps: 15000)
                     
+                    TertiaryHeading(titleHeading: "Total Weekly Volume", wantSecondaryHeading: false, secondaryHeading: "", bottomSpace: false)
+                    
+                    MuscleVolumeIndicator()
                     
                     
                 }
@@ -49,8 +52,8 @@ struct CoachPage: View {
                 .padding(.bottom, 150)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Coach")
-//                .zIndex(100)
+            //            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Coach")
+            //                .zIndex(100)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
@@ -61,6 +64,83 @@ struct CoachPage: View {
 }
 
 
+struct MuscleVolumeIndicator: View {
+    
+    var muscleGroup: String = "Chest"
+    var image: String = ""
+    var sets: (Float, Float) = (18.0, 18.0)
+    
+    var body: some View {
+        HStack {
+            HStack {
+                Image(self.image)
+                    .resizable()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .frame(maxWidth: 123, maxHeight: .infinity)
+            .background(.white)
+            .cornerRadius(17)
+            
+            ZStack(alignment: .leading) {
+                VStack {
+                    Text(self.muscleGroup)
+                        .font(.system(size: 20, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("\(String(format: "%.0f", self.sets.0)) sets of \(String(format: "%.0f", self.sets.1)) sets")
+                        .font(.system(size: 15, weight: .thin, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .offset(y: -10)
+                .zIndex(100)
+                
+                HStack(alignment: .bottom) {
+                    var latestValue = (self.sets.0 / self.sets.1) * 100
+                    
+                    Text("\(String(format: "%.0f", latestValue))%")
+                        .font(.custom("Oswald-Medium", size: 20))
+                        .foregroundStyle(.white)
+                        .offset(x: -5, y: 25)
+                    
+                }
+                .frame(width: self.sets.0 < self.sets.1 / 3 ? 100 : self.sets.0 < self.sets.1 / 2 ? 150 : 265, alignment: .trailing)
+                .frame(maxHeight: .infinity)
+                .background(
+                    LinearGradient(gradient: Gradient(colors: [.appBlueLight, .appBlueDark]), startPoint: UnitPoint(x: 0.5, y: 0), endPoint: UnitPoint(x: 0.5, y: 1))
+                )
+                
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .frame(width: UIScreen.main.bounds.width * 0.9, height: 100, alignment: .leading)
+        .background(.darkBG.opacity(0.54))
+        .cornerRadius(17)
+        .overlay(
+            RoundedRectangle(cornerRadius: 17)
+                .stroke(.white.opacity(0.08))
+        )
+        
+    }
+}
+
+struct TertiaryHeadingHelperHeading: View {
+    var text: String
+    var body: some View {
+        Text(self.text)
+            .frame(width: UIScreen.main.bounds.width * 0.9, alignment: .leading)
+            .multilineTextAlignment(.leading)
+            .font(.system(size: 18, weight: .light, design: .rounded))
+            .foregroundStyle(.white.opacity(0.44))
+            .padding(.horizontal, 25)
+            .padding(.bottom, 20)
+            .offset(y: 12)
+        
+    }
+}
+
 struct StepsPerDayGraph: View {
     var stepsThroughoutWeek: Array<(Double, Int, Int)>
     var avgSteps: Int
@@ -68,7 +148,7 @@ struct StepsPerDayGraph: View {
     
     var body: some View {
         ZStack {
-           
+            
             HStack(alignment: .bottom) {
                 Text("\(avgSteps) /")
                     .font(.custom("Oswald-Regular", size: 30))
@@ -118,7 +198,7 @@ struct StepsPerDayGraph: View {
         .frame(width: UIScreen.main.bounds.width * 0.8, height: 350)
         .padding(25)
         .background(
-            LinearGradient(gradient: Gradient(colors: [Color("AppBlueDark"), Color("AppBlueLight")]), startPoint: UnitPoint(x: 0.5, y: 0.1), endPoint: UnitPoint(x: 0.5, y:1.6))
+            LinearGradient(gradient: Gradient(colors: [Color("AppBlueDark"), Color("AppBlueLight")]), startPoint: UnitPoint(x: 0.5, y: 0.1), endPoint: UnitPoint(x: 0.5, y:1))
         )
         .cornerRadius(17)
         
@@ -419,19 +499,22 @@ struct CaloriesIngestedGraph: View {
 struct TertiaryHeading: View {
     
     var titleHeading: String
+    var wantSecondaryHeading: Bool = true
     var secondaryHeading: String
     var bottomSpace: Bool
     
     var body: some View {
         HStack(alignment: .bottom) {
             Text(titleHeading)
-                .font(.system(size: 35, weight: .light, design: .rounded))
+                .font(.system(size: 30, weight: .light, design: .rounded))
                 .foregroundStyle(.white)
             
-            Text("( \(secondaryHeading) )")
-                .font(.system(size: 20, weight: .light, design: .rounded))
-                .foregroundStyle(.white.opacity(0.16))
-            
+            if self.wantSecondaryHeading {
+                Text("( \(secondaryHeading) )")
+                    .font(.system(size: 20, weight: .light, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.16))
+                
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 23)
@@ -441,6 +524,6 @@ struct TertiaryHeading: View {
 }
 
 #Preview {
-    CoachPage()
+    MuscleVolumeIndicator()
 }
 

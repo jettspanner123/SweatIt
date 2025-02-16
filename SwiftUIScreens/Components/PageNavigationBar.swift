@@ -13,6 +13,13 @@ struct PageNavigationBar: View {
     var currentPage: String
     var wantOffset: Bool = true
     
+    var homeScreenAction: () -> Void
+    var workoutScreenAction: () -> Void
+    var coachScreenAction: () -> Void
+    var dietScreenAction: () -> Void
+    var profileScreenAction: () -> Void
+
+
     var body: some View {
         HStack {
             
@@ -30,6 +37,7 @@ struct PageNavigationBar: View {
             .offset(y: -5)
             .onTapGesture {
                 currentPage_t = 0
+                self.homeScreenAction()
             }
             
             // The workout icon
@@ -46,6 +54,7 @@ struct PageNavigationBar: View {
             .offset(y: -5)
             .onTapGesture {
                 currentPage_t = 1
+                self.workoutScreenAction()
             }
             
             // The coach icon
@@ -62,6 +71,7 @@ struct PageNavigationBar: View {
             .offset(y: -5)
             .onTapGesture {
                 currentPage_t = 2
+                self.coachScreenAction()
             }
             
             
@@ -80,7 +90,9 @@ struct PageNavigationBar: View {
             .offset(y: -5)
             .onTapGesture {
                 currentPage_t = 3
+                self.dietScreenAction()
             }
+            
             
             // The user icon
             VStack(spacing: 7) {
@@ -96,6 +108,7 @@ struct PageNavigationBar: View {
             .offset(y: -5)
             .onTapGesture {
                 currentPage_t = 4
+                self.profileScreenAction()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: 118)

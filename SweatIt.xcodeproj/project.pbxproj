@@ -19,12 +19,17 @@
 		0794B5DC2D3C84DB00B345C5 /* HomePageComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5DB2D3C84DB00B345C5 /* HomePageComponents.swift */; };
 		0794B5E02D3C86B800B345C5 /* ActivitiesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5DF2D3C86B800B345C5 /* ActivitiesPage.swift */; };
 		0794B5E22D3C8A8600B345C5 /* HealthComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0794B5E12D3C8A8600B345C5 /* HealthComponents.swift */; };
+		079B0EFE2D49B86A00D76B6A /* DietPageComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079B0EFD2D49B86A00D76B6A /* DietPageComponents.swift */; };
 		07AAFA0C2D3D7CA300B47D04 /* ExerciseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0B2D3D7CA300B47D04 /* ExerciseCard.swift */; };
 		07AAFA0E2D3D7CD400B47D04 /* AccentPageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0D2D3D7CD400B47D04 /* AccentPageHeader.swift */; };
 		07AAFA102D3D7D4800B47D04 /* ExerciseStatsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */; };
 		07AAFA122D3D7D6200B47D04 /* HeadingWithLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA112D3D7D6200B47D04 /* HeadingWithLink.swift */; };
 		07AAFA142D3D7D8A00B47D04 /* StepTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AAFA132D3D7D8A00B47D04 /* StepTrackerView.swift */; };
 		07ABA1642D3E15C8005591B6 /* ProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ABA1632D3E15C8005591B6 /* ProfilePage.swift */; };
+		07BC84832D46DE6E00F15A61 /* TodaySplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BC84822D46DE6E00F15A61 /* TodaySplitViewController.swift */; };
+		07BC84852D46E1EB00F15A61 /* OptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BC84842D46E1EB00F15A61 /* OptionView.swift */; };
+		07D4752E2D49633600565C14 /* Text_t.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D4752D2D49633600565C14 /* Text_t.swift */; };
+		07D475322D496BF600565C14 /* ExerciseRoutineComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D475312D496BF600565C14 /* ExerciseRoutineComponents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,12 +46,17 @@
 		0794B5DB2D3C84DB00B345C5 /* HomePageComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageComponents.swift; sourceTree = "<group>"; };
 		0794B5DF2D3C86B800B345C5 /* ActivitiesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesPage.swift; sourceTree = "<group>"; };
 		0794B5E12D3C8A8600B345C5 /* HealthComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthComponents.swift; sourceTree = "<group>"; };
+		079B0EFD2D49B86A00D76B6A /* DietPageComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DietPageComponents.swift; sourceTree = "<group>"; };
 		07AAFA0B2D3D7CA300B47D04 /* ExerciseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseCard.swift; sourceTree = "<group>"; };
 		07AAFA0D2D3D7CD400B47D04 /* AccentPageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentPageHeader.swift; sourceTree = "<group>"; };
 		07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseStatsPage.swift; sourceTree = "<group>"; };
 		07AAFA112D3D7D6200B47D04 /* HeadingWithLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingWithLink.swift; sourceTree = "<group>"; };
 		07AAFA132D3D7D8A00B47D04 /* StepTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerView.swift; sourceTree = "<group>"; };
 		07ABA1632D3E15C8005591B6 /* ProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePage.swift; sourceTree = "<group>"; };
+		07BC84822D46DE6E00F15A61 /* TodaySplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodaySplitViewController.swift; sourceTree = "<group>"; };
+		07BC84842D46E1EB00F15A61 /* OptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionView.swift; sourceTree = "<group>"; };
+		07D4752D2D49633600565C14 /* Text_t.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text_t.swift; sourceTree = "<group>"; };
+		07D475312D496BF600565C14 /* ExerciseRoutineComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRoutineComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -107,6 +117,7 @@
 				07AAFA0F2D3D7D4800B47D04 /* ExerciseStatsPage.swift */,
 				071467622D3D8632003B0213 /* CoachPage.swift */,
 				07ABA1632D3E15C8005591B6 /* ProfilePage.swift */,
+				07BC84822D46DE6E00F15A61 /* TodaySplitViewController.swift */,
 			);
 			path = SwiftUIScreens;
 			sourceTree = "<group>";
@@ -127,6 +138,10 @@
 				077F32C12D3E47A2003BE342 /* ChallengeCard.swift */,
 				073B967B2D3F888200376ED0 /* WorkoutPageComponents.swift */,
 				07250F672D4393E200D7D894 /* ProfilePageComponents.swift */,
+				07BC84842D46E1EB00F15A61 /* OptionView.swift */,
+				07D4752D2D49633600565C14 /* Text_t.swift */,
+				07D475312D496BF600565C14 /* ExerciseRoutineComponents.swift */,
+				079B0EFD2D49B86A00D76B6A /* DietPageComponents.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -207,6 +222,8 @@
 			files = (
 				0794B5CA2D3C5C9D00B345C5 /* AppBackgroundBlur.swift in Sources */,
 				07ABA1642D3E15C8005591B6 /* ProfilePage.swift in Sources */,
+				07BC84832D46DE6E00F15A61 /* TodaySplitViewController.swift in Sources */,
+				07D4752E2D49633600565C14 /* Text_t.swift in Sources */,
 				07AAFA0E2D3D7CD400B47D04 /* AccentPageHeader.swift in Sources */,
 				0794B5DA2D3C848B00B345C5 /* SecondaryHeading.swift in Sources */,
 				07AAFA142D3D7D8A00B47D04 /* StepTrackerView.swift in Sources */,
@@ -216,12 +233,15 @@
 				077F32C22D3E47A2003BE342 /* ChallengeCard.swift in Sources */,
 				0794B5E02D3C86B800B345C5 /* ActivitiesPage.swift in Sources */,
 				07250F682D4393E200D7D894 /* ProfilePageComponents.swift in Sources */,
+				07D475322D496BF600565C14 /* ExerciseRoutineComponents.swift in Sources */,
 				0794B5D82D3C845000B345C5 /* PageNavigationBar.swift in Sources */,
 				07AAFA122D3D7D6200B47D04 /* HeadingWithLink.swift in Sources */,
 				073B967C2D3F888200376ED0 /* WorkoutPageComponents.swift in Sources */,
 				0794B5E22D3C8A8600B345C5 /* HealthComponents.swift in Sources */,
 				0794B5DC2D3C84DB00B345C5 /* HomePageComponents.swift in Sources */,
+				079B0EFE2D49B86A00D76B6A /* DietPageComponents.swift in Sources */,
 				07AAFA102D3D7D4800B47D04 /* ExerciseStatsPage.swift in Sources */,
+				07BC84852D46E1EB00F15A61 /* OptionView.swift in Sources */,
 				0794B5B52D3C398800B345C5 /* HomePage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

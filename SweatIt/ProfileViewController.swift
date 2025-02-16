@@ -97,7 +97,26 @@ class ProfileViewController: UIViewController {
     
     private func addNavigationBar(whichPage: String) -> UIView {
         @State var something = 0
-        let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $something, currentPage: "Profile", wantOffset: false))
+        let navigationBar = UIHostingController(rootView: PageNavigationBar(currentPage_t: $something, currentPage: "Profile", wantOffset: false, homeScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, workoutScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ExercisePage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+            
+        }, coachScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CoachPage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, dietScreenAction: {
+            let destinationViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DietPage")
+            destinationViewController.modalPresentationStyle = .overFullScreen
+            self.present(destinationViewController, animated: false)
+        }, profileScreenAction: {
+        }))
+        
         navigationBar.view.frame = CGRect(origin: .zero, size: navigationBar.sizeThatFits(in: self.view.bounds.size))
         navigationBar.view.backgroundColor = .clear
         

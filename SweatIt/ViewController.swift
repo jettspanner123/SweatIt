@@ -10,44 +10,51 @@ import SwiftUI
 
 class ViewController: UIViewController {
     
-    @State var hAV: Int = 140
     
     var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-//        scrollView.backgroundColor = .blue.withAlphaComponent(0.5)
         return scrollView
     }()
     
     var contentView: UIView = {
         let contentView = UIView()
-//        contentView.backgroundColor = .red.withAlphaComponent(0.5)
         return contentView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.hAV = 100
-        }
-        
+       
         self.addLinearGradient(colorOne: UIColor(named: "DarkBG") ?? .black, colorTwo: .black, from: CGPoint(x: 0.5, y: 0), to: CGPoint(x: 0.5, y: 1.5))
-        let screenHeading = self.addHelperScreenPageHeading(headingTitle: "Challenges", heightAnchorValue: hAV)
+        
+        let pageHeading = UIHostingController(rootView: AccentPageHeader(pageHeaderTitle: "Challenges",wantOffset: false ,action: {
+            self.dismiss(animated: true)
+        }))
+        
+        pageHeading.view.frame = CGRect(origin: .zero, size: pageHeading.sizeThatFits(in: self.view.bounds.size))
+        pageHeading.view.backgroundColor = .clear
+        
+        pageHeading.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(pageHeading.view)
+        
+        
+        NSLayoutConstraint.activate([
+            pageHeading.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: -64),
+            pageHeading.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            pageHeading.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+        ])
        
         self.setupScrollView()
-        self.view.bringSubviewToFront(screenHeading)
+        
 
         let firstContestCard = self.getExerciseCardView(fromColor: Color("AppLavaOne"), toColor: Color("AppLavaTwo"), title: "Pushup Contest", desc: "Perform 20 reps in 10 secs.", difficulty: "Medium", image: "pushups", timing: "10 sec")
         let secondContestCard = self.getExerciseCardView(fromColor: Color("AppBlueLight"), toColor: Color("AppBlueDark"), title: "Squat Contest", desc: "Perform 100 reps in 5 mins.", difficulty: "Medium", image: "squats", timing: "5 min")
         let thirdContestCard = self.getExerciseCardView(fromColor: Color("AppCyanLight"), toColor: Color("AppCyanDark"), title: "Marathon Test", desc: "Run 400m in 1 mins.", difficulty: "Medium", image: "running", timing: "1 min")
-
-        firstContestCard.translatesAutoresizingMaskIntoConstraints = false
-        secondContestCard.translatesAutoresizingMaskIntoConstraints = false
-        thirdContestCard.translatesAutoresizingMaskIntoConstraints = false
-        self.contentView.addSubview(firstContestCard)
-        self.contentView.addSubview(secondContestCard)
-        self.contentView.addSubview(thirdContestCard)
         
+        
+        [firstContestCard, secondContestCard, thirdContestCard].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             firstContestCard.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 100),
@@ -62,15 +69,15 @@ class ViewController: UIViewController {
             thirdContestCard.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             thirdContestCard.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
 
-
-
         ])
         
+        self.view.bringSubviewToFront(pageHeading.view)
         
         
         // bure nazar wale tera moo kala
         
     }
+    
     
     private func setupScrollView() {
         self.view.addSubview(self.scrollView)
@@ -78,7 +85,7 @@ class ViewController: UIViewController {
         
         
         self.scrollView.addSubview(self.contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+        self.contentView.translatesAutoresizingMaskIntoConstraints = false
         
         
         NSLayoutConstraint.activate([
@@ -123,33 +130,65 @@ class ViewController: UIViewController {
     
 }
 
-extension UIViewController {
-    func addHelperScreenPageHeading(headingTitle: String, heightAnchorValue: Int) -> UIView {
-        let secondaryPageHeading = UIHostingController(rootView: AccentPageHeader(pageHeaderTitle: "Challenges", wantOffset: false, action: {
-            print("Clicked")
-        }))
-        secondaryPageHeading.view.frame = CGRect(origin: .zero, size: secondaryPageHeading.sizeThatFits(in: self.view.bounds.size))
-        secondaryPageHeading.view.layer.cornerRadius = 17
-        secondaryPageHeading.view.backgroundColor = .clear
-        
-        
-        self.view.addSubview(secondaryPageHeading.view)
-        
-        NSLayoutConstraint.activate([
-            secondaryPageHeading.view.topAnchor.constraint(equalTo: self.view.topAnchor),
-            secondaryPageHeading.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            secondaryPageHeading.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            secondaryPageHeading.view.heightAnchor.constraint(equalToConstant: 10),
-            secondaryPageHeading.view.widthAnchor.constraint(equalToConstant: self.view.frame.width)
-            
-        ])
-        
-        return secondaryPageHeading.view
+extension ViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forDismissed dismissed: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return RightSlideTransition(isPresenting: false)
     }
     
-    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> (any UIViewControllerAnimatedTransitioning)? {
+        return RightSlideTransition(isPresenting: true)
+    }
 }
 
-#Preview {
-    ViewController()
+
+
+class RightSlideTransition: NSObject, UIViewControllerAnimatedTransitioning {
+    
+    var isPresenting: Bool
+    
+    init(isPresenting: Bool) {
+        self.isPresenting = isPresenting
+        super.init()
+    }
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return 0.55
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let containerView = transitionContext.containerView
+        let toViewController = transitionContext.viewController(forKey: .to)
+        let fromViewController = transitionContext.viewController(forKey: .from)
+        
+        if isPresenting {
+            toViewController?.view.frame = containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0)
+            
+            containerView.addSubview(toViewController!.view)
+            
+            let timingFunction = CAMediaTimingFunction(controlPoints: 0.83, 0, 0.17, 1)
+            CATransaction.begin()
+            CATransaction.setAnimationTimingFunction(timingFunction)
+            
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+                toViewController?.view.frame = containerView.bounds
+            }, completion: { finished in
+                transitionContext.completeTransition(finished)
+            })
+            CATransaction.commit()
+            
+        } else {
+            let timingFunction = CAMediaTimingFunction(controlPoints: 0.83, 0, 0.17, 1) // bhai ye custom cubic bezie hai
+            CATransaction.begin()
+            CATransaction.setAnimationTimingFunction(timingFunction)
+            
+            UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+                fromViewController?.view.frame = containerView.bounds.offsetBy(dx: containerView.bounds.width, dy: 0)
+            }, completion: { finished in
+                transitionContext.completeTransition(finished)
+            })
+            CATransaction.commit()
+        }
+    }
 }
+
+

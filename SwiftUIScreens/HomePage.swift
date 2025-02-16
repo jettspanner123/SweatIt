@@ -56,7 +56,7 @@ struct HomePageStruct: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Home")
+//            PageNavigationBar(currentPage_t: $currentPage, currentPage: "Home")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
