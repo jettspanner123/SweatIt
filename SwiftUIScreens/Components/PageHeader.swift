@@ -54,7 +54,3 @@ struct PageHeader: View {
     }
 }
 
-#Preview {
-    PageHeader(pageHeaderTitle: "Profile", wantOffset: false)
-}
-
