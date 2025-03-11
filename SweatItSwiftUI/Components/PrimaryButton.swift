@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PrimaryNavigationButton: View {
     var text: String = ""
+    var leadingPadding: Double = 15
+    var trailingPadding: Double = 15
     var action: () -> Void = {}
     
     var body: some View {
@@ -31,8 +33,8 @@ struct PrimaryNavigationButton: View {
             .padding(.vertical, 15)
         }
         .frame(maxWidth: .infinity)
-        .padding(.trailing, 15)
-        .padding(.leading, 15)
+        .padding(.leading, self.leadingPadding)
+        .padding(.trailing, self.trailingPadding)
         
     }
 }

@@ -69,3 +69,17 @@ struct Activity_t {
     var creationDate: Date = .now
 }
 
+struct Food_t {
+    var id: String = UUID().uuidString
+    var foodName: String
+    var foodDescription: String
+    var foodQuantity: Double
+    var calories: Double
+    var foodImage: String
+    var foodType: Extras.FoodType
+    var protein: Double
+    var carbs: Double
+    var fats: Double
+    var recommendation: Extras.RecommendationType? = nil
+}
+

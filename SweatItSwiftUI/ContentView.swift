@@ -11,7 +11,7 @@ import SwiftData
 struct ContentView: View {
     
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .workout
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
     var body: some View {
         NavigationStack {
             ScreenBuilder {
@@ -23,6 +23,11 @@ struct ContentView: View {
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
+                        .transition(.blurReplace)
+                } else if self.currentPage_t == .coach {
+                    
+                } else if self.currentPage_t == .diet {
+                    DietScreen()
                         .transition(.blurReplace)
                 }
                 

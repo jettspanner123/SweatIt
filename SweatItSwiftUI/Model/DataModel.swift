@@ -21,7 +21,23 @@ class Extras {
     }
     
     enum Difficulty: String, Codable, CaseIterable, Hashable {
-        case all = "All", easy = "Easy", medium = "Medium", hard = "Hard", hardAf = "Hard AF"
+        case all = "All", easy = "Easy", medium = "Mid", hard = "Hard", hardAf = "Hard FR"
+    }
+    
+    enum MealType: String, Codable, CaseIterable, Hashable {
+        case breakfast = "Breakfast ☕️", lunch = "Lunch 🍽️", dinner = "Dinner 🍝", snack = "Snack 🍿"
+    }
+    
+    enum FoodType: String, Codable, CaseIterable, Hashable {
+        case junk = "Junk 💩", clean = "Clean 🥦", beverage = "Beverage 🥛"
+    }
+    
+    enum MacroType: String, Codable, CaseIterable, Hashable {
+        case protein = "Protein 🥩", carbohydrates = "Carbohydrates 🍞", fats = "Fats 🥐"
+    }
+    
+    enum RecommendationType: String, Codable, CaseIterable, Hashable {
+        case lessRecommended = "Less Recommended👎", moreRecommended = "More Recommended 👍", noRecommendation = "No Recommendation 😕"
     }
     
     enum ActivityType: String, Codable, CaseIterable, Hashable {
@@ -37,7 +53,7 @@ class Exercise {
     let pushUp = Exercise_t(
         exerciseName: "Push-Up",
         exerciseDescription: "A bodyweight exercise where you push your body up and down while maintaining a straight body.",
-        targettedMuscles: [.chest, .shoulders, .triceps, .core],
+        targettedMuscles: [.chest, .shoulders, .triceps],
         isNonActiveExercise: false,
         sets: 3,
         reps: 15,
@@ -268,10 +284,35 @@ class DailyEvents {
     public static var current = DailyEvents()
     
     var exerciseOfTheDay: Array<Exercise_t> = [
-        Exercise.current.benchPress,
         Exercise.current.pushUp,
+        Exercise.current.bodyweightSquat
     ]
 }
+
+enum FoodItems: String, CaseIterable {
+    case friedChicken
+    case salad
+    case pizza
+    case smoothie
+    case burger
+    
+    // Access the food items by enum case
+    var food: Food_t {
+        switch self {
+        case .friedChicken:
+            return Food_t(foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 200, calories: 400, foodImage: "fried_chicken.jpg", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
+        case .salad:
+            return Food_t(foodName: "Salad", foodDescription: "Fresh green salad with vegetables", foodQuantity: 150, calories: 100, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 10, fats: 5, recommendation: .moreRecommended)
+        case .pizza:
+            return Food_t(foodName: "Pizza", foodDescription: "Cheese pizza with toppings", foodQuantity: 250, calories: 600, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 60, fats: 25, recommendation: .noRecommendation)
+        case .smoothie:
+            return Food_t(foodName: "Smoothie", foodDescription: "Healthy fruit smoothie", foodQuantity: 200, calories: 150, foodImage: "smoothie.jpg", foodType: .beverage, protein: 3, carbs: 35, fats: 1, recommendation: .moreRecommended)
+        case .burger:
+            return Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese", foodQuantity: 300, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
+        }
+    }
+}
+
 
 class Challenge {
     public static var current = Challenge()
@@ -288,7 +329,7 @@ class Challenge {
             duration: ApplicationHelper.getMinutes(5)
         ),
         .init(
-            challengeName: "Marathon Challenge",
+            challengeName: "Marathon Contest",
             challengeImage: "running",
             challengeDescription: "Run a full marathon 400m within 3 mins.",
             challengeExtendedDescription: "The goal of this challenge is to run a full marathon. You need to complete the 400m within 3 mins. Pace yourself and stay hydrated to succeed in this challenge.",

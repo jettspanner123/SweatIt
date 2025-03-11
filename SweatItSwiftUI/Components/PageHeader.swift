@@ -49,7 +49,7 @@ struct PageHeader: View {
                     .resizable()
                     .frame(width: 34, height: 35)
                     .offset(x: -24, y: 30)
-                
+                    .transition(.offset(x: 150))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: 137)

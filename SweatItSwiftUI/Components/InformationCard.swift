@@ -34,7 +34,7 @@ struct InformationCard: View {
             
             HStack(alignment: .bottom) {
                 Text(self.text)
-                    .font(.custom(ApplicationFonts.oswaldRegular, size: 30))
+                    .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
                     .foregroundStyle(self.textColor)
                     .padding(.leading, 5)
                 
@@ -50,7 +50,7 @@ struct InformationCard: View {
             
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 70, alignment: .topLeading)
+        .frame(height: 65, alignment: .topLeading)
         .padding(10)
         .coordinateSpace(name: "InformationCardCoordinateSpace")
     }

@@ -15,6 +15,8 @@ class ApplicationLinearGradient {
     public static let cyanGradient = LinearGradient(gradient: Gradient(colors: [.appCyanLight, .appCyanDark]), startPoint: .top, endPoint: .bottom)
     public static let waterGradient = LinearGradient(gradient: Gradient(colors: [.appWaterLight, .appWaterDark]), startPoint: .top, endPoint: .bottom)
     public static let lavaPurpleGradient = LinearGradient(gradient: Gradient(colors: [.appLavaPurpleOne, .appLavaPurpleTwo]), startPoint: .top, endPoint: .bottom)
+    public static let goldenGradient = LinearGradient(gradient: Gradient(colors: [.appGoldLight, .appGoldDark]), startPoint: .top, endPoint: .bottom)
+    public static let brownGradient = LinearGradient(gradient: Gradient(colors: [.appBrownLight, .appBrownDark]), startPoint: .top, endPoint: .bottom)
 
 }
 
@@ -29,6 +31,31 @@ class ApplicationHelper {
             return String(format: "%.1f HR", hours)
         }
     }
+    
+    public static func getTimeFromDate(_ date: Date) -> String {
+        
+        let calendar = Calendar.current
+        let now = Date()
+        
+        let components = calendar.dateComponents([.second, .minute, .hour, .day, .month, .year], from: now, to: date)
+        
+        if let year = components.year, year > 0 {
+            return "\(year) year\(year > 1 ? "s" : "")"
+        } else if let month = components.month, month > 0 {
+            return "\(month) month\(month > 1 ? "s" : "")"
+        } else if let day = components.day, day > 0 {
+            return "\(day) day\(day > 1 ? "s" : "")"
+        } else if let hour = components.hour, hour > 0 {
+            return "\(hour) hour\(hour > 1 ? "s" : "")"
+        } else if let minute = components.minute, minute > 0 {
+            return "\(minute) min\(minute > 1 ? "s" : "")"
+        } else if let second = components.second, second > 0 {
+            return "\(second) sec\(second > 1 ? "s" : "")"
+        } else {
+            return "Just now"
+        }
+    }
+    
     
     public static func getMinutes(_ time: TimeInterval) -> Date {
         .now.addingTimeInterval(time * 60)
