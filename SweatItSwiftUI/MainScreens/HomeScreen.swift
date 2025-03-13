@@ -18,7 +18,7 @@ struct HomeScreen: View {
             // MARK: Steps Taken card
             InformationCard(image: "Boot", title: "Steps", text: "8000", secondaryText: "/ 12000")
                 .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
-           
+            
             
             // MARK: Calories burned and gained
             HStack {
@@ -42,8 +42,8 @@ struct HomeScreen: View {
                     CheckBoxWithText(text: self.AgendaToday[index].title, checked: self.$AgendaToday[index].isDone)
                         .padding(.horizontal, 15)
                         .padding(.vertical, 15)
-                   
-
+                    
+                    
                     if index != self.AgendaToday.count - 1 {
                         CustomDivider()
                     }
@@ -91,7 +91,7 @@ struct HomeScreen: View {
                     .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
                     .overlay {
                         HStack {
-                           Image("Workout")
+                            Image("Workout")
                                 .resizable()
                                 .frame(width: 30, height: 25)
                         }
@@ -102,27 +102,24 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity)
             
-            ForEach(self.RescentActivities, id: \.id) { activity in
-                NavigationLink(destination: ActivityDetailsScreen(activity: activity)) {
-                    ActivityViewCard(activity: activity)
+            VStack(spacing: 5) {
+                ForEach(self.RescentActivities, id: \.id) { activity in
+                    NavigationLink(destination: ActivityDetailsScreen(activity: activity)) {
+                        ActivityViewCard(activity: activity)
+                    }
                 }
+                
             }
-            
+           
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
     }
 }
 
 
-struct ActivityViewCard: View {
-    
-    var activity: Activity_t
-    var body: some View {
-        if let workout = self.activity.activityDescription as? Workout_t {
-            WorkoutCard(image: workout.workoutImage, name: workout.workoutName, difficulty: workout.workoutDifficulty, sideOffset: 50, isViewCard: true)
-        }
-    }
-}
+
+
+
 
 #Preview {
     HomeScreen()

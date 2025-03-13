@@ -13,3 +13,10 @@ extension View {
             .background(ApplicationLinearGradient.applicationGradient)
     }
 }
+
+extension View {
+    func takeMaxWidthLeading() -> some View {
+        self
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}

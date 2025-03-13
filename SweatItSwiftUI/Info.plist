@@ -7,6 +7,9 @@
 		<string></string>
 	</array>
     
+    <key>NSCameraUsageDescription</key>
+    <string>We need camera access to scan food</string>
+    
     <key>UIAppFonts</key>
     <array>
        <string>Oswald-Regular.ttf</string>

@@ -17,6 +17,8 @@ class ApplicationLinearGradient {
     public static let lavaPurpleGradient = LinearGradient(gradient: Gradient(colors: [.appLavaPurpleOne, .appLavaPurpleTwo]), startPoint: .top, endPoint: .bottom)
     public static let goldenGradient = LinearGradient(gradient: Gradient(colors: [.appGoldLight, .appGoldDark]), startPoint: .top, endPoint: .bottom)
     public static let brownGradient = LinearGradient(gradient: Gradient(colors: [.appBrownLight, .appBrownDark]), startPoint: .top, endPoint: .bottom)
+    public static let clearGradient = LinearGradient(gradient: Gradient(colors: [.clear, .clear]), startPoint: .top, endPoint: .bottom)
+    public static let darkBGSameGradient = LinearGradient(gradient: Gradient(colors: [.darkBG, .darkBG]), startPoint: .top, endPoint: .bottom)
 
 }
 
@@ -94,6 +96,8 @@ class ApplicationFonts {
     public static let oswaldRegular = "Oswald-Regular"
     public static let oswaldMedium = "Oswald-Medium"
     public static let oswaldBold = "Oswald-Bold"
+    public static let oswaldSemiBold = "Oswald-SemiBold"
+
     
     public static let poppinsBold = "Poppins-Bold"
     public static let poppinsLight = "Poppins-Light"

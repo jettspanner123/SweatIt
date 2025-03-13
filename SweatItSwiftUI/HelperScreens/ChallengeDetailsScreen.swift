@@ -31,10 +31,10 @@ struct ChallengeDetailsScreen: View {
             .overlay {
                 HStack {
                     Image(systemName: "xmark")
-                        .scaleEffect(1.25)
                         .foregroundStyle(.white)
                         .padding()
                         .background(.white.opacity(0.001))
+                        .offset(x: -5)
                         .onTapGesture {
                             withAnimation(.smooth) {
                                 self.showChallengeDetailView = false
@@ -43,7 +43,6 @@ struct ChallengeDetailsScreen: View {
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .padding(.horizontal, 10)
             }
             
             SectionHeader(text: "Content Description")
@@ -125,7 +124,6 @@ struct ChallengeDetailsScreen: View {
                     }
                 }
         )
-        .clipped()
         .ignoresSafeArea()
     }
 }

@@ -44,6 +44,22 @@ class Extras {
         case workoutCompleted = "Workout Completed ✅", mealEaten = "Meal Eaten 🍔", waterIntake = "Water Taken 🥛"
     }
     
+    enum Gender: String, Codable, CaseIterable, Hashable {
+        case male = "Male 🗿", female = "Female 👩", Others = "LGTV 🤡"
+    }
+    
+    enum BodyType: String, Codable, CaseIterable, Hashable {
+        case skinny = "Skinny 🥢", muscular = "Muscular 🗿", skinnyFat = "Skinny Fat 🤡", fat = "Fat 🐘"
+    }
+    
+    enum Goal: String, Codable, CaseIterable, Hashable {
+        case looseFat = "Loose Fat", buildMuscle = "Build Muscle", bodyRecomposition = "Body Recomposition", beFit = "Being Fit", developer = "Developer 🗿"
+    }
+    
+    enum UserLevel: String, Codable, CaseIterable, Hashable {
+        case beginner = "Beginner 👶", intermediate = "Intermediate 🏃", advanced = "Advanced 🗿"
+    }
+    
 }
 
 class Exercise {
@@ -287,30 +303,25 @@ class DailyEvents {
         Exercise.current.pushUp,
         Exercise.current.bodyweightSquat
     ]
+    
+    var stepCount: Int = 13020
 }
 
-enum FoodItems: String, CaseIterable {
-    case friedChicken
-    case salad
-    case pizza
-    case smoothie
-    case burger
+class Food {
+    public static var current = Food()
     
-    // Access the food items by enum case
-    var food: Food_t {
-        switch self {
-        case .friedChicken:
-            return Food_t(foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 200, calories: 400, foodImage: "fried_chicken.jpg", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
-        case .salad:
-            return Food_t(foodName: "Salad", foodDescription: "Fresh green salad with vegetables", foodQuantity: 150, calories: 100, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 10, fats: 5, recommendation: .moreRecommended)
-        case .pizza:
-            return Food_t(foodName: "Pizza", foodDescription: "Cheese pizza with toppings", foodQuantity: 250, calories: 600, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 60, fats: 25, recommendation: .noRecommendation)
-        case .smoothie:
-            return Food_t(foodName: "Smoothie", foodDescription: "Healthy fruit smoothie", foodQuantity: 200, calories: 150, foodImage: "smoothie.jpg", foodType: .beverage, protein: 3, carbs: 35, fats: 1, recommendation: .moreRecommended)
-        case .burger:
-            return Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese", foodQuantity: 300, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
-        }
-    }
+    let pizza = Food_t(foodName: "Pizza", foodDescription: "Cheese pizza with pepperoni", foodQuantity: 1, calories: 300, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 35, fats: 10, recommendation: .noRecommendation)
+    let salad = Food_t(foodName: "Salad", foodDescription: "Fresh salad with mixed greens and dressing", foodQuantity: 1, calories: 150, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 15, fats: 7, recommendation: .moreRecommended)
+    let burger = Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese and lettuce", foodQuantity: 1, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
+    let smoothie = Food_t(foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie.jpg", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
+    let friedChicken = Food_t(foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 1, calories: 400, foodImage: "chickenDish", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
+    let pasta = Food_t(foodName: "Pasta", foodDescription: "Pasta with marinara sauce", foodQuantity: 1, calories: 350, foodImage: "pasta.jpg", foodType: .junk, protein: 10, carbs: 50, fats: 10, recommendation: .noRecommendation)
+    let sandwich = Food_t(foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich.jpg", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
+    let apple = Food_t(foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple.jpg", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
+    let icedCoffee = Food_t(foodName: "Iced Coffee", foodDescription: "Iced coffee with milk and sugar", foodQuantity: 1, calories: 120, foodImage: "iced_coffee.jpg", foodType: .beverage, protein: 2, carbs: 15, fats: 4, recommendation: .noRecommendation)
+    let donut = Food_t(foodName: "Donut", foodDescription: "Glazed chocolate donut", foodQuantity: 1, calories: 200, foodImage: "donut.jpg", foodType: .junk, protein: 2, carbs: 30, fats: 10, recommendation: .lessRecommended)
+    
+    
 }
 
 
@@ -320,14 +331,14 @@ class Challenge {
     var exampleChallengesList: Array<Challenge_t> = [
         .init(challengeName: "Pushup Contest", challengeImage: "pushups", challengeDescription: "Do a set of 25 pushups in and under 10 seconds.", challengeExtendedDescription: "Perform a set of 25 clean pushups, which by the rule of thumb should be performed with your arms fully extended in front of you, and you chest touching the ground. In and under 10 seconds.", challengeDifficulty: .medium, duration: ApplicationHelper.getSeconds(10)),
         
-        .init(
-            challengeName: "Squat Contest",
-            challengeImage: "squats",
-            challengeDescription: "Do a set of 300 squats in and under 5 mins.",
-            challengeExtendedDescription: "Perform a set of 30 clean squats. Each squat should have your thighs parallel to the ground, and your back should remain straight. Complete the set in 15 seconds or less.",
-            challengeDifficulty: .medium,
-            duration: ApplicationHelper.getMinutes(5)
-        ),
+            .init(
+                challengeName: "Squat Contest",
+                challengeImage: "squats",
+                challengeDescription: "Do a set of 300 squats in and under 5 mins.",
+                challengeExtendedDescription: "Perform a set of 30 clean squats. Each squat should have your thighs parallel to the ground, and your back should remain straight. Complete the set in 15 seconds or less.",
+                challengeDifficulty: .medium,
+                duration: ApplicationHelper.getMinutes(5)
+            ),
         .init(
             challengeName: "Marathon Contest",
             challengeImage: "running",
@@ -339,11 +350,28 @@ class Challenge {
     ]
 }
 
+class Meal {
+    public static var current = Meal()
+    
+    var exampleMeals: Array<Meal_t> = [
+        .init(mealName: "Break Fast ☀️", mealType: .breakfast, foodItems: [Food.current.apple, Food.current.pasta, Food.current.smoothie]),
+        .init(mealName: "Lunch 🥚", mealType: .lunch, foodItems: [Food.current.friedChicken, Food.current.burger]),
+        .init(mealName: "Dinner 🌚", mealType: .dinner, foodItems: [Food.current.salad, Food.current.pasta, Food.current.icedCoffee]),
+    ]
+}
+
 class Activity {
     public static var current = Activity()
     
     var exampleActivityList: Array<Activity_t> = [
         .init(activityName: .workoutCompleted, activityDescription: Workout.current.exampleWorkoutList.first!),
+        .init(activityName: .mealEaten, activityDescription: Meal.current.exampleMeals.first!),
+        .init(activityName: .mealEaten, activityDescription: Food.current.friedChicken)
     ]
 }
 
+class User {
+    public static var current = User()
+    
+    var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17)
+}

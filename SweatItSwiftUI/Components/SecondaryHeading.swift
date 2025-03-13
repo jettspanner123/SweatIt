@@ -13,14 +13,14 @@ struct SecondaryHeading: View {
     var secondaryText: String = ""
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: 15) {
+        HStack(alignment: .bottom, spacing: 5) {
             Text(title)
                 .foregroundStyle(.white)
                 .font(.system(size: 25, weight: .light, design: .rounded))
                 .kerning(-1)
            
             Text(self.secondaryText)
-                .font(.system(size: 15, weight: .regular, design: .rounded))
+                .font(.system(size: 10, weight: .regular, design: .rounded))
                 .foregroundStyle(.white.opacity(0.35))
                 .kerning(-1)
                 .offset(y: -4)

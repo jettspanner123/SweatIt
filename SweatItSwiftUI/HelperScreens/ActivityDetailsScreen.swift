@@ -50,6 +50,44 @@ struct ActivityDetailsScreen: View {
                         
                     }
                     
+                    if let food = self.activity.activityDescription as? Food_t {
+                        SpaceSeparatedKeyValue(key: "Food Name", value: food.foodName)
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                        CustomDivider()
+
+                        SpaceSeparatedKeyValue(key: "Calories Consumed", value: String(food.calories) + " 🥦")
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                        CustomDivider()
+
+                        SpaceSeparatedKeyValue(key: "Protien", value: String(format: "%.f 🍖", food.protein))
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                        
+                        CustomDivider()
+                        
+                        SpaceSeparatedKeyValue(key: "Carbohydrates", value: String(format: "%.f 🍞", food.carbs))
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                        CustomDivider()
+
+                        SpaceSeparatedKeyValue(key: "Fats", value: String(format: "%.f 🥐", food.fats))
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                        CustomDivider()
+
+                        SpaceSeparatedKeyValue(key: "Quantity", value: String(format: "%.f", food.foodQuantity))
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                        
+                    }
+                    
                 }
                
                 // MARK: Creation date
@@ -78,6 +116,23 @@ struct ActivityDetailsScreen: View {
                     
                     NavigationLink(destination: ActiveWorkoutScreen(workout: workout)) {
                         WorkoutCard(image: workout.workoutImage, name: workout.workoutName, difficulty: workout.workoutDifficulty, sideOffset: 50, caloriesBurned: Int(workout.caloriesBurned), duration: String(workout.timeTaken))
+                    }
+                }
+                
+                if let food = self.activity.activityDescription as? Food_t {
+                    NavigationLink(destination: EmptyView()) {
+                        
+                        // MARK: Outer wraper
+                        HStack {
+                            FoodCard(food: food)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .background(.darkBG.opacity(0.54))
+                        .overlay {
+                            defaultShape
+                                .stroke(.white.opacity(0.18))
+                        }
+                        .clipShape(defaultShape)
                     }
                 }
                 

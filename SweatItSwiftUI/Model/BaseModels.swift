@@ -69,7 +69,7 @@ struct Activity_t {
     var creationDate: Date = .now
 }
 
-struct Food_t {
+struct Food_t: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
     var foodName: String
     var foodDescription: String
@@ -83,3 +83,60 @@ struct Food_t {
     var recommendation: Extras.RecommendationType? = nil
 }
 
+
+struct Meal_t: Identifiable, Codable, Hashable {
+    var id: String = UUID().uuidString
+    var mealName: String
+    var mealType: Extras.MealType
+    var foodItems: Array<Food_t>
+    var totalCalories: Double {
+        var finalCalories: Double = .zero
+        
+        for food in foodItems {
+            finalCalories += food.calories
+        }
+        return finalCalories
+    }
+    var totalProtein: Double {
+        var finalProtein: Double = .zero
+        
+        for food in foodItems {
+            finalProtein += food.protein
+        }
+        return finalProtein
+    }
+    
+    var totalCarbs: Double {
+        var finalCarbs: Double = .zero
+        
+        for food in foodItems {
+            finalCarbs += food.carbs
+        }
+        return finalCarbs
+    }
+    var totalFats: Double {
+        var finalFats: Double = .zero
+        
+        for food in foodItems {
+            finalFats += food.protein
+        }
+        return finalFats
+    }
+    var mealTime: Date = .now
+}
+
+struct User_t: Identifiable, Codable, Hashable {
+    var id: String = UUID().uuidString
+    var fullName: String
+    var username: String
+    var emailId: String
+    var password: String
+    var currentWeight: Double
+    var currentHeight: Double
+    var gender: Extras.Gender
+    var bodyType: Extras.BodyType
+    var level: Extras.UserLevel
+    var goal: Extras.Goal
+    var dailyPoints: Int = 0
+    var fitnessLevel: Int = 1
+}

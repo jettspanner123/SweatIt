@@ -27,4 +27,6 @@ struct CustomList<Content: View>: View {
         }
         .clipShape(defaultShape)
     }
+    
 }
+
