@@ -140,3 +140,22 @@ struct User_t: Identifiable, Codable, Hashable {
     var dailyPoints: Int = 0
     var fitnessLevel: Int = 1
 }
+
+struct FriendRequest_t: Identifiable, Codable, Hashable {
+    var id: String = UUID().uuidString
+    var fromUser: User_t
+    var toUserId: User_t
+    var requestDate: Date = .now
+    var actionDate: Date? = nil
+    var status: Extras.FriendRequestStatus = .pending
+}
+
+struct Notification_t: Identifiable {
+    var id: String = UUID().uuidString
+    var forUserId: String
+    var notificationName: String
+    var notificationDescription: String
+    var notificationType: Extras.NotificationType
+    var notificationDate: Date = .now
+    var notificationAction: Any
+}

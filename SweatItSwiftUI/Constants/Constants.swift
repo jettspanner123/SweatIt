@@ -85,6 +85,14 @@ class ApplicationHelper {
         impactEnginge.prepare()
         impactEnginge.impactOccurred()
     }
+    
+    
+    class UserHelper {
+        public static var currenr = UserHelper()
+        
+    }
+    
+    
 }
 
 class ApplicationPadding {

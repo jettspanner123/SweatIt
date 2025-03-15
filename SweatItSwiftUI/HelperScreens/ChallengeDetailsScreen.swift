@@ -133,6 +133,7 @@ struct BottomBluredButton: View {
     var text: String
     var background: LinearGradient
     
+    
     var action: () -> Void = {}
     
     var body: some View {

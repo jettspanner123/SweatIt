@@ -8,14 +8,20 @@
 import SwiftUI
 import SwiftData
 
+class AnimatedNamespaceCoordinator: ObservableObject {
+    public var current = AnimatedNamespaceCoordinator()
+    @Namespace var animatedNamespace
+}
+
+
 struct ContentView: View {
     
-    
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .workout
     @State var showSplashScreen: Bool = true
     @State var showTransitionScree: Bool = true
     
     @State var showCameraScreen: Bool = false
+    @State var showNotificationCenter: Bool = false
     
     @State var currentUser: User_t = User.current.currentUser
     
@@ -52,17 +58,30 @@ struct ContentView: View {
 //                    .zIndex(9999)
 //                }
                 
+                if self.showNotificationCenter {
+                    NotificationCenterScreen(showNotificationCenter: self.$showNotificationCenter)
+                        .transition(.offset(y: UIScreen.main.bounds.height))
+                        .zIndex(9999)
+                }
+                
                 if self.showCameraScreen {
                     FoodScannerScreen(showCameraScreen: self.$showCameraScreen)
                         .transition(.offset(y: UIScreen.main.bounds.height))
                         .zIndex(9999)
                 }
                 
-                PageHeader(pageHeaderTitle: self.currentPage_t == .home ? "Home" : self.currentPage_t == .workout ? "Workout" : self.currentPage_t == .coach ? "Coach" : self.currentPage_t == .diet ? "Diet" : "Profile")
-                
+                PageHeader(pageHeaderTitle: self.currentPage_t == .home ? "Home" : self.currentPage_t == .workout ? "Workout" : self.currentPage_t == .coach ? "Coach" : self.currentPage_t == .diet ? "Diet" : "Profile", notificationAction: {
+                    withAnimation(.smooth) {
+                        self.showNotificationCenter = true
+                    }
+                })
+                .offset(y: self.showNotificationCenter || self.showCameraScreen ? -50 : 0)
+                .blur(radius: self.showNotificationCenter || self.showCameraScreen ? 10 : 0)
                 
                 if self.currentPage_t == .home {
                     HomeScreen()
+                        .offset(y: self.showNotificationCenter ? -50 : 0)
+                        .blur(radius: self.showNotificationCenter ? 10 : 0)
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
@@ -71,6 +90,8 @@ struct ContentView: View {
                     
                 } else if self.currentPage_t == .diet {
                     DietScreen(showCameraScreen: self.$showCameraScreen)
+                        .offset(y: self.showCameraScreen ? -50 : 0)
+                        .blur(radius: self.showCameraScreen ? 10 : 0)
                         .transition(.blurReplace)
                 } else {
                     ProfileScreen(user: $currentUser)

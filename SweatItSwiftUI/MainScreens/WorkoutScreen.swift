@@ -22,7 +22,7 @@ struct WorkoutScreen: View {
             
             // MARK: Double navigation button
             HStack {
-               
+                
                 NavigationLink(destination: ChallengesScreen()) {
                     PrimaryNavigationButton(text: "Challenges")
                         .padding(.leading)
@@ -66,8 +66,8 @@ struct WorkoutScreen: View {
             
             SecondaryHeading(title: "Exercise of the day")
                 .padding(.top, 20)
-           
-                
+            
+            
             VStack(spacing: 0) {
                 
                 
@@ -113,47 +113,65 @@ struct DailyExerciseViewCard: View {
             .background(.darkBG)
             
             // MARK: Content view
-            VStack(spacing: 5) {
+            VStack(spacing: 15) {
                 Text(self.exercise.exerciseName + " 🔥")
                     .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal)
                 
-               
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        
-                        // MARK: Difficulty
+                HStack {
+                    
+                    // MARK: Difficulty
+                    HStack(spacing: 5) {
                         Text(self.exercise.difficulty.rawValue)
-                            .font(.system(size: 10, weight: .regular, design: .rounded))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 13))
                             .foregroundStyle(.white)
-                            .padding(4)
-                            .padding(.horizontal, 4)
-                            .background(self.exercise.difficulty == .easy ? ApplicationLinearGradient.greenGradient : self.exercise.difficulty == .medium ? ApplicationLinearGradient.goldenGradient : ApplicationLinearGradient.redGradient)
-                            .overlay {
-                                Capsule()
-                                    .stroke(.white.opacity(0.18))
-                            }
-                            .clipShape(Capsule())
-                        
-                        ForEach(self.exercise.targettedMuscles, id: \.self) { muscle in
-                            Text(muscle.rawValue)
-                                .font(.system(size: 10, weight: .regular, design: .rounded))
-                                .foregroundStyle(.white)
-                                .padding(4)
-                                .padding(.horizontal, 4)
-                                .background(ApplicationLinearGradient.redGradient)
-                                .overlay {
-                                    Capsule()
-                                        .stroke(.white.opacity(0.18))
-                                }
-                                .clipShape(Capsule())
-                        }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
+                    .background(self.exercise.difficulty == .easy ? ApplicationLinearGradient.greenGradient : self.exercise.difficulty == .medium ? ApplicationLinearGradient.goldenGradient : ApplicationLinearGradient.redGradient)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    
+                    
+                    
+                    // MARK: Rendering muscles
+                    ForEach(self.exercise.targettedMuscles.prefix(1), id: \.self) { muscle in
+                        HStack(spacing: 5) {
+                            Text(muscle.rawValue)
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 13))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 3)
+//                        .background(.darkBG.opacity(0.54))
+                        .background(ApplicationLinearGradient.redGradient)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.white.opacity(0.18))
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        
+                    }
+                    
+                    if self.exercise.targettedMuscles.count > 2 {
+                        
+                        Image(systemName: "ellipsis")
+                            .resizable()
+                            .frame(width: 10, height: 3)
+                            .foregroundStyle(.white.opacity(0.5))
+                            .offset(y: 5)
+                    }
+                    
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                
+                
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(.vertical)
@@ -169,7 +187,7 @@ struct DailyExerciseViewCard: View {
                 .padding(25)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 80,  alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: 90,  alignment: .leading)
         .background(.darkBG.opacity(0.54))
     }
 }

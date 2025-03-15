@@ -60,6 +60,14 @@ class Extras {
         case beginner = "Beginner 👶", intermediate = "Intermediate 🏃", advanced = "Advanced 🗿"
     }
     
+    enum NotificationType: String, Codable, CaseIterable, Hashable {
+        case friendRequest = "Friend Request", drinkWater = "Drink Water", unfinishedWorkout = "Unfinished Workout", completeDiet = "Complete Diet", newChallenge = "New Challenge!"
+    }
+    
+    enum FriendRequestStatus: String, Codable, CaseIterable, Hashable {
+        case pending = "Pending ⏰", accepted = "Accepted ✅", declined = "Declined ❌", ingnored = "Ignored 🥺"
+    }
+    
 }
 
 class Exercise {
@@ -313,11 +321,11 @@ class Food {
     let pizza = Food_t(foodName: "Pizza", foodDescription: "Cheese pizza with pepperoni", foodQuantity: 1, calories: 300, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 35, fats: 10, recommendation: .noRecommendation)
     let salad = Food_t(foodName: "Salad", foodDescription: "Fresh salad with mixed greens and dressing", foodQuantity: 1, calories: 150, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 15, fats: 7, recommendation: .moreRecommended)
     let burger = Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese and lettuce", foodQuantity: 1, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
-    let smoothie = Food_t(foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie.jpg", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
+    let smoothie = Food_t(foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
     let friedChicken = Food_t(foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 1, calories: 400, foodImage: "chickenDish", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
     let pasta = Food_t(foodName: "Pasta", foodDescription: "Pasta with marinara sauce", foodQuantity: 1, calories: 350, foodImage: "pasta.jpg", foodType: .junk, protein: 10, carbs: 50, fats: 10, recommendation: .noRecommendation)
-    let sandwich = Food_t(foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich.jpg", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
-    let apple = Food_t(foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple.jpg", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
+    let sandwich = Food_t(foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
+    let apple = Food_t(foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
     let icedCoffee = Food_t(foodName: "Iced Coffee", foodDescription: "Iced coffee with milk and sugar", foodQuantity: 1, calories: 120, foodImage: "iced_coffee.jpg", foodType: .beverage, protein: 2, carbs: 15, fats: 4, recommendation: .noRecommendation)
     let donut = Food_t(foodName: "Donut", foodDescription: "Glazed chocolate donut", foodQuantity: 1, calories: 200, foodImage: "donut.jpg", foodType: .junk, protein: 2, carbs: 30, fats: 10, recommendation: .lessRecommended)
     
@@ -374,4 +382,19 @@ class User {
     public static var current = User()
     
     var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17)
+    var exampleUserTwo: User_t = .init(fullName: "Tushar Sourav", username: "TusharKhan123", emailId: "tushar@gmail.com", password: "MyNameIsKhan", currentWeight: 70, currentHeight: 185, gender: .male, bodyType: .skinny, level: .beginner, goal: .buildMuscle)
+    
+}
+
+class Notification {
+    public static var current = Notification()
+    
+    var notifications: Array<Notification_t> = [
+        .init(forUserId: User.current.currentUser.id, notificationName: "Friend Request", notificationDescription: "Mister bihari ji apke friend request aaya hai", notificationType: .friendRequest, notificationAction: FriendRequest_t(fromUser: User.current.exampleUserTwo, toUserId: User.current.currentUser))
+    ]
+    
+    var notificationHistory: Array<Notification_t> = [
+        
+    ]
+    
 }

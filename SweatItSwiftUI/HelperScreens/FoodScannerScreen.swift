@@ -47,12 +47,26 @@ struct FoodScannerScreen: View {
     var body: some View {
         ZStack(alignment: .top) {
             
+            
+            if self.currentScannerType == .food {
+                HStack {
+                    
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 150)
+                .background(AppBackgroundBlur(radius: 100, opaque: true))
+                .background(.darkBG.opacity(0.5))
+                .offset(y: UIScreen.main.bounds.height - 150)
+                .zIndex(9999)
+                .transition(.offset(y: 150))
+            }
+            
             if self.currentScannerType == .barcode {
                 
                 // MARK: Page header with buttons
                 HStack {
                     Text("Food Analysis")
-                        .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
+                        .font(.system(size: 25, weight: .light, design: .rounded))
                         .foregroundStyle(.white)
                 }
                 .frame(maxWidth: .infinity)
@@ -77,7 +91,7 @@ struct FoodScannerScreen: View {
                     .padding(.horizontal)
                 }
                 .offset(y: 65)
-                .zIndex(9999)
+                .zIndex(11111)
                 .transition(.offset(y: -200))
                 
             }
@@ -206,11 +220,11 @@ struct FoodScannerScreen: View {
             .padding(.top, ApplicationPadding.mainScreenVerticalPadding + 50)
             .background(AppBackgroundBlur(radius: self.currentScannerType == .food ? 0 : 10, opaque: true))
             .background(self.currentScannerType == .food ? .clear : .darkBG.opacity(0.88))
-            .zIndex(9998)
+            .zIndex(9999)
             
             
             
-            
+            // MARK: Shutter button
             if self.currentScannerType == .food {
                 HStack {
                     Image(systemName: "camera.fill")
@@ -219,7 +233,7 @@ struct FoodScannerScreen: View {
                 .frame(width: 80, height: 80)
                 .background(Circle().fill(.white.gradient))
                 .offset(y: UIScreen.main.bounds.height - 170)
-                .zIndex(9998)
+                .zIndex(11111)
                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width), removal: .offset(x: UIScreen.main.bounds.width)))
             }
             
@@ -313,4 +327,8 @@ struct CameraView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
+
+#Preview {
+    FoodScannerScreen(showCameraScreen: .constant(true))
 }

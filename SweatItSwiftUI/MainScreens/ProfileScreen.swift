@@ -13,7 +13,7 @@ struct ProfileScreen: View {
     
     @State var stepCount: Int = DailyEvents.current.stepCount
     
-    @State var showPastStatisticsScreen: Bool = false
+    @State var showPastStatisticsScreen: Bool = true
     @State var showAddFriendScreen: Bool = false
     
     var body: some View {
@@ -51,15 +51,15 @@ struct ProfileScreen: View {
                     // MARK: Add friend button
                     HStack(spacing: 15) {
                         Image(systemName: "person.badge.plus")
-                            .foregroundStyle(.white.opacity(0.5))
+                            .foregroundStyle(.black.opacity(0.5))
                         Text("Add Fiend")
                             .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.5))
+                            .foregroundStyle(.black.opacity(0.5))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 40)
                     .padding(.horizontal, 15)
-                    .background(.darkBG.opacity(0.54))
+                    .background(.white.gradient)
                     .overlay {
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(.white.opacity(0.18))
@@ -68,7 +68,7 @@ struct ProfileScreen: View {
                     .overlay {
                         HStack {
                             Image(systemName: "chevron.right")
-                                .foregroundStyle(.white.opacity(0.5))
+                                .foregroundStyle(.black.opacity(0.5))
                                 .scaleEffect(0.55)
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -204,18 +204,26 @@ struct ProfileScreen: View {
                         .foregroundStyle(.white)
                         .takeMaxWidthLeading()
                     
-                    Text(" ( this monty )")
+                    Text("(this month)")
                         .font(.system(size: 12, weight: .regular, design: .rounded))
                         .foregroundStyle(.white.opacity(0.5))
                         .takeMaxWidthLeading()
                         
                     
-                    
+                    Spacer()
                     // MARK: Step count
                     Text("\(self.stepCount)")
                         .font(.custom(ApplicationFonts.oswaldSemiBold, size: 40))
                         .foregroundStyle(.white.opacity(0.5))
                         .takeMaxWidthLeading()
+                        .offset(x: -3, y: 5)
+                    
+                    
+                    Text("steps")
+                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .takeMaxWidthLeading()
+                    
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
