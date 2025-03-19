@@ -7,6 +7,7 @@ class ApplicationLinearGradient {
     public static let orangeGradient = LinearGradient(gradient: Gradient(colors: [.appOrangeLight, .appOrangeDark]), startPoint: .top, endPoint: .bottom)
     public static let greenGradient = LinearGradient(gradient: Gradient(colors: [.appGreenLight, .appGreenDark]), startPoint: .top, endPoint: .bottom)
     public static let blueGradient = LinearGradient(gradient: Gradient(colors: [.appBlueDark, .appBlueLight]), startPoint: .top, endPoint: .bottom)
+    public static let blueGradientInverted = LinearGradient(gradient: Gradient(colors: [.appBlueLight, .appBlueDark]), startPoint: .top, endPoint: .bottom)
     public static let thanosGradient = LinearGradient(gradient: Gradient(colors: [.appThanosLight, .appThanosDark]), startPoint: .top, endPoint: .bottom)
     public static let whiteGradient = LinearGradient(gradient: Gradient(colors: [.gray, .white]), startPoint: .top, endPoint: .bottom)
     public static let applicationGradient = LinearGradient(gradient: Gradient(colors: [.darkBG, .black]), startPoint: UnitPoint(x: 0.5, y: 0), endPoint: UnitPoint(x: 0.5, y: 1.6))

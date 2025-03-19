@@ -148,7 +148,7 @@ struct DailyExerciseViewCard: View {
                         }
                         .padding(.horizontal, 10)
                         .padding(.vertical, 3)
-//                        .background(.darkBG.opacity(0.54))
+                        //                        .background(.darkBG.opacity(0.54))
                         .background(ApplicationLinearGradient.redGradient)
                         .overlay {
                             RoundedRectangle(cornerRadius: 8)
@@ -200,7 +200,7 @@ struct CustomTextField: View {
         TextField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 55)
+            .frame(height: 50)
             .padding(.horizontal)
             .background(.darkBG.opacity(0.54))
             .overlay {
@@ -210,6 +210,70 @@ struct CustomTextField: View {
             .clipShape(defaultShape)
             .allowsHitTesting(true)
         
+    }
+}
+
+struct CustomSecureTextField: View {
+    
+    @State var isSecure: Bool = true
+    
+    @Binding var searchText: String
+    var placeholder: String
+    
+    var body: some View {
+        if self.isSecure {
+            SecureField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .padding(.horizontal)
+                .background(.darkBG.opacity(0.54))
+                .overlay {
+                    defaultShape
+                        .stroke(.white.opacity(0.18))
+                }
+                .clipShape(defaultShape)
+                .allowsHitTesting(true)
+                .overlay {
+                    HStack {
+                        Image(systemName: self.isSecure ? "eye.slash.fill" : "eye.fill")
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding()
+                            .onTapGesture {
+                                withAnimation {
+                                    self.isSecure.toggle()
+                                }
+                            }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+        } else {
+            TextField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .padding(.horizontal)
+                .background(.darkBG.opacity(0.54))
+                .overlay {
+                    defaultShape
+                        .stroke(.white.opacity(0.18))
+                }
+                .clipShape(defaultShape)
+                .allowsHitTesting(true)
+                .overlay {
+                    HStack {
+                        Image(systemName: self.isSecure ? "eye.slash.fill" : "eye.fill")
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding()
+                            .onTapGesture {
+                                withAnimation {
+                                    self.isSecure.toggle()
+                                }
+                            }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+        }
     }
 }
 

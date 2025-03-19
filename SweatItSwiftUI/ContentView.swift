@@ -16,47 +16,39 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .workout
-    @State var showSplashScreen: Bool = true
-    @State var showTransitionScree: Bool = true
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
     
+    @AppStorage("isUserLoggedIn") var isUserLoggedIn: Bool = true
     @State var currentUser: User_t = User.current.currentUser
+    
+    @State var showIsland: Bool = false
     
     var body: some View {
         NavigationStack {
             ScreenBuilder {
+                if !self.isUserLoggedIn {
+                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                        .zIndex(99999)
+                        .transition(ScaleBlurOffsetTransition())
+                }
+                
+                CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
+                    .zIndex(.infinity)
                 
                 
-//                // MARK: Splash screen effect hai bhai yaha pe
-//                if self.showSplashScreen {
-//                    SplashScreen()
-//                        .zIndex(10000)
-//                        .transition(.scale(170))
-//                        .onAppear {
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                                withAnimation(.timingCurve(0.83, 0, 0.17, 1, duration: 2)) {
-//                                    self.showSplashScreen = false
-//                                }
-//                            }
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-//                                withAnimation {
-//                                    self.showTransitionScree = false
-//                                }
-//                            }
-//                        }
-//                }
-//                
-//                if self.showTransitionScree {
-//                    VStack {
-//                        
+                // MARK: Button for testing dynamic island
+//
+//                Button {
+//                    withAnimation(.smooth(duration: 0.4)) {
+//                        self.showIsland.toggle()
 //                    }
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .background(.white)
-//                    .zIndex(9999)
+//                } label: {
+//                    Text("Click me")
 //                }
+//                .zIndex(.infinity)
                 
                 if self.showNotificationCenter {
                     NotificationCenterScreen(showNotificationCenter: self.$showNotificationCenter)
@@ -73,6 +65,10 @@ struct ContentView: View {
                 PageHeader(pageHeaderTitle: self.currentPage_t == .home ? "Home" : self.currentPage_t == .workout ? "Workout" : self.currentPage_t == .coach ? "Coach" : self.currentPage_t == .diet ? "Diet" : "Profile", notificationAction: {
                     withAnimation(.smooth) {
                         self.showNotificationCenter = true
+                    }
+                }, logoutAction: {
+                    withAnimation(.smooth(duration: 1.5)) {
+                        self.isUserLoggedIn = false
                     }
                 })
                 .offset(y: self.showNotificationCenter || self.showCameraScreen ? -50 : 0)
@@ -101,6 +97,14 @@ struct ContentView: View {
                 PageNavigationBar(currentPage_t: self.$currentPage_t)
             }
             .coordinateSpace(name: "MainScreenCoordinateSpace")
+        }
+        .overlay {
+            
+        }
+        .onAppear {
+            withAnimation {
+                self.isUserLoggedIn = false
+            }
         }
         
     }

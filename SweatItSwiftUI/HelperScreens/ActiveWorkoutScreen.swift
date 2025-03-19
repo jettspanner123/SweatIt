@@ -8,8 +8,8 @@
 import SwiftUI
 
 
-let BOTTOM_BUTTON_WIDTH: CGFloat = UIScreen.main.bounds.width - 50
-let BOTTOM_BUTTON_HEIGHT: CGFloat = 55
+let BOTTOM_BUTTON_WIDTH: CGFloat = UIScreen.main.bounds.width - 30
+let BOTTOM_BUTTON_HEIGHT: CGFloat = 45
 let BOTTOM_BUTTON_OFFSET: CGFloat = UIScreen.main.bounds.height - (55 * 1.5)
 
 let TRANSITION_SCREEN_WIDTH: CGFloat = UIScreen.main.bounds.width
@@ -67,7 +67,7 @@ struct ActiveWorkoutScreen: View {
                 if !self.showTransitionScreen {
                     Text("Start Workout")
                         .foregroundStyle(.white)
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .font(.system(size: 13 , weight: .medium, design: .rounded))
                         .transition(.offset(y: 500))
                     
                 } else {

@@ -12,6 +12,11 @@ struct PageHeader: View {
     var pageHeaderTitle: String
     
     var notificationAction: () -> Void = {}
+    var logoutAction: () -> Void = {}
+    var profileSettingsAction: () -> Void = {}
+    var dietSettingsAction: () -> Void = {}
+    @State var isRotating: Bool = false
+    
     var body: some View {
         HStack {
             
@@ -44,12 +49,36 @@ struct PageHeader: View {
                 
             }
             
-            if self.pageHeaderTitle == "Profile" || self.pageHeaderTitle == "Diet" {
-                Image("Settings")
-                    .resizable()
-                    .frame(width: 34, height: 35)
-                    .offset(x: -24, y: 30)
-                    .transition(.offset(x: 150))
+            if self.pageHeaderTitle == "Profile" {
+                HStack(spacing: 25) {
+                    Image("Settings")
+                        .resizable()
+                        .frame(width: 34, height: 35)
+                        .rotationEffect(.degrees(self.isRotating ? 9999 : 0))
+                        .onTapGesture {
+                            self.profileSettingsAction()
+                        }
+                    
+                    Image(systemName: "door.right.hand.open")
+                        .scaleEffect(1.5)
+                        .foregroundStyle(.white)
+                        .onTapGesture {
+                            self.logoutAction()
+                        }
+                }
+                .offset(x: -24, y: 30)
+                .transition(.offset(x: 300))
+            }
+            
+            if self.pageHeaderTitle == "Diet" {
+                HStack(spacing: 25) {
+                    Image("Settings")
+                        .resizable()
+                        .frame(width: 34, height: 35)
+                        .rotationEffect(.degrees(self.isRotating ? 9999 : 0))
+                }
+                .offset(x: -24, y: 30)
+                .transition(.offset(x: 300))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: 137)
@@ -62,6 +91,11 @@ struct PageHeader: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .offset(y: -70)
         .zIndex(100)
+        .onAppear {
+            withAnimation(.linear(duration: 1000).repeatForever()) {
+                self.isRotating = true
+            }
+        }
     }
 }
 

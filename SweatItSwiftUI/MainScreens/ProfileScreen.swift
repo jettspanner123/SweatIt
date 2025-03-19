@@ -13,7 +13,7 @@ struct ProfileScreen: View {
     
     @State var stepCount: Int = DailyEvents.current.stepCount
     
-    @State var showPastStatisticsScreen: Bool = true
+    @State var showPastStatisticsScreen: Bool = false
     @State var showAddFriendScreen: Bool = false
     
     var body: some View {
