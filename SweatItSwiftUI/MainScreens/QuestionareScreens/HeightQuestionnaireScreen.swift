@@ -22,7 +22,14 @@ struct HeightQuestionnaireScreen: View {
         var spacing: Int
     }
     
-    var heightAdjustmentScrollViewConfiguration: HeightAdjustmentConfiguration = .init(steps: 10, count: 10, spacing: 10)
+    struct WeightAdjustmentConfiguration {
+        var steps: Int
+        var count: Int
+        var spacing: Int
+    }
+    
+    var heightAdjustmentScrollViewConfiguration: HeightAdjustmentConfiguration = .init(steps: 11, count: 30, spacing: 10)
+    var weightAdjustmentScrollViewConfiguration: WeightAdjustmentConfiguration = .init(steps: 10, count: 30, spacing: 10)
     
     @State var userHeight: Double = 0
     @State var userWeight: Double = 0
@@ -31,7 +38,7 @@ struct HeightQuestionnaireScreen: View {
     @State var vibrationState: Int = 0
     
     
-    @State var currentSelectedState: HeightWeightSelectionOption = .height
+    @State var currentSelectedState: HeightWeightSelectionOption = .weight
     
     var heightOption: Array<Int> = [20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20]
     
@@ -188,38 +195,79 @@ struct HeightQuestionnaireScreen: View {
                             if let newValue {
                                 self.heightScrollOffset = newValue
                                 self.vibrationState = newValue
+                                print(newValue)
                             }
                         }))
                         .overlay(alignment: .trailing) {
-                            let lbs = CGFloat(self.heightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.heightScrollOffset)
+                            let lbs = CGFloat(self.heightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.heightScrollOffset) / 10
                             
                             HStack(alignment: .bottom) {
-                                Text(verbatim: "\(lbs)")
-                                    .font(.system(size: 35, weight: .bold, design: .rounded))
-                                    .foregroundStyle(.white)
-                                    .contentTransition(.numericText(value: lbs))
-                                    .animation(.snappy, value: lbs)
-                                
-                                Text("lbs")
-                                    .font(.system(size: 25, weight: .bold, design: .rounded))
-                                    .foregroundStyle(.white.opacity(0.5))
-                                    .offset(y: -3)
+                                if lbs == 0 {
+                                    Text("🤏")
+                                        .font(.system(size: 34, weight: .regular, design: .rounded))
+                                        .foregroundStyle(.white.opacity(0.75))
+                                        .offset(x: 5, y: -10)
+                                } else {
+                                    Text(verbatim: "\(lbs)")
+                                        .font(.system(size: 35, weight: .bold, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .contentTransition(.numericText(value: lbs))
+                                        .animation(.snappy, value: lbs)
+                                    
+                                     Text("cm")
+                                        .font(.system(size: 25, weight: .bold, design: .rounded))
+                                        .foregroundStyle(.white.opacity(0.5))
+                                        .offset(y: -3)
+                                }
                             }
                             .frame(maxWidth: .infinity)
                             .overlay(alignment: .bottom) {
                                 RoundedRectangle(cornerRadius: 8)
                                     .fill(.white)
-                                    .frame(width: lbs > 100 ? 155 : 150, height: 2)
+                                    .frame(width: lbs > 100 ? 155 : lbs == 0 ? 70 : 150, height: 2)
                                     .offset(x: 10)
                                     .animation(.snappy, value: lbs)
                             }
                             .offset(y: -(20))
                         }
                     }
+                    .transition(.offset(x: UIScreen.main.bounds.width).combined(with: .blurReplace))
+                } else {
+                    
+                    
+                    
+                    // MARK: Weight scroll view
+                    GeometryReader {
+                        let readerSize = $0.size
+                        let horizontalPadding = readerSize.width / 2
+                        let totalSteps = self.weightAdjustmentScrollViewConfiguration.steps * self.weightAdjustmentScrollViewConfiguration.count
+                        
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: CGFloat(self.weightAdjustmentScrollViewConfiguration.spacing)) {
+                                ForEach(0...totalSteps, id: \.self) { index in
+                                    Divider()
+                                        .frame(width: 1, height: index % self.weightAdjustmentScrollViewConfiguration.steps == 0 ? 50 : 30)
+                                        .background(.white)
+                                        .offset(y: index % self.weightAdjustmentScrollViewConfiguration.steps != 0 ? 10 : 0)
+                                        .overlay {
+                                            if index % self.weightAdjustmentScrollViewConfiguration.steps == 0 {
+                                                HStack {
+                                                    Text("\(index / self.weightAdjustmentScrollViewConfiguration.steps)")
+                                                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.white)
+                                                }
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                            }
+                                        }
+                                }
+                            }
+                            .frame(maxHeight: .infinity, alignment: .leading)
+                            .padding(.horizontal, horizontalPadding)
+                        }
+                    }
+                    
                 }
-                
-                
-                
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom, ApplicationPadding.mainScreenVerticalPadding / 1.8)
