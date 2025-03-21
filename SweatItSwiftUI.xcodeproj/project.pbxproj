@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		07EBA5682D7D7DC000C76E40 /* SweatItSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SweatItSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = SweatItSwiftUI;
 			packageProductDependencies = (
+				07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */,
 			);
 			productName = SweatItSwiftUI;
 			productReference = 07EBA5682D7D7DC000C76E40 /* SweatItSwiftUI.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 07EBA55F2D7D7DC000C76E40;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 07EBA5692D7D7DC000C76E40 /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maxnatchanon/trackable-scroll-view";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */;
+			productName = SwiftUITrackableScrollView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 07EBA5602D7D7DC000C76E40 /* Project object */;
 }

@@ -18,18 +18,13 @@ struct LoginScreen: View {
         var password: String = ""
     }
     
-    struct SignupStateObject {
-        var username: String = ""
-        var password: String = ""
-        var confirmPassword: String = ""
-    }
+    
     
     @Binding var showLoginScreen: Bool
     @Binding var showIsland: Bool
     
     
     @State var loginStateObject: LoginStateObject = .init()
-    @State var signupStateObject: SignupStateObject = .init()
     
     @State var isSubmitButtonClicked: Bool = false
     @State var isStartButtonClicked: Bool = false

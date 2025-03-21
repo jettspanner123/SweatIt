@@ -197,7 +197,7 @@ struct CustomTextField: View {
     var placeholder: String
     
     var body: some View {
-        TextField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
+        TextField("", text: self.$searchText, prompt: Text(self.placeholder).font(.system(size: 15)).foregroundStyle(.white.opacity(0.5)))
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 50)
@@ -222,7 +222,7 @@ struct CustomSecureTextField: View {
     
     var body: some View {
         if self.isSecure {
-            SecureField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
+            SecureField("", text: self.$searchText, prompt: Text(self.placeholder).font(.system(size: 15)).foregroundStyle(.white.opacity(0.5)))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)

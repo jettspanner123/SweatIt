@@ -45,19 +45,19 @@ class Extras {
     }
     
     enum Gender: String, Codable, CaseIterable, Hashable {
-        case male = "Male 🗿", female = "Female 👩", Others = "LGTV 🤡"
+        case male = "Male 🗿", female = "Female 👩", Others = "LGTV 🤡", none = "None"
     }
     
     enum BodyType: String, Codable, CaseIterable, Hashable {
-        case skinny = "Skinny 🥢", muscular = "Muscular 🗿", skinnyFat = "Skinny Fat 🤡", fat = "Fat 🐘"
+        case skinny = "Skinny 🥢", muscular = "Muscular 🗿", skinnyFat = "Skinny Fat 🤡", fat = "Fat 🐘" , none = "None"
     }
     
     enum Goal: String, Codable, CaseIterable, Hashable {
-        case looseFat = "Loose Fat", buildMuscle = "Build Muscle", bodyRecomposition = "Body Recomposition", beFit = "Being Fit", developer = "Developer 🗿"
+        case looseFat = "Loose Fat", buildMuscle = "Build Muscle", bodyRecomposition = "Body Recomposition", beFit = "Being Fit", developer = "Developer 🗿", none = "None"
     }
     
     enum UserLevel: String, Codable, CaseIterable, Hashable {
-        case beginner = "Beginner 👶", intermediate = "Intermediate 🏃", advanced = "Advanced 🗿"
+        case beginner = "Beginner 👶", intermediate = "Intermediate 🏃", advanced = "Advanced 🗿", none = "None"
     }
     
     enum NotificationType: String, Codable, CaseIterable, Hashable {
@@ -66,6 +66,10 @@ class Extras {
     
     enum FriendRequestStatus: String, Codable, CaseIterable, Hashable {
         case pending = "Pending ⏰", accepted = "Accepted ✅", declined = "Declined ❌", ingnored = "Ignored 🥺"
+    }
+    
+    enum MeasurenmentSystem {
+        case metric, imperial
     }
     
 }

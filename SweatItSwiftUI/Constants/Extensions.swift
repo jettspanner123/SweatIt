@@ -15,9 +15,33 @@ extension View {
 }
 
 extension View {
+    
+    func buttonConfiguration(_ background: LinearGradient = ApplicationLinearGradient.redGradient) -> some View {
+        
+        self
+            .frame(maxWidth: .infinity)
+            .frame(height: 45)
+            .background(background)
+            .clipShape(defaultShape)
+    }
     func takeMaxWidthLeading() -> some View {
         self
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    
+    
+    func applicationDropDownButton(_ background: LinearGradient = ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf, height: CGFloat = 45) -> some View {
+        self
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(minHeight: height)
+            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            .background(background)
+            .overlay {
+                defaultShape
+                    .stroke(.white.opacity(0.18))
+            }
+            .clipShape(defaultShape)
     }
 }
 
@@ -38,7 +62,7 @@ extension Color {
         default:
             (a, r, g, b) = (255, 0, 0, 0)
         }
-
+        
         self.init(
             .sRGB,
             red: Double(r) / 255,
@@ -65,7 +89,7 @@ extension Color {
         let r: CGFloat = components?[0] ?? 0.0
         let g: CGFloat = components?[1] ?? 0.0
         let b: CGFloat = components?[2] ?? 0.0
-
+        
         let hexString = String(
             format: "#%02lX%02lX%02lX",
             lroundf(Float(r * 255)),
@@ -88,83 +112,30 @@ extension Color {
     }
 }
 
-extension UIImage {
-    func extractDominantColors(count: Int = 2) -> [Color] {
-        // Convert to CGImage
-        guard let cgImage = self.cgImage else { return [] }
-        
-        // Create the color space
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        
-        // Create bitmap context
-        let width = cgImage.width
-        let height = cgImage.height
-        let bytesPerPixel = 4
-        let bytesPerRow = bytesPerPixel * width
-        let bitsPerComponent = 8
-        
-        var rawData = [UInt8](repeating: 0, count: width * height * bytesPerPixel)
-        
-        guard let context = CGContext(data: &rawData,
-                                     width: width,
-                                     height: height,
-                                     bitsPerComponent: bitsPerComponent,
-                                     bytesPerRow: bytesPerRow,
-                                     space: colorSpace,
-                                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue) else {
-            return []
-        }
-        
-        // Draw the image in the bitmap context
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
-        // Create a dictionary to count color occurrences
-        var colorCounts: [UInt32: Int] = [:]
-        
-        // Iterate through pixels
-        for y in 0..<height {
-            for x in 0..<width {
-                let byteIndex = (bytesPerRow * y) + (bytesPerPixel * x)
-                
-                // Skip pixels with high transparency
-                if rawData[byteIndex + 3] < 128 {
-                    continue
+struct BounceEffectModifier: ViewModifier {
+    @State private var isTapped: Bool = false
+    var closure: () -> Void = {}
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isTapped ? 0.95 : 1)
+            .onTapGesture {
+                closure() // Execute the closure passed in
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                    isTapped = true
+                    
+                    // Reset the scale after the bounce effect
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isTapped = false
+                    }
                 }
-                
-                // Pack RGB values into a UInt32 for easy dictionary handling
-                let red = UInt32(rawData[byteIndex])
-                let green = UInt32(rawData[byteIndex + 1])
-                let blue = UInt32(rawData[byteIndex + 2])
-                
-                // Skip very dark colors
-                if red + green + blue < 100 {
-                    continue
-                }
-                
-                // Reduce color space to make clustering easier
-                let quantizedRed = red / 16 * 16
-                let quantizedGreen = green / 16 * 16
-                let quantizedBlue = blue / 16 * 16
-                
-                let colorKey = (quantizedRed << 16) | (quantizedGreen << 8) | quantizedBlue
-                
-                // Increment count for this color
-                colorCounts[colorKey, default: 0] += 1
             }
-        }
-        
-        // Sort colors by occurrence count
-        let sortedColors = colorCounts.sorted { $0.value > $1.value }
-        
-        // Convert top colors back to Color objects
-        let result = sortedColors.prefix(count).map { colorKey, _ in
-            let red = Double((colorKey >> 16) & 0xFF) / 255.0
-            let green = Double((colorKey >> 8) & 0xFF) / 255.0
-            let blue = Double(colorKey & 0xFF) / 255.0
-            
-            return Color(red: red, green: green, blue: blue)
-        }
-        
-        return result
     }
 }
+
+extension View {
+    func addBounceEffectOnTap(closure: @escaping () -> Void) -> some View {
+        self.modifier(BounceEffectModifier(closure: closure))
+    }
+}
+

@@ -2,6 +2,26 @@ import SwiftUI
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
+class ApplicationConstants {
+    
+    struct SignupStateObject {
+        var username: String = ""
+        var password: String = ""
+        var confirmPassword: String = ""
+        var dob: Date = .now
+        var gender: Extras.Gender = .none
+        var height: Double = .zero
+        var weight: Double = .zero
+        var bodyType: Extras.BodyType = .none
+        var userLevel: Extras.UserLevel = .none
+        var goalType: Extras.Goal = .none
+        
+    }
+    
+    
+    public static let minimumUserAge: Double = 18
+}
+
 class ApplicationLinearGradient {
     public static let lavaGradient = LinearGradient(gradient: Gradient(colors: [.appLavaTwo, .appLavaOne]), startPoint: .top, endPoint: .bottom)
     public static let orangeGradient = LinearGradient(gradient: Gradient(colors: [.appOrangeLight, .appOrangeDark]), startPoint: .top, endPoint: .bottom)
@@ -20,10 +40,16 @@ class ApplicationLinearGradient {
     public static let brownGradient = LinearGradient(gradient: Gradient(colors: [.appBrownLight, .appBrownDark]), startPoint: .top, endPoint: .bottom)
     public static let clearGradient = LinearGradient(gradient: Gradient(colors: [.clear, .clear]), startPoint: .top, endPoint: .bottom)
     public static let darkBGSameGradient = LinearGradient(gradient: Gradient(colors: [.darkBG, .darkBG]), startPoint: .top, endPoint: .bottom)
+    public static let darkBGSameGradientWithOpacityHalf = LinearGradient(gradient: Gradient(colors: [.darkBG.opacity(0.54), .darkBG.opacity(0.54)]), startPoint: .top, endPoint: .bottom)
 
 }
 
 class ApplicationHelper {
+    
+    public static func inchesToCentimeters(inches: Int) -> Int {
+        let centimeters = Double(inches) * 2.54
+        return Int(centimeters)
+    }
     
     public static func formatSeconds(seconds: Int) -> String {
         if seconds < 3600 {
@@ -33,6 +59,12 @@ class ApplicationHelper {
             let hours = Double(seconds) / 3600
             return String(format: "%.1f HR", hours)
         }
+    }
+    
+    public static func inchesToFeetAndInches(inches: Int) -> String {
+        let feet = inches / 12
+        let remainingInches = inches % 12
+        return "\(feet)ft \(remainingInches)in"
     }
     
     public static func getTimeFromDate(_ date: Date) -> String {
@@ -76,6 +108,14 @@ class ApplicationHelper {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium 
         dateFormatter.timeStyle = .short
+        
+        return dateFormatter.string(from: date)
+    }
+    
+    public static func formatDateToHumanReadableWithoutTime(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
         
         return dateFormatter.string(from: date)
     }
