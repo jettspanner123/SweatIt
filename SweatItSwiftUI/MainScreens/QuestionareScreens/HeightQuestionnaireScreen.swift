@@ -16,14 +16,19 @@ struct HeightQuestionnaireScreen: View {
         case height = "Height", weight = "Weight"
     }
     
+    struct HeightAdjustmentConfiguration {
+        var steps: Int
+        var count: Int
+        var spacing: Int
+    }
+    
+    var heightAdjustmentScrollViewConfiguration: HeightAdjustmentConfiguration = .init(steps: 10, count: 10, spacing: 10)
+    
     @State var userHeight: Double = 0
     @State var userWeight: Double = 0
-    @State var heightOffset: CGSize = .zero
-    @State var weightOffset: CGSize = .zero
-    @State var scrollOffset_t: CGFloat = .zero
-    @State var scrollOffset: CGFloat = .zero
-    @State var heightToShow: String = "0ft 0in"
-    @State var heightToShowCm: String = "0 cm"
+    @State var heightScrollOffset: Int = 0
+    
+    @State var vibrationState: Int = 0
     
     
     @State var currentSelectedState: HeightWeightSelectionOption = .height
@@ -144,12 +149,79 @@ struct HeightQuestionnaireScreen: View {
                 
                 
                 // MARK: Height scroll view
+                if self.currentSelectedState == .height {
+                    GeometryReader {
+                        let readerSize: CGSize = $0.size
+                        let totalSteps: Int = self.heightAdjustmentScrollViewConfiguration.count * self.heightAdjustmentScrollViewConfiguration.steps
+                        let verticalPadding = readerSize.height / 2
+                        
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: CGFloat(self.heightAdjustmentScrollViewConfiguration.spacing)) {
+                                ForEach(0...totalSteps, id: \.self) { index in
+                                    Divider()
+                                        .frame(width: index % self.heightAdjustmentScrollViewConfiguration.steps == 0 ? 60 : 30, height: 1)
+                                        .background(index % self.heightAdjustmentScrollViewConfiguration.steps == 0 ? .white.opacity(0.75) : .white.opacity(0.5), in: .rect(cornerRadius: 8))
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .overlay {
+                                            if index % self.heightAdjustmentScrollViewConfiguration.steps == 0 {
+                                                HStack {
+                                                    Text("\(index / self.heightAdjustmentScrollViewConfiguration.steps)")
+                                                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.white)
+                                                }
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                                .padding(.horizontal, 70)
+                                            }
+                                        }
+                                    
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .safeAreaPadding(.vertical, verticalPadding)
+                            .scrollTargetLayout()
+                        }
+                        .scrollTargetBehavior(.viewAligned)
+                        .scrollPosition(id: .init(get: {
+                            let position: Int? = self.heightScrollOffset
+                            return position
+                        }, set: { newValue in
+                            if let newValue {
+                                self.heightScrollOffset = newValue
+                                self.vibrationState = newValue
+                            }
+                        }))
+                        .overlay(alignment: .trailing) {
+                            let lbs = CGFloat(self.heightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.heightScrollOffset)
+                            
+                            HStack(alignment: .bottom) {
+                                Text(verbatim: "\(lbs)")
+                                    .font(.system(size: 35, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white)
+                                    .contentTransition(.numericText(value: lbs))
+                                    .animation(.snappy, value: lbs)
+                                
+                                Text("lbs")
+                                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white.opacity(0.5))
+                                    .offset(y: -3)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .overlay(alignment: .bottom) {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(.white)
+                                    .frame(width: lbs > 100 ? 155 : 150, height: 2)
+                                    .offset(x: 10)
+                                    .animation(.snappy, value: lbs)
+                            }
+                            .offset(y: -(20))
+                        }
+                    }
+                }
                 
                 
                 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.white.opacity(0.18))
             .padding(.bottom, ApplicationPadding.mainScreenVerticalPadding / 1.8)
             .padding(.top, 10)
         
@@ -158,6 +230,6 @@ struct HeightQuestionnaireScreen: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-        .sensoryFeedback(.impact, trigger: self.currentSelectedState)
+        .sensoryFeedback(.impact, trigger: self.vibrationState)
     }
 }
