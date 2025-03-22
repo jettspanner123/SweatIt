@@ -34,6 +34,7 @@ struct HeightQuestionnaireScreen: View {
     @State var userHeight: Double = 0
     @State var userWeight: Double = 0
     @State var heightScrollOffset: Int = 0
+    @State var weightScrollOffset: Int = 0
     
     @State var vibrationState: Int = 0
     
@@ -264,8 +265,42 @@ struct HeightQuestionnaireScreen: View {
                             }
                             .frame(maxHeight: .infinity, alignment: .leading)
                             .padding(.horizontal, horizontalPadding)
+                            .scrollTargetLayout()
+                        }
+                        .scrollTargetBehavior(.viewAligned)
+                        .scrollPosition(id: .init(get: {
+                            let position: Int? = self.weightScrollOffset
+                            return position
+                        }, set: { newValue in
+                            if let newValue {
+                                self.weightScrollOffset = newValue
+                                self.vibrationState = newValue
+                            }
+                        }))
+                        .overlay {
+                            VStack(spacing: 0) {
+                                
+                                let lsb = CGFloat(self.weightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.weightScrollOffset) / 10
+                                HStack(alignment: .bottom) {
+                                    Text(verbatim: "\(lsb)")
+                                        .font(.system(size: 35, weight: .bold, design: .rounded))
+                                        .foregroundStyle(.white)
+                                    
+                                    Text(verbatim: "lbs")
+                                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                                        .foregroundStyle(.white.opacity(0.5))
+                                        .offset(y: -5)
+                                }
+                               
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(ApplicationLinearGradient.redGradient)
+                                    .frame(width: 3, height: 60)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .offset(y: -25)
                         }
                     }
+                    .transition(.offset(y: UIScreen.main.bounds.height / 2).combined(with: .blurReplace))
                     
                 }
             }
@@ -279,5 +314,6 @@ struct HeightQuestionnaireScreen: View {
         .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         .sensoryFeedback(.impact, trigger: self.vibrationState)
+        .sensoryFeedback(.impact, trigger: self.currentSelectedState)
     }
 }
