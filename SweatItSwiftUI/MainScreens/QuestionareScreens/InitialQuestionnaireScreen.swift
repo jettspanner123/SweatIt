@@ -13,7 +13,7 @@ struct InitialQuestionnaireScreen: View {
         case intro = "Introduction", genderAge = "Gender & Age", heightWeight = "Height & Weight", bodyType = "Body Type", activityLevel = "Activity Level", foodType = "Food Type", fitnessLevel = "Fitness Level", goal = "Goal"
     }
     
-    @State var currentSelectedPage: QuestionPageScreens = .heightWeight
+    @State var currentSelectedPage: QuestionPageScreens = .bodyType
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
@@ -217,7 +217,8 @@ struct InitialQuestionnaireScreen: View {
                 HeightQuestionnaireScreen(currentSelectedSystem: self.$currentSelectedSystem)
                     .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
             } else if self.currentSelectedPage == .bodyType {
-                
+                BodyTypeQuestionnaireScreen()
+                    .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
             } else if self.currentSelectedPage == .activityLevel {
                 
             } else if self.currentSelectedPage == .foodType {

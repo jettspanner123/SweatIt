@@ -28,8 +28,8 @@ struct HeightQuestionnaireScreen: View {
         var spacing: Int
     }
     
-    var heightAdjustmentScrollViewConfiguration: HeightAdjustmentConfiguration = .init(steps: 11, count: 30, spacing: 10)
-    var weightAdjustmentScrollViewConfiguration: WeightAdjustmentConfiguration = .init(steps: 10, count: 30, spacing: 10)
+    var heightAdjustmentScrollViewConfiguration: HeightAdjustmentConfiguration = .init(steps: 1, count: ApplicationConstants.heightScrollViewMaxLimit, spacing: 10)
+    var weightAdjustmentScrollViewConfiguration: WeightAdjustmentConfiguration = .init(steps: 1, count: ApplicationConstants.weightScrollViewMaxLimit, spacing: 10)
     
     @State var userHeight: Double = 0
     @State var userWeight: Double = 0
@@ -49,6 +49,7 @@ struct HeightQuestionnaireScreen: View {
             Text("Please select either the height bar or the weight bar first before entering your height or weight.")
                 .font(.system(size: 15, weight: .regular, design: .rounded))
                 .foregroundStyle(.white.opacity(0.5))
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             
             
@@ -59,7 +60,7 @@ struct HeightQuestionnaireScreen: View {
             // MARK: Filter option
             SectionHeader(text: "Choose Option")
                 .padding(.top, 25)
-            
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             
             
@@ -83,10 +84,24 @@ struct HeightQuestionnaireScreen: View {
                     
                     if self.currentSelectedState == .height {
                         
-                        Text(String(format: "%.f cm", self.userHeight))
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white)
-                            .transition(.offset(x: 50).combined(with: .blurReplace))
+                        let heightInCm = CGFloat(self.heightScrollOffset) * CGFloat(self.heightAdjustmentScrollViewConfiguration.steps)
+                        
+                        if self.currentSelectedSystem == .imperial {
+                            Text(String(format: "%.f cm", heightInCm))
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .contentTransition(.numericText(value: heightInCm))
+                                .animation(.snappy, value: heightInCm)
+                                .transition(.offset(x: 50).combined(with: .blurReplace))
+                        } else {
+                            Text(ApplicationHelper.convertCmToFeetAndInches(cm: heightInCm))
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .contentTransition(.numericText(value: heightInCm))
+                                .animation(.snappy, value: heightInCm)
+                                .transition(.offset(x: 50).combined(with: .blurReplace))
+                        }
+                        
                     }
                 }
                 .applicationDropDownButton(self.currentSelectedState == .height ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf, height: 40)
@@ -103,6 +118,7 @@ struct HeightQuestionnaireScreen: View {
                     withAnimation {
                         self.currentSelectedState = .height
                     }
+                    self.vibrationState = 0
                 }
                 
                 
@@ -118,15 +134,31 @@ struct HeightQuestionnaireScreen: View {
                     Image(systemName: "scalemass.fill")
                         .foregroundStyle(self.currentSelectedState == .weight ? .white : .white.opacity(0.5))
                     
-                   
+                    
                     Spacer()
                     
                     if self.currentSelectedState == .weight {
                         
-                        Text(String(format: "%.f kg", self.userWeight))
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white)
-                            .transition(.offset(x: 50).combined(with: .blurReplace))
+                        let weightInPound = CGFloat(self.weightScrollOffset) * CGFloat(self.weightAdjustmentScrollViewConfiguration.steps)
+                        if self.currentSelectedSystem == .metric {
+                            Text(String(format: "%.f lbs", weightInPound))
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .transition(.offset(x: 50).combined(with: .blurReplace))
+                                .contentTransition(.numericText(value: weightInPound))
+                                .animation(.snappy, value: weightInPound)
+                            
+                            
+                        } else {
+                            
+                            Text(String(format: "%.f kg", ApplicationHelper.toKg(lbs: weightInPound)))
+                                .font(.system(size: 10, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .transition(.offset(x: 50).combined(with: .blurReplace))
+                                .contentTransition(.numericText(value: weightInPound))
+                                .animation(.snappy, value: weightInPound)
+                            
+                        }
                     }
                 }
                 .applicationDropDownButton(self.currentSelectedState == .weight ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf, height: 40)
@@ -144,10 +176,17 @@ struct HeightQuestionnaireScreen: View {
                     withAnimation {
                         self.currentSelectedState = .weight
                     }
+                    self.vibrationState = 0
                 }
                 
             }
             .frame(maxWidth: .infinity)
+            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            
+            
+            
+            
+            
             
             
             
@@ -159,35 +198,28 @@ struct HeightQuestionnaireScreen: View {
                 // MARK: Height scroll view
                 if self.currentSelectedState == .height {
                     GeometryReader {
-                        let readerSize: CGSize = $0.size
-                        let totalSteps: Int = self.heightAdjustmentScrollViewConfiguration.count * self.heightAdjustmentScrollViewConfiguration.steps
+                        let readerSize = $0.size
                         let verticalPadding = readerSize.height / 2
                         
+                        let heightInCm = CGFloat(self.heightScrollOffset) * CGFloat(self.heightAdjustmentScrollViewConfiguration.steps)
+                        
+                        // MARK: Actual scroll view here
                         ScrollView(.vertical, showsIndicators: false) {
-                            VStack(spacing: CGFloat(self.heightAdjustmentScrollViewConfiguration.spacing)) {
+                            VStack(alignment: .trailing, spacing: CGFloat(self.heightAdjustmentScrollViewConfiguration.spacing)) {
+                                let totalSteps = self.heightAdjustmentScrollViewConfiguration.steps * self.heightAdjustmentScrollViewConfiguration.count
                                 ForEach(0...totalSteps, id: \.self) { index in
-                                    Divider()
-                                        .frame(width: index % self.heightAdjustmentScrollViewConfiguration.steps == 0 ? 60 : 30, height: 1)
-                                        .background(index % self.heightAdjustmentScrollViewConfiguration.steps == 0 ? .white.opacity(0.75) : .white.opacity(0.5), in: .rect(cornerRadius: 8))
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                        .overlay {
-                                            if index % self.heightAdjustmentScrollViewConfiguration.steps == 0 {
-                                                HStack {
-                                                    Text("\(index / self.heightAdjustmentScrollViewConfiguration.steps)")
-                                                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.white)
-                                                }
-                                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                                .padding(.horizontal, 70)
-                                            }
-                                        }
                                     
+                                    let isStep = index % 10 == 0
+                                    Divider()
+                                        .frame(width: isStep ? 60 : 30, height: 1)
+                                        .background(isStep ? .white.opacity(0.75) : .white.opacity(0.5))
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                             }
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .safeAreaPadding(.vertical, verticalPadding)
+                            .frame(maxWidth: .infinity)
                             .scrollTargetLayout()
                         }
+                        .scrollIndicators(.hidden)
                         .scrollTargetBehavior(.viewAligned)
                         .scrollPosition(id: .init(get: {
                             let position: Int? = self.heightScrollOffset
@@ -196,77 +228,103 @@ struct HeightQuestionnaireScreen: View {
                             if let newValue {
                                 self.heightScrollOffset = newValue
                                 self.vibrationState = newValue
-                                print(newValue)
                             }
                         }))
-                        .overlay(alignment: .trailing) {
-                            let lbs = CGFloat(self.heightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.heightScrollOffset) / 10
-                            
-                            HStack(alignment: .bottom) {
-                                if lbs == 0 {
-                                    Text("🤏")
-                                        .font(.system(size: 34, weight: .regular, design: .rounded))
-                                        .foregroundStyle(.white.opacity(0.75))
-                                        .offset(x: 5, y: -10)
-                                } else {
-                                    Text(verbatim: "\(lbs)")
-                                        .font(.system(size: 35, weight: .bold, design: .rounded))
-                                        .foregroundStyle(.white)
-                                        .contentTransition(.numericText(value: lbs))
-                                        .animation(.snappy, value: lbs)
+                        .overlay {
+                            HStack(spacing: 50) {
+                                //                                let cm = CGFloat(self.heightScrollOffset) * CGFloat(self.heightAdjustmentScrollViewConfiguration.steps)
+                                HStack(alignment: .bottom) {
+                                    if self.currentSelectedSystem == .metric {
+                                        Text(String(format: "%.f", heightInCm))
+                                            .font(.system(size: 35, weight: .bold, design: .rounded))
+                                            .foregroundStyle(.white)
+                                            .contentTransition(.numericText(value: heightInCm))
+                                            .animation(.snappy, value: heightInCm)
+                                        
+                                    } else {
+                                        Text(ApplicationHelper.convertCmToFeetAndInches(cm: heightInCm))
+                                            .font(.system(size: 35, weight: .bold, design: .rounded))
+                                            .foregroundStyle(.white)
+                                            .frame(width: 150)
+                                            .contentTransition(.numericText(value: heightInCm))
+                                            .animation(.snappy, value: heightInCm)
+                                        
+                                    }
                                     
-                                     Text("cm")
+                                    Text(self.currentSelectedSystem == .metric ? "cm" : "")
                                         .font(.system(size: 25, weight: .bold, design: .rounded))
                                         .foregroundStyle(.white.opacity(0.5))
                                         .offset(y: -3)
+                                    
                                 }
-                            }
-                            .frame(maxWidth: .infinity)
-                            .overlay(alignment: .bottom) {
+                                .offset(y: -10)
+                                
                                 RoundedRectangle(cornerRadius: 8)
-                                    .fill(.white)
-                                    .frame(width: lbs > 100 ? 155 : lbs == 0 ? 70 : 150, height: 2)
-                                    .offset(x: 10)
-                                    .animation(.snappy, value: lbs)
+                                    .fill(ApplicationLinearGradient.redGradient)
+                                    .frame(width: 63, height: 3)
                             }
-                            .offset(y: -(20))
+                            .frame(maxWidth: .infinity, alignment: .trailing)
                         }
+                        .safeAreaPadding(.vertical, verticalPadding)
                     }
-                    .transition(.offset(x: UIScreen.main.bounds.width).combined(with: .blurReplace))
+                    .transition(.offset(x: UIScreen.main.bounds.width / 2).combined(with: .blurReplace))
                 } else {
-                    
                     
                     
                     // MARK: Weight scroll view
                     GeometryReader {
                         let readerSize = $0.size
                         let horizontalPadding = readerSize.width / 2
-                        let totalSteps = self.weightAdjustmentScrollViewConfiguration.steps * self.weightAdjustmentScrollViewConfiguration.count
+                        let verticalTextPading = readerSize.height / 2
+                        
+                        let weightInPound = CGFloat(self.weightScrollOffset) * CGFloat(self.weightAdjustmentScrollViewConfiguration.steps)
+                        
+                        // MARK: Weight trxt
+                        HStack(alignment: .bottom) {
+                            if self.currentSelectedSystem == .metric {
+                                Text(String(format: "%.f", ApplicationHelper.toKg(lbs: weightInPound)))
+                                    .font(.system(size: 35, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white)
+                                    .contentTransition(.numericText(value: weightInPound))
+                                    .animation(.snappy, value: weightInPound)
+                            } else {
+                                Text(String(format: "%.f", weightInPound))
+                                    .font(.system(size: 35, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white)
+                                    .contentTransition(.numericText(value: weightInPound))
+                                    .animation(.snappy, value: weightInPound)
+                            }
+                            
+                            Text(self.currentSelectedSystem == .metric ? "kg" : "lbs")
+                                .font(.system(size: 25, weight: .bold, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.5))
+                                .offset(y: -3)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .offset(y: verticalTextPading - (35 * 2) - (10))
                         
                         
+                        
+                        
+                        // MARK: Actual scroll view here
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: CGFloat(self.weightAdjustmentScrollViewConfiguration.spacing)) {
+                                let totalSteps = self.weightAdjustmentScrollViewConfiguration.steps * self.weightAdjustmentScrollViewConfiguration.count
+                                
                                 ForEach(0...totalSteps, id: \.self) { index in
+                                    let isStep = index % 10 == 0
+                                    
                                     Divider()
-                                        .frame(width: 1, height: index % self.weightAdjustmentScrollViewConfiguration.steps == 0 ? 50 : 30)
-                                        .background(.white)
-                                        .offset(y: index % self.weightAdjustmentScrollViewConfiguration.steps != 0 ? 10 : 0)
-                                        .overlay {
-                                            if index % self.weightAdjustmentScrollViewConfiguration.steps == 0 {
-                                                HStack {
-                                                    Text("\(index / self.weightAdjustmentScrollViewConfiguration.steps)")
-                                                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.white)
-                                                }
-                                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                            }
-                                        }
+                                        .frame(width: 1, height: isStep ? 60 : 30)
+                                        .background(isStep ? .white.opacity(0.75) : .white.opacity(0.5))
+                                        .frame(maxHeight: 60, alignment: .bottom)
+                                    
                                 }
                             }
-                            .frame(maxHeight: .infinity, alignment: .leading)
-                            .padding(.horizontal, horizontalPadding)
+                            .frame(height: readerSize.height)
                             .scrollTargetLayout()
                         }
+                        .scrollIndicators(.hidden)
                         .scrollTargetBehavior(.viewAligned)
                         .scrollPosition(id: .init(get: {
                             let position: Int? = self.weightScrollOffset
@@ -277,42 +335,25 @@ struct HeightQuestionnaireScreen: View {
                                 self.vibrationState = newValue
                             }
                         }))
-                        .overlay {
-                            VStack(spacing: 0) {
-                                
-                                let lsb = CGFloat(self.weightAdjustmentScrollViewConfiguration.steps) * CGFloat(self.weightScrollOffset) / 10
-                                HStack(alignment: .bottom) {
-                                    Text(verbatim: "\(lsb)")
-                                        .font(.system(size: 35, weight: .bold, design: .rounded))
-                                        .foregroundStyle(.white)
-                                    
-                                    Text(verbatim: "lbs")
-                                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                                        .foregroundStyle(.white.opacity(0.5))
-                                        .offset(y: -5)
-                                }
-                               
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(ApplicationLinearGradient.redGradient)
-                                    .frame(width: 3, height: 60)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .offset(y: -25)
+                        .overlay(alignment: .center) {
+                            
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(ApplicationLinearGradient.redGradient)
+                                .frame(width: 3, height: 63)
                         }
+                        .safeAreaPadding(.horizontal, horizontalPadding)
                     }
-                    .transition(.offset(y: UIScreen.main.bounds.height / 2).combined(with: .blurReplace))
-                    
+                    .transition(.offset(y: UIScreen.main.bounds.height / 1.5).combined(with: .blurReplace))
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom, ApplicationPadding.mainScreenVerticalPadding / 1.8)
             .padding(.top, 10)
-        
+            
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
-        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         .sensoryFeedback(.impact, trigger: self.vibrationState)
         .sensoryFeedback(.impact, trigger: self.currentSelectedState)
     }

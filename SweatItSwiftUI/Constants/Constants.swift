@@ -20,6 +20,9 @@ class ApplicationConstants {
     
     
     public static let minimumUserAge: Double = 18
+    public static let heightScrollViewStepSize: Int = 1
+    public static let heightScrollViewMaxLimit: Int = 270
+    public static let weightScrollViewMaxLimit: Int = 1400
 }
 
 class ApplicationLinearGradient {
@@ -41,10 +44,19 @@ class ApplicationLinearGradient {
     public static let clearGradient = LinearGradient(gradient: Gradient(colors: [.clear, .clear]), startPoint: .top, endPoint: .bottom)
     public static let darkBGSameGradient = LinearGradient(gradient: Gradient(colors: [.darkBG, .darkBG]), startPoint: .top, endPoint: .bottom)
     public static let darkBGSameGradientWithOpacityHalf = LinearGradient(gradient: Gradient(colors: [.darkBG.opacity(0.54), .darkBG.opacity(0.54)]), startPoint: .top, endPoint: .bottom)
+    public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
+    
 
 }
 
 class ApplicationHelper {
+    
+    public static func convertCmToFeetAndInches(cm: Double) -> String {
+        let inchesTotal = cm / 2.54
+        let feet = Int(inchesTotal) / 12
+        let inches = Int(inchesTotal) % 12
+        return "\(feet) ft \(inches) in"
+    }
     
     public static func inchesToCentimeters(inches: Int) -> Int {
         let centimeters = Double(inches) * 2.54
@@ -59,6 +71,15 @@ class ApplicationHelper {
             let hours = Double(seconds) / 3600
             return String(format: "%.1f HR", hours)
         }
+    }
+    
+    public static func toKg(lbs: CGFloat) -> CGFloat {
+        return lbs * 0.453592
+    }
+    
+    public static func toMeter(height: CGFloat) -> Int {
+        let meters = height / 100
+        return Int(meters)
     }
     
     public static func inchesToFeetAndInches(inches: Int) -> String {

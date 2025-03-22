@@ -60,10 +60,10 @@ struct GenderAgeQuestionnaireScreen: View {
                             } else {
                                 Text(gender.rawValue)
                                     .font(.system(size: 15, weight: .regular, design: .rounded))
-                                    .foregroundStyle(self.currentSelectedGender == gender ? .black : .white)
+                                    .foregroundStyle(.white)
                                     .frame(maxWidth: .infinity)
-                                    .frame(height: 45)
-                                    .background(self.currentSelectedGender == gender ? .white : .white.opacity(0.08))
+                                    .frame(height: 35)
+                                    .background(self.currentSelectedGender == gender ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.whiteSameGradientWithOpacityPoint8)
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .onTapGesture {
                                         withAnimation {
@@ -105,6 +105,8 @@ struct GenderAgeQuestionnaireScreen: View {
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundStyle(.white)
                                 .transition(.offset(x: 100).combined(with: .blurReplace))
+                                .contentTransition(.numericText(value: self.gaynessSlider))
+                                .animation(.snappy, value: self.gaynessSlider)
                         } else {
                             Text("Gay 🤡")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
