@@ -68,8 +68,25 @@ class Extras {
         case pending = "Pending ⏰", accepted = "Accepted ✅", declined = "Declined ❌", ingnored = "Ignored 🥺"
     }
     
+    enum UserFoodType: String, Codable, CaseIterable, Hashable {
+        case vegiterian = "Vegiterian", nonVegiterian = "Non Vegiterian", eggitarian = "Eggiterian", flexiterian = "Flexiterian", pescaterian = "Pescaterian", none
+    }
+    
     enum MeasurenmentSystem {
         case metric, imperial
+    }
+    
+    enum FoodAllergy: String, CaseIterable {
+        case peanuts = "Peanuts"
+        case treeNuts = "Tree Nuts"
+        case dairy = "Dairy"
+        case eggs = "Eggs"
+        case wheat = "Wheat"
+        case soy = "Soy"
+        case fish = "Fish"
+        case shellfish = "Shellfish"
+        case sesame = "Sesame"
+        case none = "None"
     }
     
 }

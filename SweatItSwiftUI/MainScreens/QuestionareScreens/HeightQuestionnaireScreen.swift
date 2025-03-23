@@ -47,9 +47,10 @@ struct HeightQuestionnaireScreen: View {
         VStack {
             
             Text("Please select either the height bar or the weight bar first before entering your height or weight.")
-                .font(.system(size: 15, weight: .regular, design: .rounded))
+                .font(.system(size: 12, weight: .regular, design: .rounded))
                 .foregroundStyle(.white.opacity(0.5))
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                .padding(.horizontal, -1)
             
             
             
@@ -312,7 +313,7 @@ struct HeightQuestionnaireScreen: View {
                                 let totalSteps = self.weightAdjustmentScrollViewConfiguration.steps * self.weightAdjustmentScrollViewConfiguration.count
                                 
                                 ForEach(0...totalSteps, id: \.self) { index in
-                                    let isStep = index % 10 == 0
+                                    let isStep = index % 11 == 0
                                     
                                     Divider()
                                         .frame(width: 1, height: isStep ? 60 : 30)

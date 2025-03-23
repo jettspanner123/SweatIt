@@ -23,6 +23,15 @@ class ApplicationConstants {
     public static let heightScrollViewStepSize: Int = 1
     public static let heightScrollViewMaxLimit: Int = 270
     public static let weightScrollViewMaxLimit: Int = 1400
+    
+    public static let workoutTimeEachDatMaxLimit: Int = 8
+    
+    
+    public static let annualIncoms: Array<ClosedRange<Int>> = [
+        .init(uncheckedBounds: (0, 5)),
+        .init(uncheckedBounds: (5, 10)),
+        .init(uncheckedBounds: (10, 15)),
+    ]
 }
 
 class ApplicationLinearGradient {
