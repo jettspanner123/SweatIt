@@ -39,7 +39,7 @@ struct HeightQuestionnaireScreen: View {
     @State var vibrationState: Int = 0
     
     
-    @State var currentSelectedState: HeightWeightSelectionOption = .weight
+    @State var currentSelectedState: HeightWeightSelectionOption = .height
     
     var heightOption: Array<Int> = [20, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20]
     

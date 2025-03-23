@@ -13,14 +13,20 @@ struct InitialQuestionnaireScreen: View {
         case intro = "Introduction", genderAge = "Gender & Age", heightWeight = "Height & Weight", bodyType = "Body Type", activityLevel = "Activity Level", foodType = "Food Type", fitnessLevel = "Fitness Level", goal = "Goal"
     }
     
-    @State var currentSelectedPage: QuestionPageScreens = .foodType
+    @StateObject var annualIncomes = ApplicationConstants()
+    
+    @State var currentSelectedPage: QuestionPageScreens = .goal
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
     
     @State public static var userQuestionnaireStore: ApplicationConstants.SignupStateObject = .init()
     @State public var currentSelectedSystem: Extras.MeasurenmentSystem = .metric
+    
+    @State var addAnnualIncomeCreateButtonClicked: Bool = false
     @State var showAddAnnualIncomeTopSheet: Bool = false
+    @State var showAddAnnualIncomeTopSheetError: Bool = false
+    @State var showAddAnnualINcomeTopSheetErrorDescription: String = "Please fill all the fields"
     
     @State var customRangeLowerBound: String = ""
     @State var customRangeUpperBound: String = ""
@@ -31,12 +37,81 @@ struct InitialQuestionnaireScreen: View {
     var pageChangeOptions: Array<QuestionPageScreens> = Array(QuestionPageScreens.allCases)
     
     
+    func createNewUserAnnualIncome() -> Void {
+        
+        
+        withAnimation {
+            self.addAnnualIncomeCreateButtonClicked = true
+        }
+        
+        if self.customRangeLowerBound.isEmpty || self.customRangeUpperBound.isEmpty {
+            self.showAddAnnualINcomeTopSheetErrorDescription = "Please fill all the fields"
+            withAnimation {
+                self.showAddAnnualIncomeTopSheetError = true
+                self.addAnnualIncomeCreateButtonClicked = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation {
+                    self.showAddAnnualIncomeTopSheetError = false
+                }
+            }
+            return
+        }
+        
+        
+        guard let lowerBound = Int(self.customRangeLowerBound), let upperBound = Int(self.customRangeUpperBound) else {
+            self.showAddAnnualINcomeTopSheetErrorDescription = "Please enter valid annual income"
+            withAnimation {
+                self.showAddAnnualIncomeTopSheetError = true
+                self.addAnnualIncomeCreateButtonClicked = false
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation {
+                    self.showAddAnnualIncomeTopSheetError = false
+                }
+            }
+            return
+            
+            
+        }
+        
+        
+        if lowerBound >= upperBound {
+            self.showAddAnnualINcomeTopSheetErrorDescription = "Lower bound should be more than upper bound."
+            withAnimation {
+                self.showAddAnnualIncomeTopSheetError = true
+                self.addAnnualIncomeCreateButtonClicked = false
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                withAnimation {
+                    self.showAddAnnualIncomeTopSheetError = false
+                }
+            }
+            return
+        }
+        
+        
+        self.annualIncomes.annualIncoms.append(ClosedRange<Int>(uncheckedBounds: (lowerBound, upperBound)))
+        ApplicationHelper.dismissKeyboard()
+        withAnimation {
+            self.showAddAnnualIncomeTopSheet = false
+        }
+   
+    }
+    
+    
     var body: some View {
         NavigationStack {
             ScreenBuilder {
                 
                 
-                if self.showAddAnnualIncomeTopSheet {
+                if self.showAddAnnualIncomeTopSheet && self.currentSelectedPage == .foodType {
+                    
+                    
+                    
+                    
+                    // MARK: Backdrop
                     DarkBackdrop {
                         
                     }
@@ -46,12 +121,14 @@ struct InitialQuestionnaireScreen: View {
                         withAnimation {
                             self.showAddAnnualIncomeTopSheet = false
                         }
+                        ApplicationHelper.dismissKeyboard()
                     }
                     
                     
+                    
+                    
+                    // MARK: Actual content
                     VStack {
-                        
-                        
                         VStack {
                             
                             Spacer()
@@ -60,20 +137,52 @@ struct InitialQuestionnaireScreen: View {
                             
                             SectionHeader(text: "Enter Range")
                             
+                            
+                            
+                            
+                            
+                            
+                            // MARK: Lower and upper bounds
                             HStack {
                                 CustomTextField(searchText: self.$customRangeLowerBound, placeholder: "Lower Bound")
-                                CustomTextField(searchText: self.$customRangeLowerBound, placeholder: "Upper Bound")
+                                CustomTextField(searchText: self.$customRangeUpperBound, placeholder: "Upper Bound")
                             }
                             .frame(maxWidth: .infinity)
                             
+                            
+                            
+                            
+                            // MARK: Error
+                            if self.showAddAnnualIncomeTopSheetError {
+                                Text(self.showAddAnnualINcomeTopSheetErrorDescription)
+                                    .font(.system(size: 13, weight: .regular, design: .rounded))
+                                    .foregroundStyle(ApplicationLinearGradient.redGradient)
+                                    .padding(.top)
+                                    .transition(.blurReplace)
+                            }
+                            
+                            
+                            
+                            
+                            
                             // MARK: Create button
                             HStack {
-                                Text("Create Range")
-                                    .font(.system(size: 15, weight: .medium, design: .rounded))
-                                    .foregroundStyle(.white)
-                                    .frame(maxWidth: .infinity)
+                                
+                                if self.addAnnualIncomeCreateButtonClicked {
+                                    ProgressView()
+                                        .tint(.white)
+                                        .frame(maxWidth: .infinity)
+                                } else {
+                                    Text("Create Range")
+                                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity)
+                                }
                             }
-                            .applicationDropDownButton(ApplicationLinearGradient.redGradient, height: 40)
+                            .applicationDropDownButton(ApplicationLinearGradient.redGradient)
+                            .onTapGesture {
+                                self.createNewUserAnnualIncome()
+                            }
                         }
                         .frame(maxWidth: .infinity, minHeight: 200, alignment: .bottom)
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
@@ -89,7 +198,7 @@ struct InitialQuestionnaireScreen: View {
                     
                 }
                 
-                if self.currentSelectedPage == .foodType && !self.isMenuOpen{
+                if !self.isMenuOpen{
                     HStack {
                         
                         
@@ -296,7 +405,6 @@ struct InitialQuestionnaireScreen: View {
                 // MARK: Conditional rendering for the pages
                 if self.currentSelectedPage == .intro {
                     IntroductionQuestionnaireScreen(currentSelectedPage: self.$currentSelectedPage)
-                    //                    .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace))
                         .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 } else if self.currentSelectedPage == .genderAge {
                     GenderAgeQuestionnaireScreen(currentSelectedPage: self.$currentSelectedPage)
@@ -314,9 +422,11 @@ struct InitialQuestionnaireScreen: View {
                     FoodTypeQuestionnaireScreen(showAddAnnualIncomeTopSheet: $showAddAnnualIncomeTopSheet)
                         .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 } else if self.currentSelectedPage == .fitnessLevel {
-                    
+                    FitnessLevelQuestionnaireScreen()
+                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 } else {
-                    
+                    GoalQuestionnaireScreen()
+                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 }
                 
                 

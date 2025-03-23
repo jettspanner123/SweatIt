@@ -24,7 +24,7 @@ struct IntroductionQuestionnaireScreen: View {
     
     var body: some View {
         VStack {
-            Text("From now on, you will be asked to complete a questionnaire to help us understand your preferences better.")
+            Text("From now on, you will be asked a series of questions to help us understand your fitness goals better.")
                 .font(.system(size: 13, weight: .regular, design: .rounded))
                 .foregroundStyle(.white.opacity(0.5))
                 .takeMaxWidthLeading()

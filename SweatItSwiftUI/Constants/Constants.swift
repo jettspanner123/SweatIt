@@ -2,7 +2,7 @@ import SwiftUI
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
-class ApplicationConstants {
+class ApplicationConstants: ObservableObject {
     
     struct SignupStateObject {
         var username: String = ""
@@ -18,7 +18,6 @@ class ApplicationConstants {
         
     }
     
-    
     public static let minimumUserAge: Double = 18
     public static let heightScrollViewStepSize: Int = 1
     public static let heightScrollViewMaxLimit: Int = 270
@@ -27,7 +26,7 @@ class ApplicationConstants {
     public static let workoutTimeEachDatMaxLimit: Int = 8
     
     
-    public static let annualIncoms: Array<ClosedRange<Int>> = [
+    @Published var annualIncoms: Array<ClosedRange<Int>> = [
         .init(uncheckedBounds: (0, 5)),
         .init(uncheckedBounds: (5, 10)),
         .init(uncheckedBounds: (10, 15)),
@@ -59,6 +58,10 @@ class ApplicationLinearGradient {
 }
 
 class ApplicationHelper {
+    
+    public static func dismissKeyboard() -> Void {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
     
     public static func convertCmToFeetAndInches(cm: Double) -> String {
         let inchesTotal = cm / 2.54

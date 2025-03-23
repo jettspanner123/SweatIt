@@ -15,6 +15,8 @@ struct FoodTypeQuestionnaireScreen: View {
         case weekly = "Weekly", monthly = "Monthly"
     }
     
+    @StateObject var annualIncomes = ApplicationConstants()
+    
     
     @State var showSelectRegionScreen: Bool = false
     @State var showSelectAlergiesScreen: Bool = false
@@ -205,7 +207,7 @@ struct FoodTypeQuestionnaireScreen: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            ForEach(ApplicationConstants.annualIncoms, id: \.self) { incomLevel in
+                            ForEach(self.annualIncomes.annualIncoms, id: \.self) { incomLevel in
                                 HStack{
                                     Text(String(incomLevel.lowerBound) + "-" + String(incomLevel.upperBound) + " LPA")
                                         .font(.system(size: 13, weight: .medium, design: .rounded))
