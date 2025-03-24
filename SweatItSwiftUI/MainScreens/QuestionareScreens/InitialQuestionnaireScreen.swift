@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct InitialQuestionnaireScreen: View {
+    @Binding var showLoginScreen: Bool
     
     enum QuestionPageScreens: String, CaseIterable {
         case intro = "Introduction", genderAge = "Gender & Age", heightWeight = "Height & Weight", bodyType = "Body Type", activityLevel = "Activity Level", foodType = "Food Type", fitnessLevel = "Fitness Level", goal = "Goal"
@@ -15,7 +16,7 @@ struct InitialQuestionnaireScreen: View {
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    @State var currentSelectedPage: QuestionPageScreens = .goal
+    @State var currentSelectedPage: QuestionPageScreens = .intro
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
@@ -30,6 +31,9 @@ struct InitialQuestionnaireScreen: View {
     
     @State var customRangeLowerBound: String = ""
     @State var customRangeUpperBound: String = ""
+    
+    @State var pageChangeTransition: Bool = false
+    @State var saveChanges: Bool = false
     
     
     @Environment(\.dismiss) var dissmis
@@ -97,7 +101,7 @@ struct InitialQuestionnaireScreen: View {
         withAnimation {
             self.showAddAnnualIncomeTopSheet = false
         }
-   
+        
     }
     
     
@@ -105,6 +109,104 @@ struct InitialQuestionnaireScreen: View {
         NavigationStack {
             ScreenBuilder {
                 
+                // MARK: Finish button
+                if self.currentSelectedPage == .goal {
+                    
+                    HStack {
+                        if self.pageChangeTransition {
+                            if !self.saveChanges {
+                                VStack {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Text("Want to save the changes?")
+                                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .takeMaxWidthLeading()
+                                        .padding(.top, 25)
+                                    
+                                    
+                                    Text("The changes you made throughout the questionnaire will now be saved to the database. Please review your entries carefully, as this data is essential for the app's proper functionality. You can always update your settings within the app if needed.")
+                                        .font(.system(size: 13, weight: .light, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .padding(.top, 1)
+                                    
+                                    Spacer()
+                                    
+                                    Text("Save")
+                                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                                        .foregroundStyle(ApplicationLinearGradient.redGradient)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 40)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .padding(.top, 25)
+                                        .onTapGesture {
+                                            withAnimation(.smooth(duration: 0.5)) {
+                                                self.saveChanges = true
+                                            }
+                                            
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                self.dissmis()
+                                            }
+                                            
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                withAnimation(.smooth(duration: 1.5)) {
+                                                    self.showLoginScreen = true
+                                                }
+                                            }
+                                        }
+                                    
+                                    
+                                    Text("Make Changes")
+                                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 40)
+                                        .background(.white.opacity(0.18))
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(.white.opacity(0.25))
+                                        }
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .onTapGesture {
+                                            withAnimation(.smooth(duration: 0.5)) {
+                                                self.pageChangeTransition = false
+                                                
+                                            }
+                                            
+                                        }
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                                .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding * 2)
+                                .transition(.offset(y: -UIScreen.main.bounds.height).combined(with: .blurReplace))
+                            }
+                        } else {
+                            Text("Finish")
+                                .font(.system(size: 15, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .transition(.blurReplace)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    .frame(maxWidth: self.pageChangeTransition ? UIScreen.main.bounds.width : UIScreen.main.bounds.width - (30))
+                    .frame(height: self.pageChangeTransition ? UIScreen.main.bounds.height : 42)
+                    .background(ApplicationLinearGradient.redGradient)
+                    .clipShape(defaultShape)
+                    .offset(y: self.pageChangeTransition ? 0 : UIScreen.main.bounds.height - (45 * 3))
+                    .zIndex(self.pageChangeTransition ? .infinity : 10)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.smooth(duration: 0.5)) {
+                            self.pageChangeTransition = true
+                        }
+                    }
+                    
+                }
                 
                 if self.showAddAnnualIncomeTopSheet && self.currentSelectedPage == .foodType {
                     
@@ -580,6 +682,8 @@ struct InitialQuestionnaireScreen: View {
                                 }
                             }
                         }
+                    } else {
+                        
                     }
                     
                     
@@ -591,13 +695,7 @@ struct InitialQuestionnaireScreen: View {
             .sensoryFeedback(.impact, trigger: self.currentSelectedPage)
             .sensoryFeedback(.impact, trigger: self.currentSelectedSystem)
             .sensoryFeedback(.impact, trigger: self.isMenuOpen)
-            
-            
         }
-        
     }
 }
 
-#Preview {
-    InitialQuestionnaireScreen()
-}

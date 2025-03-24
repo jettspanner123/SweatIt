@@ -271,7 +271,7 @@ struct LoginScreen: View {
             }
         }
         .navigationDestination(isPresented: self.$isStartButtonClicked, destination: {
-            InitialQuestionnaireScreen()
+            InitialQuestionnaireScreen(showLoginScreen: self.$showLoginScreen)
         })
     }
 }

@@ -157,13 +157,13 @@ struct FitnessLevelQuestionnaireScreen: View {
                                 .font(.system(size: 15, weight: .regular, design: .rounded))
                                 .foregroundStyle(self.currentSelectedFitnessLevel == level ? .white : .white.opacity(0.5))
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 40)
+                                .frame(height: 45)
                                 .background(self.currentSelectedFitnessLevel == level ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
                                 .overlay {
-                                    RoundedRectangle(cornerRadius: 8)
+                                    RoundedRectangle(cornerRadius: 12)
                                         .stroke(.white.opacity(0.18))
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
                                 .onTapGesture {
                                     withAnimation {
                                         self.currentSelectedFitnessLevel = level

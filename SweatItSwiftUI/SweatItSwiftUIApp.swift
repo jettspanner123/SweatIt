@@ -11,9 +11,10 @@ import SwiftData
 @main
 struct SweatItSwiftUIApp: App {
     
+    
     var body: some Scene {
         WindowGroup {
-            InitialQuestionnaireScreen()
+            ContentView()
         }
     }
 }
