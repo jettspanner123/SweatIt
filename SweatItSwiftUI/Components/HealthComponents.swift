@@ -142,6 +142,7 @@ struct CaloriesConsumed: View {
     
     @State var caloriesConsumed: Int
     @State var totalCalories: Int
+    var wantSecondary: Bool = true
     
     var body: some View {
         ZStack {

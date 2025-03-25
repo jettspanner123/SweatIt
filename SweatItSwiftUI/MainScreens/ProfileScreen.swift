@@ -11,9 +11,8 @@ struct ProfileScreen: View {
     
     @Binding var user: User_t
     
-    @State var stepCount: Int = DailyEvents.current.stepCount
     
-    @State var showPastStatisticsScreen: Bool = false
+    @State var showPastStatisticsScreen: Bool = true
     @State var showAddFriendScreen: Bool = false
     
     var body: some View {
@@ -28,7 +27,8 @@ struct ProfileScreen: View {
                 }
                 .frame(width: 100, height: 100)
                 .background(ApplicationLinearGradient.blueGradient)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipShape(defaultShape)
+//                .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 // MARK: User profile
                 
@@ -51,24 +51,20 @@ struct ProfileScreen: View {
                     // MARK: Add friend button
                     HStack(spacing: 15) {
                         Image(systemName: "person.badge.plus")
-                            .foregroundStyle(.black.opacity(0.5))
+                            .foregroundStyle(.white.opacity(0.5))
                         Text("Add Fiend")
                             .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(.black.opacity(0.5))
+                            .foregroundStyle(.white.opacity(0.5))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 40)
                     .padding(.horizontal, 15)
-                    .background(.white.gradient)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.white.opacity(0.18))
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .background(ApplicationLinearGradient.redGradient)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay {
                         HStack {
                             Image(systemName: "chevron.right")
-                                .foregroundStyle(.black.opacity(0.5))
+                                .foregroundStyle(.white.opacity(0.5))
                                 .scaleEffect(0.55)
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -212,7 +208,7 @@ struct ProfileScreen: View {
                     
                     Spacer()
                     // MARK: Step count
-                    Text("\(self.stepCount)")
+                    Text("\(13900)")
                         .font(.custom(ApplicationFonts.oswaldSemiBold, size: 40))
                         .foregroundStyle(.white.opacity(0.5))
                         .takeMaxWidthLeading()

@@ -12,7 +12,7 @@ struct WorkoutScreen: View {
     @State var searchText: String = ""
     
     @State var workouts: Array<Workout_t> = Workout.current.exampleWorkoutList
-    @State var exerciseOfTheDay: Array<Exercise_t> = DailyEvents.current.exerciseOfTheDay
+    @State var exerciseOfTheDay: Array<Exercise_t> = [Exercise.current.bodyweightSquat, Exercise.current.bodyweightSquat]
     
     
     var body: some View {

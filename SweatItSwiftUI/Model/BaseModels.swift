@@ -125,6 +125,18 @@ struct Meal_t: Identifiable, Codable, Hashable {
     var mealTime: Date = .now
 }
 
+struct DailyEvents_t: Identifiable, Codable, Hashable  {
+    var id: String = UUID().uuidString
+    var date: Date = .now
+    var caloriesBurnedForTheDay: Int = .zero
+    var caloriesIngestedForTheDay: Int = .zero
+    var waterIntakeForTheDay: Int = .zero
+    var workoutTimingForTheDay: Int = .zero
+    var mealsHad: Array<Meal_t> = []
+    var workoutsDone: Array<Workout_t> = []
+    var stepsTaken: Int = .zero
+}
+
 struct User_t: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
     var fullName: String

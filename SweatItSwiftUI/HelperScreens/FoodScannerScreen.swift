@@ -26,6 +26,8 @@ struct FoodScannerScreen: View {
     
     @State var tempState: Bool = false
     
+    @State var isFoodVisible: Bool = false
+    
     func changeFlashlight(to state: Bool) {
         guard let captureDevice = captureDevice else { return }
         do {
@@ -46,6 +48,19 @@ struct FoodScannerScreen: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            
+            if self.currentScannerType == .food {
+                Text(self.isFoodVisible ? "Food Visible" : "Food Not Visible")
+                    .font(.system(size: 15, weight: .regular, design: .rounded))
+                    .foregroundStyle(.white)
+                    .frame(height: 35)
+                    .padding(.horizontal)
+                    .background(self.isFoodVisible ? ApplicationLinearGradient.greenGradient : ApplicationLinearGradient.redGradient)
+                    .clipShape(Capsule())
+                    .offset(y: 60)
+                    .zIndex(.infinity)
+                    .transition(.offset(y: -UIScreen.main.bounds.height / 2).combined(with: .blurReplace))
+            }
             
             
             if self.currentScannerType == .food {
@@ -235,6 +250,9 @@ struct FoodScannerScreen: View {
                 .offset(y: UIScreen.main.bounds.height - 170)
                 .zIndex(11111)
                 .transition(.asymmetric(insertion: .offset(x: -UIScreen.main.bounds.width), removal: .offset(x: UIScreen.main.bounds.width)))
+                .onTapGesture {
+                    ApplicationHelper.playSound(of: ApplicationHelper.Sounds.cameraShutter)
+                }
             }
             
             
@@ -296,11 +314,10 @@ struct CameraView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let viewController = UIViewController()
         
-        // Set up camera session
         let session = AVCaptureSession()
+        
         session.beginConfiguration()
         
-        // Setup camera input
         guard let device = AVCaptureDevice.default(for: .video) else { return viewController }
         guard let input = try? AVCaptureDeviceInput(device: device) else { return viewController }
         
@@ -308,13 +325,11 @@ struct CameraView: UIViewControllerRepresentable {
             session.addInput(input)
         }
         
-        // Setup video preview layer
         let previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.frame = viewController.view.bounds
         viewController.view.layer.addSublayer(previewLayer)
         
-        // Set up output
         let output = AVCaptureVideoDataOutput()
         if session.canAddOutput(output) {
             session.addOutput(output)

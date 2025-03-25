@@ -11,10 +11,13 @@ struct FoodViewCard: View {
             // MARK: Background image view
             HStack {
                 Image(self.food.foodImage)
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .offset(y: 10)
                     .opacity(0.25)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
-            
+
             
             // MARK: Content View
             VStack(spacing: 5) {

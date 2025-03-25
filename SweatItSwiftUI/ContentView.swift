@@ -16,7 +16,7 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .coach
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -34,7 +34,7 @@ struct ContentView: View {
 //                        .zIndex(99999)
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
-                
+//                
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
                 

@@ -1,4 +1,5 @@
 import SwiftUI
+import AudioToolbox
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
@@ -53,11 +54,32 @@ class ApplicationLinearGradient {
     public static let darkBGSameGradient = LinearGradient(gradient: Gradient(colors: [.darkBG, .darkBG]), startPoint: .top, endPoint: .bottom)
     public static let darkBGSameGradientWithOpacityHalf = LinearGradient(gradient: Gradient(colors: [.darkBG.opacity(0.54), .darkBG.opacity(0.54)]), startPoint: .top, endPoint: .bottom)
     public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
-    
+    public static let whiteGradientInverted = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
+
 
 }
 
 class ApplicationHelper {
+    
+    public static func getDay(from: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        return dateFormatter.string(from: from)
+    }
+    
+    public static func getDate(from: Date) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd"
+        return Int(dateFormatter.string(from: from)) ?? 0
+    }
+    
+    enum Sounds: Int {
+        case cameraShutter
+    }
+        
+    public static func playSound(of: Sounds) -> Void {
+        AudioServicesPlaySystemSound(SystemSoundID(of.rawValue))
+    }
     
     public static func dismissKeyboard() -> Void {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)

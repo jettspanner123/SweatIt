@@ -16,7 +16,7 @@ struct SecondaryHeading: View {
         HStack(alignment: .bottom, spacing: 5) {
             Text(title)
                 .foregroundStyle(.white)
-                .font(.system(size: 25, weight: .light, design: .rounded))
+                .font(.system(size: 23, weight: .light, design: .rounded))
                 .kerning(-1)
            
             Text(self.secondaryText)

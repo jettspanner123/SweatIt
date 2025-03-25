@@ -292,6 +292,8 @@ class Exercise {
         difficulty: .medium
     )
     
+    var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium)
+    
 }
 
 class Workout {
@@ -305,6 +307,13 @@ class Workout {
         .init(workoutName: "Arm Builder", workoutDescription: "Got No guns? What a looser 😒. Get guns now with this workout or you are gay🤡.", workoutCategory: .strength, workoutImage: "arms", exercises: [Exercise.current.closeGripPushups, Exercise.current.bicepCurl, Exercise.current.tricepDips]),
         .init(workoutName: "Core Create", workoutDescription: "Bro you got family pack instead of 6? Fear not! Be beach ready in only 30 mins a day. Let the girls know you've entered the beach premisis 😉.", workoutCategory: .strength, workoutImage: "core", exercises: [Exercise.current.plank, Exercise.current.bicycleCrunch, Exercise.current.mountainClimbers, Exercise.current.mountainClimbers])
     ]
+    
+    let chestWorkout: Workout_t = .init(workoutName: "Chest Workout", workoutDescription: "Chest workout for bigger chest, bigger than chiyalis ki chati.", workoutCategory: .strength, workoutImage: "", exercises: [Exercise.current.pushUp, Exercise.current.inclinePushUp, Exercise.current.chestDip, Exercise.current.benchPress])
+    let armsWorkout: Workout_t = .init(workoutName: "Arm Workout", workoutDescription: "Don't be like Kacchap, have bigger arms.", workoutCategory: .strength, workoutImage: "arms", exercises: [Exercise.current.bicepCurl, Exercise.current.closeGripPushups, Exercise.current.pullups, Exercise.current.tricepDips])
+    let coreWorkout: Workout_t = .init(workoutName: "Core Workout", workoutDescription: "Don't have a six pack, don't be a negative rizzler. Get a pack.", workoutCategory: .strength, workoutImage: "", exercises: [Exercise.current.mountainClimbers, Exercise.current.bicycleCrunch, Exercise.current.plank, Exercise.current.russianTwist])
+    let fullBodyWorkotu: Workout_t = .init(workoutName: "Full Body Workout", workoutDescription: "Full body workout for when you don't have enought time. You are not a rizzler my friend. 😔", workoutCategory: .strength, workoutImage: "upperbody", exercises: [Exercise.current.pushUp, Exercise.current.pullups, Exercise.current.bulgarianSplitSquat, Exercise.current.plank])
+    
+    
 }
 
 class Agenda {
@@ -323,17 +332,6 @@ class Agenda {
         .init(title: "Sleep - Recovery", description: "Get 7-8 hours of restful sleep to recover and rebuild muscle.", date: Date().addingTimeInterval(60 * 60 * 18), isDone: false)
     ]
     
-}
-
-class DailyEvents {
-    public static var current = DailyEvents()
-    
-    var exerciseOfTheDay: Array<Exercise_t> = [
-        Exercise.current.pushUp,
-        Exercise.current.bodyweightSquat
-    ]
-    
-    var stepCount: Int = 13020
 }
 
 class Food {
@@ -418,4 +416,25 @@ class Notification {
         
     ]
     
+}
+
+
+class DailyEvents {
+    public static var current = DailyEvents()
+    
+    var weeklyEvents: Array<DailyEvents_t> = [
+        .init(date: .now.add(-6), caloriesBurnedForTheDay: 800, caloriesIngestedForTheDay: 1570, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 32, mealsHad: Meal.current.exampleMeals,workoutsDone: [Workout.current.armsWorkout] ,stepsTaken: 13020),
+        .init(date: .now.add(-5), caloriesBurnedForTheDay: 600, caloriesIngestedForTheDay: 1392, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 65, mealsHad: Meal.current.exampleMeals,workoutsDone: [Workout.current.coreWorkout] ,stepsTaken: 15000),
+        .init(date: .now.add(-4), caloriesBurnedForTheDay: 700,caloriesIngestedForTheDay: 1888, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 43, mealsHad: Meal.current.exampleMeals, workoutsDone: [Workout.current.chestWorkout] ,stepsTaken: 18000),
+        .init(date: .now.add(-3), caloriesBurnedForTheDay: 800, caloriesIngestedForTheDay: 1900, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 55, mealsHad: Meal.current.exampleMeals,workoutsDone: [Workout.current.fullBodyWorkotu] ,stepsTaken: 13000),
+        .init(date: .now.add(-2), caloriesBurnedForTheDay: 650, caloriesIngestedForTheDay: 1679, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 39, mealsHad: Meal.current.exampleMeals, workoutsDone: [Workout.current.armsWorkout, Workout.current.chestWorkout],stepsTaken: 15432),
+        .init(date: .now.add(-1), caloriesBurnedForTheDay: 790, caloriesIngestedForTheDay: 1218, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 39, mealsHad: Meal.current.exampleMeals, workoutsDone: [Workout.current.armsWorkout, Workout.current.fullBodyWorkotu],stepsTaken: 14325),
+        .init(date: .now, caloriesBurnedForTheDay: 900, caloriesIngestedForTheDay: 1833, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 70, mealsHad: Meal.current.exampleMeals, stepsTaken: 13232)
+    ]
+}
+
+extension Date {
+    func add(_ day: Int) -> Date {
+        return self.addingTimeInterval(TimeInterval(ONE_DAY * day))
+    }
 }
