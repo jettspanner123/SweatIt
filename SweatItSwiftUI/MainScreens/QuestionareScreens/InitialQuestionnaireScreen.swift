@@ -16,7 +16,7 @@ struct InitialQuestionnaireScreen: View {
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    @State var currentSelectedPage: QuestionPageScreens = .intro
+    @State var currentSelectedPage: QuestionPageScreens = .activityLevel
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
@@ -34,6 +34,11 @@ struct InitialQuestionnaireScreen: View {
     
     @State var pageChangeTransition: Bool = false
     @State var saveChanges: Bool = false
+    
+    @State var showRegionSelectScreen: Bool = false
+    @State var showAlergiesSelectScreen: Bool = false
+    @State var selectedRegion: String = ""
+    @State var selectedFoodAlergies: Array<Extras.FoodAllergy> = []
     
     
     @Environment(\.dismiss) var dissmis
@@ -108,6 +113,19 @@ struct InitialQuestionnaireScreen: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
+                
+                
+                if self.showRegionSelectScreen {
+                    SelectRegionScreen(selectedRegion: self.$selectedRegion, showSelectRegionScreen: self.$showRegionSelectScreen)
+                        .zIndex(.infinity)
+                        .transition(.offset(x: UIScreen.main.bounds.width))
+                }
+                
+                if self.showAlergiesSelectScreen {
+                    SelectAlergiesScreen(selectedAlergies: self.$selectedFoodAlergies, showAlergiesSelectScreen: self.$showAlergiesSelectScreen)
+                        .zIndex(.infinity)
+                        .transition(.offset(x: UIScreen.main.bounds.width))
+                }
                 
                 // MARK: Finish button
                 if self.currentSelectedPage == .goal {
@@ -521,7 +539,7 @@ struct InitialQuestionnaireScreen: View {
                     ActivityQuestionnaireScreen()
                         .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 } else if self.currentSelectedPage == .foodType {
-                    FoodTypeQuestionnaireScreen(showAddAnnualIncomeTopSheet: $showAddAnnualIncomeTopSheet)
+                    FoodTypeQuestionnaireScreen(showAddAnnualIncomeTopSheet: self.$showAddAnnualIncomeTopSheet, showSelectRegionScreen: self.$showRegionSelectScreen, showSelectAlergiesScreen: self.$showAlergiesSelectScreen, selectedFoodAlergies: self.$selectedFoodAlergies, selectedRegion: self.$selectedRegion)
                         .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
                 } else if self.currentSelectedPage == .fitnessLevel {
                     FitnessLevelQuestionnaireScreen()
@@ -682,10 +700,7 @@ struct InitialQuestionnaireScreen: View {
                                 }
                             }
                         }
-                    } else {
-                        
                     }
-                    
                     
                 }
                 .zIndex(11)
@@ -699,3 +714,6 @@ struct InitialQuestionnaireScreen: View {
     }
 }
 
+#Preview {
+    InitialQuestionnaireScreen(showLoginScreen: .constant(false))
+}

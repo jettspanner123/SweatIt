@@ -11,22 +11,22 @@ struct FoodTypeQuestionnaireScreen: View {
     
     @Binding var showAddAnnualIncomeTopSheet: Bool
     
+    @Binding var showSelectRegionScreen: Bool
+    @Binding var showSelectAlergiesScreen: Bool
+    @Binding var selectedFoodAlergies: Array<Extras.FoodAllergy>
+    @Binding var selectedRegion: String
+
     enum BudgetSelectionType: String, CaseIterable {
         case weekly = "Weekly", monthly = "Monthly"
     }
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    
-    @State var showSelectRegionScreen: Bool = false
-    @State var showSelectAlergiesScreen: Bool = false
-    @State var selectedRegion: String = ""
     @State var showFoodTypeDropDown: Bool = false
     @State var currentSelectedFoodType: Extras.UserFoodType = .none
     @State var currentSelectedBudgetType: BudgetSelectionType = .weekly
     @State var currentSelectedAnnualIncom: ClosedRange<Int> = .init(uncheckedBounds: (0, 0))
     @State var budget: Double = 1000
-    @State var selectedFoodAlergies: Array<Extras.FoodAllergy> = []
     
     func midpoint<T: BinaryInteger>(_ range: ClosedRange<T>) -> Double {
         return Double(range.lowerBound + range.upperBound) / 2.0
@@ -34,7 +34,6 @@ struct FoodTypeQuestionnaireScreen: View {
    
     func changeSliderBasedOnAnnualIncome() -> Void {
         
-        print("Hello world")
         if self.currentSelectedBudgetType == .weekly {
             let something = Double((self.midpoint(self.currentSelectedAnnualIncom) * 0.12) / 52)
             withAnimation(.snappy(duration: 1)) {
@@ -86,7 +85,7 @@ struct FoodTypeQuestionnaireScreen: View {
                     .applicationDropDownButton(self.selectedRegion.isEmpty ? ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf : ApplicationLinearGradient.blueGradientInverted)
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     .onTapGesture {
-                        withAnimation {
+                        withAnimation(.smooth(duration: 0.4)) {
                             self.showSelectRegionScreen = true
                         }
                     }
@@ -300,7 +299,9 @@ struct FoodTypeQuestionnaireScreen: View {
                     .applicationDropDownButton()
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     .onTapGesture {
-                        self.showSelectAlergiesScreen = true
+                        withAnimation(.smooth(duration: 0.4)) {
+                            self.showSelectAlergiesScreen = true
+                        }
                     }
                     
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -333,12 +334,12 @@ struct FoodTypeQuestionnaireScreen: View {
         .onChange(of: self.currentSelectedBudgetType) {
             self.changeSliderBasedOnAnnualIncome()
         }
-        .navigationDestination(isPresented: self.$showSelectRegionScreen, destination: {
-            SelectRegionScreen(selectedRegion: self.$selectedRegion)
-        })
-        .navigationDestination(isPresented: self.$showSelectAlergiesScreen, destination: {
-            SelectAlergiesScreen(selectedAlergies: self.$selectedFoodAlergies)
-        })
+//        .navigationDestination(isPresented: self.$showSelectRegionScreen, destination: {
+//            SelectRegionScreen(selectedRegion: self.$selectedRegion)
+//        })
+//        .navigationDestination(isPresented: self.$showSelectAlergiesScreen, destination: {
+//            SelectAlergiesScreen(selectedAlergies: self.$selectedFoodAlergies)
+//        })
         .sensoryFeedback(.impact, trigger: self.budget)
         .sensoryFeedback(.impact, trigger: self.currentSelectedBudgetType)
     }

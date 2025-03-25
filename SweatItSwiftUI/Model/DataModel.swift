@@ -379,7 +379,7 @@ class Challenge {
     ]
 }
 
-class Meal {
+class Meal: ObservableObject {
     public static var current = Meal()
     
     var exampleMeals: Array<Meal_t> = [

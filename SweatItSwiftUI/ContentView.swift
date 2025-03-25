@@ -16,7 +16,7 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .coach
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -29,27 +29,16 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                if !self.isUserLoggedIn {
-                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-                        .zIndex(99999)
-                        .transition(ScaleBlurOffsetTransition())
-                }
+//                if !self.isUserLoggedIn {
+//                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+//                        .zIndex(99999)
+//                        .transition(ScaleBlurOffsetTransition())
+//                }
                 
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
                 
-                
-                // MARK: Button for testing dynamic island
-//
-//                Button {
-//                    withAnimation(.smooth(duration: 0.4)) {
-//                        self.showIsland.toggle()
-//                    }
-//                } label: {
-//                    Text("Click me")
-//                }
-//                .zIndex(.infinity)
-                
+               
                 if self.showNotificationCenter {
                     NotificationCenterScreen(showNotificationCenter: self.$showNotificationCenter)
                         .transition(.offset(y: UIScreen.main.bounds.height))
@@ -83,7 +72,8 @@ struct ContentView: View {
                     WorkoutScreen()
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .coach {
-                    
+                    CoachScreen()
+                        .transition(.blurReplace)
                 } else if self.currentPage_t == .diet {
                     DietScreen(showCameraScreen: self.$showCameraScreen)
                         .offset(y: self.showCameraScreen ? -50 : 0)

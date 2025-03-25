@@ -9,64 +9,153 @@ import SwiftUI
 
 struct ActivityQuestionnaireScreen: View {
     
+    enum ActivityScreenState: String, CaseIterable, Codable {
+        case daysInWeek = "Days In Week", hoursEachDay = "Hours Each Day"
+    }
+    
     
     @State var selectedHour: Int = 0
+    @State var currentSelectedState: ActivityScreenState = .daysInWeek
+    @State var currentSelectedDays: Array<String> = ["Mon", "Wed"]
+    
+    var daysInWeek: Array<String> = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     
     let dialText: Array<Int> = [1,2,3,4,5,6,7,8,9,10,11,12]
-    
+    @State var hoursADay: Double = 1
     
     var body: some View {
         VStack {
-            Text("Please select how many times you are active through the week.")
-                .font(.system(size: 15, weight: .regular, design: .rounded))
+            Text("Please select how many hours you are active through the week eg. ( Use the sliders below )")
+                .font(.system(size: 12, weight: .regular, design: .rounded))
                 .foregroundStyle(.white.opacity(0.5))
+                .takeMaxWidthLeading()
             
-            GeometryReader {
-                let readerSize = $0.size
-                let verticalPadding = readerSize.height / 2
-               
-                ScrollView {
-                    VStack {
-                        ForEach(0...(ApplicationConstants.workoutTimeEachDatMaxLimit * 7), id: \.self) { index in
-                            Text("\(index)")
-                                .font(.system(size: self.selectedHour == index ? 50 : 15, weight: .bold, design: .rounded))
-                                .foregroundStyle(self.selectedHour == index ? .white : .white.opacity(0.5))
-                                .frame(height: 50)
-                        }
-                    }
-                    .frame(width: readerSize.width)
-                    .scrollTargetLayout()
-                }
-                .safeAreaPadding(.vertical, verticalPadding)
-                .scrollTargetBehavior(.viewAligned)
-                .overlay(alignment: .center) {
-                    HStack(spacing: 100) {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(ApplicationLinearGradient.redGradient)
-                            .frame(width: 100, height: 3)
+           
+            SectionHeader(text: "Choose Option")
+                .padding(.top, 25)
+            HStack {
+                ForEach(ActivityScreenState.allCases, id: \.self) { type_t in
+                    HStack {
+                        Text(type_t.rawValue)
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(self.currentSelectedState == type_t ? .white : .white.opacity(0.5))
+                            .frame(maxWidth: .infinity)
                         
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(ApplicationLinearGradient.redGradient)
-                            .frame(width: 100, height: 3)
                     }
-                    .frame(maxWidth: .infinity)
-                }
-                .scrollPosition(id: .init(get: {
-                    let position: Int? = self.selectedHour
-                    return position
-                }, set: { newValue in
-                    if let newValue {
-                        withAnimation(.bouncy) {
-                            self.selectedHour = newValue
+                    .applicationDropDownButton(self.currentSelectedState == type_t ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf, height: 40)
+                    .onTapGesture {
+                        withAnimation {
+                            self.currentSelectedState = type_t
                         }
                     }
-                }))
+                }
+            }
+            
+            
+            HStack {
+                    
+                VStack {
+                    Text(String(self.currentSelectedDays.count))
+                        .font(.system(size: 35, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .contentTransition(.numericText(value: Double(self.currentSelectedDays.count)))
+                        .animation(.snappy, value: self.currentSelectedDays.count)
+                    
+                    Text("Days a week")
+                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        
+                    
+                }
+                .applicationDropDownButton(height: 85)
+                
+                VStack {
+                    Text(String(format: "%.1f", self.hoursADay))
+                        .font(.system(size: 35, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .contentTransition(.numericText(value: self.hoursADay))
+                        .animation(.snappy, value: self.hoursADay)
+                    
+                    Text("Hours a day")
+                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                    
+                }
+                .applicationDropDownButton(height: 85)
+                
+                
+                
+              
+            }
+            .frame(maxWidth: .infinity)
+            
+           
+            
+            if self.currentSelectedState == .daysInWeek {
+                SectionHeader(text: "Choose days")
+                    .padding(.top, 25)
+                
+                HStack {
+                    ForEach(self.daysInWeek, id: \.self) { day in
+                        VStack {
+                            Text(day.split(separator: "").first!)
+                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                .foregroundStyle(self.currentSelectedDays.contains(day) ? .white : .white.opacity(0.5))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(self.currentSelectedDays.contains(day) ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                        .overlay {
+                            defaultShape
+                                .stroke(.white.opacity(0.18))
+                            
+                        }
+                        .clipShape(defaultShape)
+                        .onTapGesture {
+                            withAnimation {
+                                if self.currentSelectedDays.contains(day) {
+                                    self.currentSelectedDays.removeAll(where: { $0 == day })
+                                } else {
+                                    self.currentSelectedDays.append(day)
+                                }
+                            }
+                        }
+                    }
+                }
+                .transition(.blurReplace)
+            } else {
+                
+                SectionHeader(text: "Slide your choice")
+                    .padding(.top, 25)
+                
+                Slider(value: self.$hoursADay, in: 1...7)
+                    .tint(ApplicationLinearGradient.blueGradientInverted)
+                HStack {
+                   
+                    Text("1")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                   Spacer()
+                    
+                    Text("7")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    
             }
             
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding)
-        .sensoryFeedback(.impact, trigger: self.selectedHour)
+        .sensoryFeedback(.impact, trigger: self.hoursADay)
+        .sensoryFeedback(.impact, trigger: self.currentSelectedDays.count)
     }
 }
+
 

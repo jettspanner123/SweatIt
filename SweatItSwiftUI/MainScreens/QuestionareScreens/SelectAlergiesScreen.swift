@@ -10,12 +10,18 @@ import SwiftUI
 struct SelectAlergiesScreen: View {
     
     @Binding var selectedAlergies: Array<Extras.FoodAllergy>
+    @Binding var showAlergiesSelectScreen: Bool
+    
     var alergiesOption: Array<Extras.FoodAllergy> = Array(Extras.FoodAllergy.allCases)
     
     var body: some View {
         ScreenBuilder {
             
-            AccentPageHeader(pageHeaderTitle: "Select Alergies")
+            AccentPageHeader_NoAction(pageHeaderTitle: "Select Alergies") {
+                withAnimation {
+                    self.showAlergiesSelectScreen = false
+                }
+            }
             
             ScrollContentView {
                 

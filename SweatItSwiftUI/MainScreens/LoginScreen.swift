@@ -31,6 +31,8 @@ struct LoginScreen: View {
     
     @State var currentSelectedRegistrationType: RegistrationTypes = .login
     
+    @State var showOnBoardingScreen: Bool = true
+    
     var isSubmitButtonDisabled: Bool {
         self.loginStateObject.username.isEmpty || self.loginStateObject.password.isEmpty
     }
@@ -55,15 +57,21 @@ struct LoginScreen: View {
     }
     
     
+    var onboardingScreenDetils: Array<String> = [
+        "",
+        "",
+        "",
+    ]
+    
     
     var body: some View {
         ZStack {
+          
+            
+                        
+            
             ScreenBuilder {
                 VStack {
-                    
-                    
-                    
-                    
                     // MARK: Upar wala header hai bhai
                     HStack(spacing: 1) {
                         
@@ -274,6 +282,11 @@ struct LoginScreen: View {
             InitialQuestionnaireScreen(showLoginScreen: self.$showLoginScreen)
         })
     }
+}
+
+
+#Preview {
+    LoginScreen(showLoginScreen: .constant(false), showIsland: .constant(false))
 }
 
 

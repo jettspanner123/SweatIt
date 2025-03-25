@@ -12,6 +12,7 @@ struct SelectRegionScreen: View {
     @Environment(\.dismiss) var dismiss
     
     @Binding var selectedRegion: String
+    @Binding var showSelectRegionScreen: Bool
     
     @State var searchText: String = ""
     
@@ -36,7 +37,11 @@ struct SelectRegionScreen: View {
     var body: some View {
         ScreenBuilder {
             
-            AccentPageHeader(pageHeaderTitle: "Indian Regions")
+            AccentPageHeader_NoAction(pageHeaderTitle: "Indian Regions", action: {
+                withAnimation {
+                    self.showSelectRegionScreen = false
+                }
+            })
             
             ScrollContentView {
                 CustomTextField(searchText: self.$searchText, placeholder: "Search Region")
@@ -81,7 +86,9 @@ struct SelectRegionScreen: View {
                                         self.selectedRegion = self.indianStatesAndUTs[index]
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        self.dismiss()
+                                        withAnimation {
+                                            self.showSelectRegionScreen = false
+                                        }
                                     }
                                 }
                             
@@ -125,7 +132,9 @@ struct SelectRegionScreen: View {
                                             self.searchText = ""
                                         }
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                            self.dismiss()
+                                            withAnimation {
+                                                self.showSelectRegionScreen = false
+                                            }
                                         }
                                     }
                                 
