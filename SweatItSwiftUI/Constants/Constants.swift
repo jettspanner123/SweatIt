@@ -55,11 +55,17 @@ class ApplicationLinearGradient {
     public static let darkBGSameGradientWithOpacityHalf = LinearGradient(gradient: Gradient(colors: [.darkBG.opacity(0.54), .darkBG.opacity(0.54)]), startPoint: .top, endPoint: .bottom)
     public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
     public static let whiteGradientInverted = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
+    
 
 
 }
 
 class ApplicationHelper {
+    
+    public static func estimatedCaloriesBurned(steps: Int, weightInKg: Double) -> Double {
+        let caloriesPerStep = 0.04 + (weightInKg - 70) * 0.0002 // Adjust based on weight (70kg baseline)
+        return Double(steps) * caloriesPerStep
+    }
     
     public static func getDay(from: Date) -> String {
         let dateFormatter = DateFormatter()

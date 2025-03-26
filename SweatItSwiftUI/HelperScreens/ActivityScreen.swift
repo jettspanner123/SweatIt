@@ -11,6 +11,8 @@ struct ActivityScreen: View {
     
     @State var showAllExerciseStats: Bool = false
     
+    @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
+    
     
     var body: some View {
         ScreenBuilder {
@@ -46,6 +48,47 @@ struct ActivityScreen: View {
                         .font(.system(size: 20, weight: .regular, design: .rounded))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    ZStack {
+                        Circle()
+                            .trim(from: 0.15, to: 0.85)
+                            .stroke(LinearGradient(colors: [Color.appGreenDark, Color.appGreenLight], startPoint: .trailing, endPoint: .leading), style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                            .rotationEffect(.degrees(90))
+                            .opacity(0.25)
+                            .padding(25)
+                            .zIndex(1)
+                        
+                        Circle()
+                            .trim(from: 0.15, to: 0.7)
+                            .stroke(LinearGradient(colors: [Color.appGreenDark, Color.appGreenLight], startPoint: .trailing, endPoint: .leading), style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
+                            .rotationEffect(.degrees(90))
+                            .padding(25)
+                            .zIndex(1)
+                        
+                        Image("Walking")
+                            .scaleEffect(0.75)
+                        
+                        Text("\(self.weeklyData.last!.stepsTaken)")
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 28))
+                            .foregroundStyle(ApplicationLinearGradient.greenGradient)
+                            .offset(y: 75)
+                        
+                    }
+                    
+                    Text("Calories Burned")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .takeMaxWidthLeading()
+                        .padding(.top)
+                    
+                    let caloriesBurned: Double = ApplicationHelper.estimatedCaloriesBurned(steps: self.weeklyData.last!.stepsTaken, weightInKg: Double(75))
+                    
+                    Text(String(format: "%.f", caloriesBurned))
+                        .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
+                        .foregroundStyle(ApplicationLinearGradient.redGradient)
+                        .takeMaxWidthLeading()
+
+                    
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 300, alignment: .topLeading)

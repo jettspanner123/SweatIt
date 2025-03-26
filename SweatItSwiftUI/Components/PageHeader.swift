@@ -30,11 +30,6 @@ struct PageHeader: View {
             
             if self.pageHeaderTitle == "Home" {
                 HStack {
-                    Image("Fire")
-                        .resizable()
-                        .frame(maxWidth: 30, maxHeight: 30)
-                        .frame(width: 50, height: 50)
-                    
                     Image("Bell")
                         .resizable()
                         .frame(maxWidth: 30, maxHeight: 30)

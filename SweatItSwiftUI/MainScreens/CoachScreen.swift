@@ -20,42 +20,42 @@ struct CoachScreen: View {
     
     var body: some View {
         ScrollContentView {
-            
-            
-            SecondaryHeading(title: "Newly Added", secondaryText: "( Things that are newly added to the app )")
-                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    
-                    ForEach(0...3, id: \.self) { index in
-                        VStack {
-                        }
-                        .padding()
-                        .frame(width: UIScreen.main.bounds.width - 30, height: 125)
-                        .background(ApplicationLinearGradient.greenGradient, in: defaultShape)
-                        .scrollTransition { view, phase in
-                            view
-                                .opacity(phase.isIdentity ? 1 : 0)
-                                .blur(radius: phase.isIdentity ? 0 : 25)
-                        }
-                    }
-                   
-                    
-                    
-                }
-                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                .scrollTargetLayout()
-            }
-            .scrollTargetBehavior(.viewAligned(limitBehavior: .never))
-            .scrollClipDisabled()
-            
+//            
+//            
+//            SecondaryHeading(title: "Newly Added", secondaryText: "( Things that are newly added to the app )")
+//                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+//            
+//            ScrollView(.horizontal, showsIndicators: false) {
+//                HStack {
+//                    
+//                    ForEach(0...3, id: \.self) { index in
+//                        VStack {
+//                        }
+//                        .padding()
+//                        .frame(width: UIScreen.main.bounds.width - 30, height: 125)
+//                        .background(ApplicationLinearGradient.greenGradient, in: defaultShape)
+//                        .scrollTransition { view, phase in
+//                            view
+//                                .opacity(phase.isIdentity ? 1 : 0)
+//                                .blur(radius: phase.isIdentity ? 0 : 25)
+//                        }
+//                    }
+//                   
+//                    
+//                    
+//                }
+//                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+//                .scrollTargetLayout()
+//            }
+//            .scrollTargetBehavior(.viewAligned(limitBehavior: .never))
+//            .scrollClipDisabled()
+//            
             
             
             // MARK: HOrizontal scroll widgets
             SecondaryHeading(title: "Fitness Metrics", secondaryText: "( avg per week )")
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                .padding(.top, 25)
+//                .padding(.top, 25)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {

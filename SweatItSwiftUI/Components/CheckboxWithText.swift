@@ -25,6 +25,9 @@ struct CheckBoxWithText: View {
         .frame(height: 15)
         .background(.white.opacity(0.001))
         .onTapGesture {
+            withAnimation {
+                self.checked.toggle()
+            }
             ApplicationHelper.impactOccured(style: .heavy)
         }
     }

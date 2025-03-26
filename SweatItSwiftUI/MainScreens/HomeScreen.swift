@@ -87,18 +87,21 @@ struct HomeScreen: View {
                 }
                 
                 // MARK: Choose Workout Button
-                PrimaryNavigationButton(text: "Workout")
-                    .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
-                    .overlay {
-                        HStack {
-                            Image("Workout")
-                                .resizable()
-                                .frame(width: 30, height: 25)
+                NavigationLink(destination: ChooseWorkoutScreen()) {
+                    PrimaryNavigationButton(text: "Workout")
+                        .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
+                        .overlay {
+                            HStack {
+                                Image("Workout")
+                                    .resizable()
+                                    .frame(width: 30, height: 25)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 10)
+                            .offset(y: 0)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 10)
-                        .offset(y: 0)
-                    }
+                }
+                
             }
             .frame(maxWidth: .infinity)
             

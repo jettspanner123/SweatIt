@@ -16,7 +16,7 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -88,14 +88,12 @@ struct ContentView: View {
             }
             .coordinateSpace(name: "MainScreenCoordinateSpace")
         }
-        .overlay {
-            
-        }
         .onAppear {
             withAnimation {
                 self.isUserLoggedIn = false
             }
         }
+        .sensoryFeedback(.impact, trigger: self.currentPage_t)
         
     }
 }

@@ -12,8 +12,9 @@ struct ProfileScreen: View {
     @Binding var user: User_t
     
     
-    @State var showPastStatisticsScreen: Bool = true
+    @State var showPastStatisticsScreen: Bool = false
     @State var showAddFriendScreen: Bool = false
+    @State var showLeaderboardScreen: Bool = false
     
     var body: some View {
         ScrollContentView {
@@ -189,7 +190,7 @@ struct ProfileScreen: View {
             
             
             
-            // MARK: Steps graph card
+//             MARK: Steps graph card
             HStack {
                 
                 VStack {
@@ -239,7 +240,12 @@ struct ProfileScreen: View {
             .clipShape(defaultShape)
             
             
-            HeadingWithLink(titleHeading: "Top Performers")
+           
+            
+            
+            HeadingWithLink(titleHeading: "Top Performers", action: {
+                self.showLeaderboardScreen = true
+            })
                 .padding(.top, 20)
             
         }
@@ -249,6 +255,9 @@ struct ProfileScreen: View {
         })
         .navigationDestination(isPresented: self.$showAddFriendScreen, destination: {
             AddFriendScreen()
+        })
+        .navigationDestination(isPresented: self.$showLeaderboardScreen, destination: {
+            LeaderboardScreen()
         })
     }
 }
