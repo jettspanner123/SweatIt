@@ -37,6 +37,7 @@ struct PageHeader: View {
                         .background(.white.opacity(0.001))
                         .onTapGesture {
                             self.notificationAction()
+                            ApplicationHelper.impactOccured(style: .light)
                         }
                 }
                 .offset(x: -24, y: 30)
@@ -52,6 +53,7 @@ struct PageHeader: View {
                         .rotationEffect(.degrees(self.isRotating ? 9999 : 0))
                         .onTapGesture {
                             self.profileSettingsAction()
+                            ApplicationHelper.impactOccured(style: .light)
                         }
                     
                     Image(systemName: "door.right.hand.open")
@@ -59,6 +61,7 @@ struct PageHeader: View {
                         .foregroundStyle(.white)
                         .onTapGesture {
                             self.logoutAction()
+                            ApplicationHelper.impactOccured(style: .light)
                         }
                 }
                 .offset(x: -24, y: 30)

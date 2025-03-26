@@ -9,8 +9,11 @@ import SwiftUI
 
 struct HomeScreen: View {
     
-    @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
+    @Binding var showAddAgendaPage: Bool
+    
+    @Binding var AgendaToday: Array<Agenda_t> 
     @State var RescentActivities: Array<Activity_t> = Activity.current.exampleActivityList
+    
     
     var body: some View {
         ScrollContentView {
@@ -38,6 +41,22 @@ struct HomeScreen: View {
             
             // MARK: Agenda today card
             VStack(spacing: 0) {
+                
+                if self.AgendaToday.isEmpty {
+                    VStack(spacing: 15) {
+                        Image(systemName: "tray.fill")
+                            .resizable()
+                            .frame(width: 80, height: 70)
+                            .foregroundStyle(.white.opacity(0.25))
+                        
+                        Text("No Agendas Found!")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.25))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 200)
+                }
+                
                 ForEach(self.AgendaToday.indices, id: \.self) { index in
                     CheckBoxWithText(text: self.AgendaToday[index].title, checked: self.$AgendaToday[index].isDone)
                         .padding(.horizontal, 15)
@@ -48,6 +67,14 @@ struct HomeScreen: View {
                         CustomDivider()
                     }
                 }
+                
+                
+                
+                
+                
+                
+                
+                
             }
             .frame(maxWidth: .infinity)
             .background(.darkBG)
@@ -56,6 +83,26 @@ struct HomeScreen: View {
                     .stroke(.white.opacity(0.18))
             }
             .clipShape(defaultShape)
+            
+            
+            // MARK: Create agenda button
+            
+            HStack {
+                Text("Create Agenda")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.95))
+                    .frame(maxWidth: .infinity)
+                
+                
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 40)
+            .background(ApplicationLinearGradient.redGradient.opacity(0.85), in: RoundedRectangle(cornerRadius: 8))
+            .onTapGesture {
+                withAnimation {
+                    self.showAddAgendaPage = true
+                }
+            }
             
             
             // MARK: Recent Activities
@@ -116,14 +163,8 @@ struct HomeScreen: View {
            
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .sensoryFeedback(.impact, trigger: self.showAddAgendaPage)
     }
 }
 
 
-
-
-
-
-#Preview {
-    HomeScreen()
-}

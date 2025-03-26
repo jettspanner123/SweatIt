@@ -26,19 +26,32 @@ struct ContentView: View {
     
     @State var showIsland: Bool = false
     
+    @State var showAddAgendaPage: Bool = false
+    
+    
+    @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
+
+    
+    
+    
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-//                if !self.isUserLoggedIn {
-//                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-//                        .zIndex(99999)
-//                        .transition(ScaleBlurOffsetTransition())
-//                }
-//                
+                //                if !self.isUserLoggedIn {
+                //                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                //                        .zIndex(99999)
+                //                        .transition(ScaleBlurOffsetTransition())
+                //                }
+                //
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
                 
-               
+                if self.showAddAgendaPage {
+                    AddAgendaScreen(showAddAgendaScreen: self.$showAddAgendaPage, agendaList: self.$AgendaToday)
+                        .transition(.offset(y: UIScreen.main.bounds.height))
+                        .zIndex(9999)
+                }
+                
                 if self.showNotificationCenter {
                     NotificationCenterScreen(showNotificationCenter: self.$showNotificationCenter)
                         .transition(.offset(y: UIScreen.main.bounds.height))
@@ -60,13 +73,13 @@ struct ContentView: View {
                         self.isUserLoggedIn = false
                     }
                 })
-                .offset(y: self.showNotificationCenter || self.showCameraScreen ? -50 : 0)
-                .blur(radius: self.showNotificationCenter || self.showCameraScreen ? 10 : 0)
-                
+                .offset(y: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? -50 : 0)
+                .blur(radius: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? 10 : 0)
+
                 if self.currentPage_t == .home {
-                    HomeScreen()
-                        .offset(y: self.showNotificationCenter ? -50 : 0)
-                        .blur(radius: self.showNotificationCenter ? 10 : 0)
+                    HomeScreen(showAddAgendaPage: self.$showAddAgendaPage, AgendaToday: self.$AgendaToday)
+                        .offset(y: self.showNotificationCenter || self.showAddAgendaPage ? -50 : 0)
+                        .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
@@ -97,6 +110,8 @@ struct ContentView: View {
         
     }
 }
+
+
 
 #Preview {
     ContentView()

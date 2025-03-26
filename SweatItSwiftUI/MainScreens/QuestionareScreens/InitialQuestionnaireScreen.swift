@@ -16,7 +16,7 @@ struct InitialQuestionnaireScreen: View {
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    @State var currentSelectedPage: QuestionPageScreens = .activityLevel
+    @State var currentSelectedPage: QuestionPageScreens = .intro
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false

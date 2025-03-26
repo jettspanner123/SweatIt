@@ -294,6 +294,26 @@ class Exercise {
     
     var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium)
     
+    var allExercises: Array<Exercise_t> {
+        return [pullups, mountainClimbers, russianTwist, legRaise, bicycleCrunch, plank, bicepCurl, tricepDips, closeGripPushups, calfRaise, bulgarianSplitSquat, gluteBridge, walkingLunge, bodyweightSquat, chestDip, overheadPress, inclinePushUp, benchPress, pushUp]
+    }
+    
+    var chestExercises: Array<Exercise_t> {
+        return self.allExercises.filter( {$0.targettedMuscles.contains(.chest)} )
+    }
+    
+    var lowerBodyExercises: Array<Exercise_t> {
+        return self.allExercises.filter( {$0.targettedMuscles.contains(.glutes) || $0.targettedMuscles.contains(.calves) || $0.targettedMuscles.contains(.quads) || $0.targettedMuscles.contains(.hamstrings)} )
+    }
+    
+    var armExercises: Array<Exercise_t> {
+        return self.allExercises.filter( {$0.targettedMuscles.contains(.bicep) || $0.targettedMuscles.contains(.triceps) || $0.targettedMuscles.contains(.shoulders)} )
+    }
+    
+    var coreExercises: Array<Exercise_t> {
+        return self.allExercises.filter( {$0.targettedMuscles.contains(.obliques) || $0.targettedMuscles.contains(.core)} )
+    }
+    
 }
 
 class Workout {
@@ -316,20 +336,26 @@ class Workout {
     
 }
 
-class Agenda {
+class Agenda: ObservableObject, Observable {
     public static var current = Agenda()
     
     var exampleAgendaList: Array<Agenda_t> = [
-        .init(title: "Morning Yoga", description: "Start the day with a 30-minute yoga session.", date: Date(), isDone: false),
-        .init(title: "Cardio Workout", description: "Go for a 5 km run or bike ride to boost metabolism.", date: Date().addingTimeInterval(60 * 60 * 2), isDone: false),
-        .init(title: "Breakfast - High Protein", description: "Eat scrambled eggs, spinach, and whole grain toast.", date: Date().addingTimeInterval(60 * 60 * 3), isDone: false),
-        .init(title: "Strength Training", description: "Lift weights for a 45-minute full-body workout.", date: Date().addingTimeInterval(60 * 60 * 5), isDone: false),
-        .init(title: "Lunch - Low Carb", description: "Grilled chicken with a side of mixed greens and avocado.", date: Date().addingTimeInterval(60 * 60 * 7), isDone: false),
-        .init(title: "HIIT Workout", description: "Perform a 20-minute High-Intensity Interval Training session.", date: Date().addingTimeInterval(60 * 60 * 9), isDone: false),
-        .init(title: "Dinner - Balanced", description: "Salmon, quinoa, and steamed vegetables for a balanced meal.", date: Date().addingTimeInterval(60 * 60 * 12), isDone: false),
-        .init(title: "Stretching & Flexibility", description: "Finish the day with 15 minutes of stretching exercises.", date: Date().addingTimeInterval(60 * 60 * 14), isDone: false),
-        .init(title: "Snack - Healthy", description: "Have a protein shake or a handful of almonds.", date: Date().addingTimeInterval(60 * 60 * 16), isDone: false),
-        .init(title: "Sleep - Recovery", description: "Get 7-8 hours of restful sleep to recover and rebuild muscle.", date: Date().addingTimeInterval(60 * 60 * 18), isDone: false)
+        
+        .init(title: "User the 'Create Agenda' button to create new agendas.", description: ""),
+        .init(title: "Check out the notification area.", description: ""),
+
+        
+        
+//        .init(title: "Morning Yoga", description: "Start the day with a 30-minute yoga session.", date: Date(), isDone: false),
+//        .init(title: "Cardio Workout", description: "Go for a 5 km run or bike ride to boost metabolism.", date: Date().addingTimeInterval(60 * 60 * 2), isDone: false),
+//        .init(title: "Breakfast - High Protein", description: "Eat scrambled eggs, spinach, and whole grain toast.", date: Date().addingTimeInterval(60 * 60 * 3), isDone: false),
+//        .init(title: "Strength Training", description: "Lift weights for a 45-minute full-body workout.", date: Date().addingTimeInterval(60 * 60 * 5), isDone: false),
+//        .init(title: "Lunch - Low Carb", description: "Grilled chicken with a side of mixed greens and avocado.", date: Date().addingTimeInterval(60 * 60 * 7), isDone: false),
+//        .init(title: "HIIT Workout", description: "Perform a 20-minute High-Intensity Interval Training session.", date: Date().addingTimeInterval(60 * 60 * 9), isDone: false),
+//        .init(title: "Dinner - Balanced", description: "Salmon, quinoa, and steamed vegetables for a balanced meal.", date: Date().addingTimeInterval(60 * 60 * 12), isDone: false),
+//        .init(title: "Stretching & Flexibility", description: "Finish the day with 15 minutes of stretching exercises.", date: Date().addingTimeInterval(60 * 60 * 14), isDone: false),
+//        .init(title: "Snack - Healthy", description: "Have a protein shake or a handful of almonds.", date: Date().addingTimeInterval(60 * 60 * 16), isDone: false),
+//        .init(title: "Sleep - Recovery", description: "Get 7-8 hours of restful sleep to recover and rebuild muscle.", date: Date().addingTimeInterval(60 * 60 * 18), isDone: false)
     ]
     
 }

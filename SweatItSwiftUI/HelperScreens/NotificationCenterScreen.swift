@@ -96,6 +96,7 @@ struct NotificationCenterScreen: View {
         .frame(maxWidth: .infinity)
         .background(AppBackgroundBlur(radius: 100, opaque: true))
         .background(.darkBG.opacity(0.54))
+        .clipped()
         .ignoresSafeArea()
         .offset(y: self.pageTranslation.height)
         .gesture(
