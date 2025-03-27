@@ -30,18 +30,18 @@ struct ContentView: View {
     
     
     @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
-
+    
     
     
     
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                //                if !self.isUserLoggedIn {
-                //                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-                //                        .zIndex(99999)
-                //                        .transition(ScaleBlurOffsetTransition())
-                //                }
+                if !self.isUserLoggedIn {
+                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                        .zIndex(99999)
+                        .transition(ScaleBlurOffsetTransition())
+                }
                 //
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
@@ -75,7 +75,7 @@ struct ContentView: View {
                 })
                 .offset(y: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? -50 : 0)
                 .blur(radius: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? 10 : 0)
-
+                
                 if self.currentPage_t == .home {
                     HomeScreen(showAddAgendaPage: self.$showAddAgendaPage, AgendaToday: self.$AgendaToday)
                         .offset(y: self.showNotificationCenter || self.showAddAgendaPage ? -50 : 0)

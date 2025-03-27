@@ -50,7 +50,7 @@ struct ChooseWorkoutScreen: View {
         
         for (key, value) in self.currentSelectedMuscles {
             for index in 1...value {
-                
+                    
             }
         }
         

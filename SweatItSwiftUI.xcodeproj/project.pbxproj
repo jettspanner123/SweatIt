@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */; };
 		07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */,
+				07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = SweatItSwiftUI;
 			packageProductDependencies = (
 				07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */,
+				07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */,
 			);
 			productName = SweatItSwiftUI;
 			productReference = 07EBA5682D7D7DC000C76E40 /* SweatItSwiftUI.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */,
+				07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 07EBA5692D7D7DC000C76E40 /* Products */;
@@ -352,6 +356,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.6;
+			};
+		};
 		07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxnatchanon/trackable-scroll-view";
@@ -363,6 +375,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
+		};
 		07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */;

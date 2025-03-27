@@ -22,5 +22,12 @@
        <string>Oswald-Medium.ttf</string>
        <string>Poppins-Medium.ttf</string>
     </array>
+    
+    
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to select food photos.</string>
+    
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to take photos.</string>
 </dict>
 </plist>
