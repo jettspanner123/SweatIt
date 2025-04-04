@@ -102,12 +102,12 @@ struct FoodTypeQuestionnaireScreen: View {
                         
                         HStack(spacing: 25) {
                             Image(systemName: "fork.knife")
-                                .foregroundStyle(.white.opacity(0.5))
-                            
-                            Text("Food Type")
+//                                .foregroundStyle(self.currentSelectedFoodType == .none : .white.opacity(0.5) : .white)
+
+                            Text(self.currentSelectedFoodType == .none ? "Food Type" : self.currentSelectedFoodType.rawValue)
                                 .font(.system(size: 15, weight: .regular, design: .rounded))
-                                .foregroundStyle(.white.opacity(0.5))
-                            
+//                                .foregroundStyle(self.currentSelectedFoodType == .none : .white.opacity(0.5) : .white)
+
                             Spacer()
                             
                             Image(systemName: "chevron.down")
@@ -152,7 +152,7 @@ struct FoodTypeQuestionnaireScreen: View {
                         
                         
                     }
-                    .applicationDropDownButton()
+                    .applicationDropDownButton(self.currentSelectedFoodType != .none && !self.showFoodTypeDropDown ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
                     
