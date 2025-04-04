@@ -103,7 +103,8 @@ class Exercise {
         sets: 3,
         reps: 15,
         perRepCaloriesBurned: 0.1,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "pushups"
     )
     
     let benchPress = Exercise_t(
@@ -114,7 +115,8 @@ class Exercise {
         sets: 4,
         reps: 10,
         perRepCaloriesBurned: 0.15,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "benchPress"
     )
     
     let inclinePushUp = Exercise_t(
@@ -125,7 +127,8 @@ class Exercise {
         sets: 3,
         reps: 12,
         perRepCaloriesBurned: 0.08,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "inclinePushUp"
     )
     
     let overheadPress = Exercise_t(
@@ -136,7 +139,8 @@ class Exercise {
         sets: 4,
         reps: 8,
         perRepCaloriesBurned: 0.2 ,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "overheadPress"
     )
     
     let chestDip = Exercise_t(
@@ -147,7 +151,8 @@ class Exercise {
         sets: 3,
         reps: 10,
         perRepCaloriesBurned: 0.18,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "chestDip"
     )
     
     let bodyweightSquat = Exercise_t(
@@ -158,7 +163,8 @@ class Exercise {
         sets: 4,
         reps: 15,
         perRepCaloriesBurned: 0.1,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "bodyWeightSquat"
     )
     
     let walkingLunge = Exercise_t(
@@ -169,7 +175,8 @@ class Exercise {
         sets: 3,
         reps: 12, // reps per leg
         perRepCaloriesBurned: 0.12,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "walkingLunge"
     )
     
     let gluteBridge = Exercise_t(
@@ -180,7 +187,8 @@ class Exercise {
         sets: 3,
         reps: 15,
         perRepCaloriesBurned: 0.08,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "gluteBridge"
     )
     
     let bulgarianSplitSquat = Exercise_t(
@@ -191,7 +199,8 @@ class Exercise {
         sets: 3,
         reps: 10, // reps per leg
         perRepCaloriesBurned: 0.14,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "bulgarianSplitSquat"
     )
     
     let calfRaise = Exercise_t(
@@ -202,7 +211,8 @@ class Exercise {
         sets: 4,
         reps: 20,
         perRepCaloriesBurned: 0.05,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "calfRaise"
     )
     let closeGripPushups = Exercise_t(
         exerciseName: "Close Grip Pushups",
@@ -245,7 +255,8 @@ class Exercise {
         sets: 3,
         reps: 1,
         perRepCaloriesBurned: 0.2,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "plank"
     )
     
     var bicycleCrunch = Exercise_t(
@@ -292,7 +303,7 @@ class Exercise {
         difficulty: .medium
     )
     
-    var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium)
+    var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium, image: "pullups")
     
     var allExercises: Array<Exercise_t> {
         return [pullups, mountainClimbers, russianTwist, legRaise, bicycleCrunch, plank, bicepCurl, tricepDips, closeGripPushups, calfRaise, bulgarianSplitSquat, gluteBridge, walkingLunge, bodyweightSquat, chestDip, overheadPress, inclinePushUp, benchPress, pushUp]

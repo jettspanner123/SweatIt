@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct InitialQuestionnaireScreen: View {
+    
+    @EnvironmentObject var appStates: ApplicationStates
+    
     @Binding var showLoginScreen: Bool
     
     enum QuestionPageScreens: String, CaseIterable {
@@ -16,7 +19,7 @@ struct InitialQuestionnaireScreen: View {
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    @State var currentSelectedPage: QuestionPageScreens = .intro
+    @State var currentSelectedPage: QuestionPageScreens = .foodType
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
@@ -44,6 +47,12 @@ struct InitialQuestionnaireScreen: View {
     @Environment(\.dismiss) var dissmis
     
     var pageChangeOptions: Array<QuestionPageScreens> = Array(QuestionPageScreens.allCases)
+    
+    
+    var isEveryUserDetailsFilled: Bool {
+        let userDetails = self.appStates.userData
+        return !userDetails.username.isEmpty && !userDetails.password.isEmpty && userDetails.gender != .none && userDetails.height != .zero && userDetails.weight != .zero && userDetails.age != .zero && userDetails.bodyType != .none && userDetails.fitnessLevel != .none && !userDetails.region.isEmpty && userDetails.goalType != .none && userDetails.foodType != .none && !userDetails.activeDays.isEmpty && userDetails.activeHoursADay != .zero
+    }
     
     
     func createNewUserAnnualIncome() -> Void {
@@ -134,6 +143,7 @@ struct InitialQuestionnaireScreen: View {
                         if self.pageChangeTransition {
                             if !self.saveChanges {
                                 VStack {
+                                    
                                     Image(systemName: "exclamationmark.triangle.fill")
                                         .resizable()
                                         .frame(width: 50, height: 50)
@@ -152,31 +162,47 @@ struct InitialQuestionnaireScreen: View {
                                         .foregroundStyle(.white)
                                         .padding(.top, 1)
                                     
-                                    Spacer()
-                                    
-                                    Text("Save")
-                                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                                        .foregroundStyle(ApplicationLinearGradient.redGradient)
+                                   
+                                    if self.isEveryUserDetailsFilled {
+                                        Text("Save")
+                                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                                            .foregroundStyle(ApplicationLinearGradient.redGradient)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 40)
+                                            .background(.white)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                            .padding(.top, 25)
+                                            .onTapGesture {
+                                                withAnimation(.smooth(duration: 0.5)) {
+                                                    self.saveChanges = true
+                                                }
+                                                
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                    self.dissmis()
+                                                }
+                                                
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                                    withAnimation(.smooth(duration: 1.5)) {
+                                                        self.showLoginScreen = true
+                                                    }
+                                                }
+                                            }
+                                    } else {
+                                        HStack {
+                                           Text("Please complete the questionnaire.")
+                                                .font(.system(size: 15, weight: .medium, design: .rounded))
+                                                .foregroundStyle(ApplicationLinearGradient.redGradient)
+                                            
+                                            Image(systemName: "exclamationmark.lock.fill")
+                                                .foregroundStyle(.white)
+                                        }
                                         .frame(maxWidth: .infinity)
                                         .frame(height: 40)
                                         .background(.white)
                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                         .padding(.top, 25)
-                                        .onTapGesture {
-                                            withAnimation(.smooth(duration: 0.5)) {
-                                                self.saveChanges = true
-                                            }
-                                            
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                                self.dissmis()
-                                            }
-                                            
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                withAnimation(.smooth(duration: 1.5)) {
-                                                    self.showLoginScreen = true
-                                                }
-                                            }
-                                        }
+                                        
+                                    }
                                     
                                     
                                     Text("Make Changes")
@@ -198,7 +224,7 @@ struct InitialQuestionnaireScreen: View {
                                             
                                         }
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                                 .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding * 2)
                                 .transition(.offset(y: -UIScreen.main.bounds.height).combined(with: .blurReplace))
@@ -525,28 +551,28 @@ struct InitialQuestionnaireScreen: View {
                 // MARK: Conditional rendering for the pages
                 if self.currentSelectedPage == .intro {
                     IntroductionQuestionnaireScreen(currentSelectedPage: self.$currentSelectedPage)
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .genderAge {
                     GenderAgeQuestionnaireScreen(currentSelectedPage: self.$currentSelectedPage)
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .heightWeight {
                     HeightQuestionnaireScreen(currentSelectedSystem: self.$currentSelectedSystem)
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .bodyType {
                     BodyTypeQuestionnaireScreen()
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .activityLevel {
                     ActivityQuestionnaireScreen()
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .foodType {
                     FoodTypeQuestionnaireScreen(showAddAnnualIncomeTopSheet: self.$showAddAnnualIncomeTopSheet, showSelectRegionScreen: self.$showRegionSelectScreen, showSelectAlergiesScreen: self.$showAlergiesSelectScreen, selectedFoodAlergies: self.$selectedFoodAlergies, selectedRegion: self.$selectedRegion)
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else if self.currentSelectedPage == .fitnessLevel {
                     FitnessLevelQuestionnaireScreen()
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 } else {
                     GoalQuestionnaireScreen()
-                        .transition(.offset(y: UIScreen.main.bounds.height).combined(with: .blurReplace.combined(with: .scale)))
+                        .transition(.blurReplace)
                 }
                 
                 

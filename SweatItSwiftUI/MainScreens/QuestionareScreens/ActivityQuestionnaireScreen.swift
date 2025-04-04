@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ActivityQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     enum ActivityScreenState: String, CaseIterable, Codable {
         case daysInWeek = "Days In Week", hoursEachDay = "Hours Each Day"
@@ -21,7 +22,7 @@ struct ActivityQuestionnaireScreen: View {
     var daysInWeek: Array<String> = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     
     let dialText: Array<Int> = [1,2,3,4,5,6,7,8,9,10,11,12]
-    @State var hoursADay: Double = 1
+    @State var hoursADay: Double = 0.1
     
     var body: some View {
         VStack {
@@ -132,7 +133,7 @@ struct ActivityQuestionnaireScreen: View {
                 SectionHeader(text: "Slide your choice")
                     .padding(.top, 25)
                 
-                Slider(value: self.$hoursADay, in: 1...7)
+                Slider(value: self.$hoursADay, in: 0...7)
                     .tint(ApplicationLinearGradient.blueGradientInverted)
                 HStack {
                    
@@ -150,9 +151,16 @@ struct ActivityQuestionnaireScreen: View {
                     
             }
             
+            
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding)
+        .onChange(of: self.currentSelectedDays) {
+            self.appStates.userData.activeDays = self.currentSelectedDays
+        }
+        .onChange(of: self.hoursADay) {
+            self.appStates.userData.activeHoursADay = self.hoursADay
+        }
         .sensoryFeedback(.impact, trigger: self.hoursADay)
         .sensoryFeedback(.impact, trigger: self.currentSelectedDays.count)
     }

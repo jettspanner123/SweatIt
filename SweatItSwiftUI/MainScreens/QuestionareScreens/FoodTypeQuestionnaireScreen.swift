@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FoodTypeQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     @Binding var showAddAnnualIncomeTopSheet: Bool
     
@@ -334,12 +335,15 @@ struct FoodTypeQuestionnaireScreen: View {
         .onChange(of: self.currentSelectedBudgetType) {
             self.changeSliderBasedOnAnnualIncome()
         }
-//        .navigationDestination(isPresented: self.$showSelectRegionScreen, destination: {
-//            SelectRegionScreen(selectedRegion: self.$selectedRegion)
-//        })
-//        .navigationDestination(isPresented: self.$showSelectAlergiesScreen, destination: {
-//            SelectAlergiesScreen(selectedAlergies: self.$selectedFoodAlergies)
-//        })
+        .onChange(of: self.currentSelectedFoodType) {
+            self.appStates.userData.foodType = self.currentSelectedFoodType
+        }
+        .onChange(of: self.selectedFoodAlergies) {
+            self.appStates.userData.alergies = self.selectedFoodAlergies
+        }
+        .onChange(of: self.selectedRegion) {
+            self.appStates.userData.region = self.selectedRegion
+        }
         .sensoryFeedback(.impact, trigger: self.budget)
         .sensoryFeedback(.impact, trigger: self.currentSelectedBudgetType)
     }

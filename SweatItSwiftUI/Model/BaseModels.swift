@@ -26,6 +26,7 @@ struct Exercise_t: Identifiable, Codable, Hashable {
     var reps: Int
     var perRepCaloriesBurned: Double
     var difficulty: Extras.Difficulty
+    var image: String = ""
 }
 
 struct Workout_t: Identifiable, Codable, Hashable {
@@ -170,4 +171,24 @@ struct Notification_t: Identifiable {
     var notificationType: Extras.NotificationType
     var notificationDate: Date = .now
     var notificationAction: Any
+}
+
+
+struct SignUpUserDataStore {
+    var username: String
+    var password: String
+    var age: Int
+    var gender: Extras.Gender
+    var height: Double
+    var weight: Double
+    var bodyType: Extras.BodyType
+    var activeDaysAWeek: Int
+    var activeHoursADay: Double
+    var activeDays: Array<String> = []
+    var region: String
+    var foodType: Extras.UserFoodType = .none
+    var foodBudged: Double
+    var alergies: Array<Extras.FoodAllergy> = []
+    var fitnessLevel: Extras.UserLevel = .none
+    var goalType: Extras.Goal = .none
 }

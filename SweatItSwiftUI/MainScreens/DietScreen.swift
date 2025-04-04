@@ -17,105 +17,25 @@ struct DietScreen: View {
     var body: some View {
         ScrollContentView {
             
-            HStack {
+            
+            
+            // MARK: Add food button
                 
-                
-                // MARK: Diet completed today
-                GeometryReader { proxy in
-                    HStack{
-                        
-                        
-                        // MARK: Actual loader
-                        HStack {
-                            
-                        }
-                        .frame(maxHeight: .infinity)
-                        .frame(width: (self.dietCompletedPrecentage/100) * proxy.size.width)
-                        .background(
-                            LinearGradient(gradient: Gradient(colors: [.appGreenDark, .appGreenLight]), startPoint: .leading, endPoint: .trailing)
-                        )
+            PrimaryNavigationButton(text: "Add Food", leadingPadding: -UIScreen.main.bounds.width / 2)
+                .background(defaultShape.fill(ApplicationLinearGradient.redGradient))
+                .overlay {
+                    HStack {
+                        Image(systemName: "plus")
+                            .foregroundStyle(.white.opacity(0.5))
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                    .background(.darkBG.opacity(0.54))
-                    .overlay {
-                        defaultShape
-                            .stroke(.white.opacity(0.18))
-                    }
-                    .overlay {
-                        HStack {
-                            
-                            
-                            Text("Diet")
-                                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
-                                .foregroundStyle(.white)
-                            
-                            Spacer()
-                            
-                            Text(String(format: "%.f%%", self.dietCompletedPrecentage))
-                                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.horizontal, 20)
-                        .clipped()
-                    }
-                    .clipShape(defaultShape)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
                 }
-
-                
-                // MARK: Add meal button
-                NavigationLink(destination: AddMealScreen()) {
-                    PrimaryNavigationButton(text: "Meals", leadingPadding: 5)
-                        .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient))
-                        .overlay {
-                            HStack {
-                                Image("Food")
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 20)
-                        }
-                    
+                .onTapGesture {
+                    withAnimation {
+                        self.showCameraScreen = true
+                    }
                 }
-                
-                
-            }
-            .frame(maxWidth: .infinity)
-            
-               
-            
-            // MARK: Twin buttons
-            HStack {
-                PrimaryNavigationButton(text: "Scan Food", leadingPadding: 20)
-                    .background(defaultShape.fill(ApplicationLinearGradient.redGradient))
-                    .overlay {
-                        HStack {
-                            Image("Barcode")
-                                .scaleEffect(0.75)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
-                    }
-                    .onTapGesture {
-                        withAnimation {
-                            self.showCameraScreen = true
-                        }
-                    }
-                
-                
-                PrimaryNavigationButton(text: "Add Food    ")
-                    .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
-                    .overlay {
-                        HStack {
-                            Image(systemName: "plus")
-                                .scaleEffect(1.25)
-                                .foregroundStyle(.white.opacity(0.5))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 15)
-                    }
-            }
-            .frame(maxWidth: .infinity)
-            
             
             SecondaryHeading(title: "Nutrition", secondaryText: "( per gram of body weight )")
                 .padding(.top, 20)

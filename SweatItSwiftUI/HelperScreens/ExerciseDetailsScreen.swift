@@ -77,7 +77,9 @@ struct ExerciseDetailsScreen: View {
                     .padding(.top, 20)
                 
                 HStack {
-                    Image("pushups")
+                    Image(self.exercise.image)
+                        .resizable()
+                        .scaleEffect(x: 0.5, anchor: .center)
                 }
                 .frame(maxWidth: .infinity, maxHeight: 200)
                 .background(.white)

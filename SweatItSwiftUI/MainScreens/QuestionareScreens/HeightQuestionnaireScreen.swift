@@ -10,6 +10,8 @@ import SwiftUITrackableScrollView
 
 struct HeightQuestionnaireScreen: View {
     
+    @EnvironmentObject var appStates: ApplicationStates
+    
     @Binding var currentSelectedSystem: Extras.MeasurenmentSystem
     
     enum HeightWeightSelectionOption: String, CaseIterable {
@@ -94,6 +96,9 @@ struct HeightQuestionnaireScreen: View {
                                 .contentTransition(.numericText(value: heightInCm))
                                 .animation(.snappy, value: heightInCm)
                                 .transition(.offset(x: 50).combined(with: .blurReplace))
+                                .onChange(of: heightInCm) {
+                                    self.userHeight = heightInCm
+                                }
                         } else {
                             Text(ApplicationHelper.convertCmToFeetAndInches(cm: heightInCm))
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
@@ -101,6 +106,9 @@ struct HeightQuestionnaireScreen: View {
                                 .contentTransition(.numericText(value: heightInCm))
                                 .animation(.snappy, value: heightInCm)
                                 .transition(.offset(x: 50).combined(with: .blurReplace))
+                                .onChange(of: heightInCm) {
+                                    self.userHeight = heightInCm
+                                }
                         }
                         
                     }
@@ -148,17 +156,19 @@ struct HeightQuestionnaireScreen: View {
                                 .transition(.offset(x: 50).combined(with: .blurReplace))
                                 .contentTransition(.numericText(value: weightInPound))
                                 .animation(.snappy, value: weightInPound)
-                            
-                            
+                                .onChange(of: weightInPound) {
+                                    self.userWeight = weightInPound
+                                }
                         } else {
-                            
                             Text(String(format: "%.f kg", ApplicationHelper.toKg(lbs: weightInPound)))
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                                 .transition(.offset(x: 50).combined(with: .blurReplace))
                                 .contentTransition(.numericText(value: weightInPound))
                                 .animation(.snappy, value: weightInPound)
-                            
+                                .onChange(of: weightInPound) {
+                                    self.userWeight = weightInPound
+                                }
                         }
                     }
                 }
@@ -183,13 +193,6 @@ struct HeightQuestionnaireScreen: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-            
-            
-            
-            
-            
-            
-            
             
             
             // MARK: Scroll karne pe value change hoinga
@@ -355,6 +358,12 @@ struct HeightQuestionnaireScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
+        .onChange(of: self.userHeight) {
+            self.appStates.userData.height = self.userHeight
+        }
+        .onChange(of: self.userWeight) {
+            self.appStates.userData.weight = self.userWeight
+        }
         .sensoryFeedback(.impact, trigger: self.vibrationState)
         .sensoryFeedback(.impact, trigger: self.currentSelectedState)
     }

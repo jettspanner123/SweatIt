@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GenderAgeQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     @Binding var currentSelectedPage: InitialQuestionnaireScreen.QuestionPageScreens
     
     @State var currentSelectedGender: Extras.Gender = .male
@@ -163,7 +164,7 @@ struct GenderAgeQuestionnaireScreen: View {
                     .frame(width: 20)
                 
                 
-                Text(ApplicationHelper.formatDateToHumanReadableWithoutTime(date: self.dob))
+                Text(ApplicationHelper.formatDateToHumanReadableWithoutTime(date: self.dob) + " (\(self.appStates.userData.age) years)")
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundStyle(.white.opacity(0.5))
                 
@@ -173,11 +174,19 @@ struct GenderAgeQuestionnaireScreen: View {
             }
             .applicationDropDownButton()
             
+        
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding)
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .onChange(of: self.currentSelectedGender) {
+            self.appStates.userData.gender = self.currentSelectedGender
+        }
+        .onChange(of: self.dob) {
+            let age = Calendar.current.dateComponents([.year], from: self.dob, to: .now)
+            self.appStates.userData.age = age.year!
+        }
     }
 }
 

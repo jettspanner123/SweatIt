@@ -12,7 +12,7 @@ struct WorkoutScreen: View {
     @State var searchText: String = ""
     
     @State var workouts: Array<Workout_t> = Workout.current.exampleWorkoutList
-    @State var exerciseOfTheDay: Array<Exercise_t> = [Exercise.current.bodyweightSquat, Exercise.current.bodyweightSquat]
+    @State var exerciseOfTheDay: Array<Exercise_t> = [Exercise.current.allExercises.randomElement()!, Exercise.current.allExercises.randomElement()!]
     
     
     var body: some View {
@@ -105,8 +105,11 @@ struct DailyExerciseViewCard: View {
             
             // MARK: Image view
             HStack {
-                Image("pushups")
-                    .scaleEffect(0.5)
+                Image(self.exercise.image)
+                    .resizable()
+                    .frame(width: 60)
+                    .frame(maxHeight: .infinity)
+                    
             }
             .frame(maxHeight: .infinity)
             .frame(width: 100)
@@ -248,7 +251,7 @@ struct CustomSecureTextField: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }
         } else {
-            TextField("", text: self.$searchText, prompt: Text(self.placeholder).foregroundStyle(.white.opacity(0.5)))
+            TextField("", text: self.$searchText, prompt: Text(self.placeholder).font(.system(size: 15)).foregroundStyle(.white.opacity(0.5)))
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
@@ -277,6 +280,3 @@ struct CustomSecureTextField: View {
     }
 }
 
-#Preview {
-    WorkoutScreen()
-}

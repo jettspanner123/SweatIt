@@ -14,9 +14,11 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 }
 
 
+
+
 struct ContentView: View {
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -42,7 +44,7 @@ struct ContentView: View {
                         .zIndex(99999)
                         .transition(ScaleBlurOffsetTransition())
                 }
-                //
+                
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
                 
@@ -61,7 +63,7 @@ struct ContentView: View {
                 if self.showCameraScreen {
                     FoodScannerScreen(showCameraScreen: self.$showCameraScreen)
                         .transition(.offset(y: UIScreen.main.bounds.height))
-                        .zIndex(9999)
+                        .zIndex(.infinity)
                 }
                 
                 PageHeader(pageHeaderTitle: self.currentPage_t == .home ? "Home" : self.currentPage_t == .workout ? "Workout" : self.currentPage_t == .coach ? "Coach" : self.currentPage_t == .diet ? "Diet" : "Profile", notificationAction: {
@@ -98,6 +100,7 @@ struct ContentView: View {
                 }
                 
                 PageNavigationBar(currentPage_t: self.$currentPage_t)
+                    .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
             }
             .coordinateSpace(name: "MainScreenCoordinateSpace")
         }
@@ -112,7 +115,12 @@ struct ContentView: View {
 }
 
 
-
-#Preview {
-    ContentView()
+struct ContentViewPreviewProvider: PreviewProvider {
+    static let appStates: ApplicationStates = .init()
+    
+    static var previews: some View {
+        ContentView()
+            .environmentObject(self.appStates)
+    }
+    
 }

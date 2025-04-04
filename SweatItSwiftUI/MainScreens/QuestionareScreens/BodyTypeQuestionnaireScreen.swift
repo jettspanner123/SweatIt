@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BodyTypeQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     @State var currentSelectedBodyType: Extras.BodyType = .none
     var body: some View {
@@ -120,6 +121,9 @@ struct BodyTypeQuestionnaireScreen: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding)
+        .onChange(of: self.currentSelectedBodyType) {
+            self.appStates.userData.bodyType = self.currentSelectedBodyType
+        }
     }
 }
 

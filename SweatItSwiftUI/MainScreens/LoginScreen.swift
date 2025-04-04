@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginScreen: View {
     
     enum RegistrationTypes: String, CaseIterable {
-        case login, signup
+        case SignIn, SignUp
     }
     
     struct LoginStateObject {
@@ -29,7 +29,7 @@ struct LoginScreen: View {
     @State var isSubmitButtonClicked: Bool = false
     @State var isStartButtonClicked: Bool = false
     
-    @State var currentSelectedRegistrationType: RegistrationTypes = .login
+    @State var currentSelectedRegistrationType: RegistrationTypes = .SignIn
     
     @State var showOnBoardingScreen: Bool = true
     
@@ -133,7 +133,7 @@ struct LoginScreen: View {
                     
                     
                     // MARK: Login screen
-                    if self.currentSelectedRegistrationType == .login {
+                    if self.currentSelectedRegistrationType == .SignIn {
                         VStack {
                             
                             
@@ -229,7 +229,7 @@ struct LoginScreen: View {
             }
             
             // MARK: Submit button
-            if self.currentSelectedRegistrationType == .login {
+            if self.currentSelectedRegistrationType == .SignIn {
                 HStack {
                     if self.isSubmitButtonClicked {
                         ProgressView()
@@ -258,7 +258,7 @@ struct LoginScreen: View {
             }
             
             
-            if self.currentSelectedRegistrationType == .signup {
+            if self.currentSelectedRegistrationType == .SignUp {
                 HStack {
                     Text("Start Journey")
                         .font(.system(size: 15, weight: .medium, design: .rounded))

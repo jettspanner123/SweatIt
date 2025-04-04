@@ -46,15 +46,25 @@ struct ChooseWorkoutScreen: View {
         
         let allExercises: Array<Exercise_t> = Exercise.current.allExercises
         
-        var exercises: Array<Exercise_t> = []
+        var exercises: Set<Exercise_t> = []
         
         for (key, value) in self.currentSelectedMuscles {
-            for index in 1...value {
-                    
+            for index in 0...value {
+                let filtered_exercises = allExercises.filter { $0.targettedMuscles.contains(key) }
+                var randomExercise = filtered_exercises.randomElement()!
+                
+                if exercises.contains(randomExercise) {
+                    randomExercise = filtered_exercises.randomElement()!
+                    exercises.insert(randomExercise)
+                } else {
+                    exercises.insert(randomExercise)
+                }
+                
+                
             }
         }
         
-        return .init(workoutName: "Your Workout", workoutDescription: "You custom workout coverring \(musclesCovered)", workoutCategory: .strength, workoutImage: "upperbody", exercises: [])
+        return .init(workoutName: "Your Workout", workoutDescription: "You custom workout coverring \(musclesCovered)", workoutCategory: .strength, workoutImage: "upperbody", exercises: Array(Array(exercises).prefix(self.totalExercises)))
     }
     
     
@@ -63,14 +73,10 @@ struct ChooseWorkoutScreen: View {
             AccentPageHeader(pageHeaderTitle: "Custom Workout")
             
             
-            
-            
             // MARK: Background blur
             BottomBlur()
                 .offset(y: UIScreen.main.bounds.height - (55 * 2.1))
                 .transition(.offset(y: 400))
-            
-            
             
             
             // MARK: Bottom button

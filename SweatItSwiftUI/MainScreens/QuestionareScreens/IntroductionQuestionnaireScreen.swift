@@ -8,19 +8,10 @@
 import SwiftUI
 
 struct IntroductionQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
+    
     @Binding var currentSelectedPage: InitialQuestionnaireScreen.QuestionPageScreens
-    
-//    @State var signupStateStore: ApplicationConstants.SignupStateObject = .init()
     @State var isUsernameAvailable: Bool = false
-    
-    
-    func validateUsername() -> Void {
-        if InitialQuestionnaireScreen.userQuestionnaireStore.username == "hello" {
-            self.isUsernameAvailable = true
-        } else {
-            self.isUsernameAvailable = false
-        }
-    }
     
     var body: some View {
         VStack {
@@ -29,31 +20,36 @@ struct IntroductionQuestionnaireScreen: View {
                 .foregroundStyle(.white.opacity(0.5))
                 .takeMaxWidthLeading()
             
-            CustomTextField(searchText: InitialQuestionnaireScreen.$userQuestionnaireStore.username, placeholder: "Username")
-                .onChange(of: InitialQuestionnaireScreen.userQuestionnaireStore.username) {
-                    self.validateUsername()
-                }
+            CustomTextField(searchText: self.$appStates.userData.username, placeholder: "Username")
                 .autocapitalization(.none)
                 .overlay {
-                    HStack {
-                        if !InitialQuestionnaireScreen.userQuestionnaireStore.username.isEmpty && !isUsernameAvailable{
-                            ProgressView()
-                                .tint(.white.opacity(0.5))
-                        }
-                        
-                        if self.isUsernameAvailable {
-                            Text("✅")
-                        }
-                        
-                        
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+//                    HStack {
+//                        if !InitialQuestionnaireScreen.userQuestionnaireStore.username.isEmpty && !isUsernameAvailable {
+//                            ProgressView()
+//                                .tint(.white.opacity(0.5))
+//                        }
+//                        
+//                        if self.isUsernameAvailable {
+//                            Text("✅")
+//                        }
+//                        
+//                        
+//                    }
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+//                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                 }
                 .padding(.top, 15)
 
-            CustomSecureTextField(searchText: InitialQuestionnaireScreen.$userQuestionnaireStore.password, placeholder: "Password")
-            CustomSecureTextField(searchText: InitialQuestionnaireScreen.$userQuestionnaireStore.confirmPassword, placeholder: "Confirm Password")
+            CustomSecureTextField(searchText: self.$appStates.userData.password, placeholder: "Password")
+                .autocapitalization(.none)
+           
+            if self.appStates.isError {
+                Text("Username and password fields cannot be empty.")
+                    .font(.system(size: 12, weight: .regular, design: .rounded))
+                    .foregroundStyle(ApplicationLinearGradient.redGradient)
+                    .padding(.top, 5)
+                    .transition(.blurReplace.combined(with: .offset(y: 10)))
+            }
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
