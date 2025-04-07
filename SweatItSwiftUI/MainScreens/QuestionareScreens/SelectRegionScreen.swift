@@ -15,6 +15,7 @@ struct SelectRegionScreen: View {
     @Binding var showSelectRegionScreen: Bool
     
     @State var searchText: String = ""
+    @State var pageTranslation: CGSize = .zero
     
     let indianStatesAndUTs = [
         "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
@@ -37,11 +38,32 @@ struct SelectRegionScreen: View {
     var body: some View {
         ScreenBuilder {
             
-            AccentPageHeader_NoAction(pageHeaderTitle: "Indian Regions", action: {
+            AccentPageHeader_NoAction(pageHeaderTitle: "Indian Regions", icon: "xmark", action: {
                 withAnimation {
                     self.showSelectRegionScreen = false
                 }
             })
+            .gesture(
+                DragGesture()
+                    .onChanged { changeValue in
+                        if changeValue.translation.height > .zero {
+                            withAnimation {
+                                self.pageTranslation = changeValue.translation
+                            }
+                        }
+                    }
+                    .onEnded { changeValue in
+                        if changeValue.translation.height > 150 {
+                            withAnimation {
+                                self.showSelectRegionScreen = false
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.pageTranslation = .zero
+                            }
+                        }
+                    }
+            )
             
             ScrollContentView {
                 CustomTextField(searchText: self.$searchText, placeholder: "Search Region")
@@ -150,5 +172,6 @@ struct SelectRegionScreen: View {
                 }
             }
         }
+        .offset(y: self.pageTranslation.height)
     }
 }

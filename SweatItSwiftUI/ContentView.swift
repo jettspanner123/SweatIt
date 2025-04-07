@@ -18,6 +18,7 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
+    
     @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
     
     @State var showCameraScreen: Bool = false

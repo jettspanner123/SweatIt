@@ -440,6 +440,10 @@ class User {
     var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17)
     var exampleUserTwo: User_t = .init(fullName: "Tushar Sourav", username: "TusharKhan123", emailId: "tushar@gmail.com", password: "MyNameIsKhan", currentWeight: 70, currentHeight: 185, gender: .male, bodyType: .skinny, level: .beginner, goal: .buildMuscle)
     
+    var allUsers: Array<User_t> {
+        return [exampleUserTwo, currentUser]
+    }
+    
 }
 
 class Notification {

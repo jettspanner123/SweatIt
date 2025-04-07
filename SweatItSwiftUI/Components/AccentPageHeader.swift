@@ -50,13 +50,14 @@ struct AccentPageHeader: View {
 struct AccentPageHeader_NoAction: View {
     
     var pageHeaderTitle: String
+    var icon: String = "chevron.left"
     
     var action: () -> Void = {}
     
     var body: some View {
         HStack {
             ZStack {
-                Image(systemName: "chevron.left")
+                Image(systemName: self.icon)
                     .foregroundStyle(.white)
                     .padding(20)
                     .background(.darkBG.opacity(0.001))

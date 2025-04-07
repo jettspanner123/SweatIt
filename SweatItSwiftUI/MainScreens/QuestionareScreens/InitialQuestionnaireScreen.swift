@@ -124,16 +124,21 @@ struct InitialQuestionnaireScreen: View {
             ScreenBuilder {
                 
                 
+                // MARK: Region page
                 if self.showRegionSelectScreen {
                     SelectRegionScreen(selectedRegion: self.$selectedRegion, showSelectRegionScreen: self.$showRegionSelectScreen)
                         .zIndex(.infinity)
-                        .transition(.offset(x: UIScreen.main.bounds.width))
+                        .transition(.offset(y: UIScreen.main.bounds.height))
                 }
                 
+                
+                
+                
+                // MARK: Alergies page
                 if self.showAlergiesSelectScreen {
                     SelectAlergiesScreen(selectedAlergies: self.$selectedFoodAlergies, showAlergiesSelectScreen: self.$showAlergiesSelectScreen)
                         .zIndex(.infinity)
-                        .transition(.offset(x: UIScreen.main.bounds.width))
+                        .transition(.offset(y: UIScreen.main.bounds.height))
                 }
                 
                 // MARK: Finish button

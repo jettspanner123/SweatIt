@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 
 struct Agenda_t: Identifiable, Codable, Hashable {
@@ -152,6 +153,12 @@ struct User_t: Identifiable, Codable, Hashable {
     var goal: Extras.Goal
     var dailyPoints: Int = 0
     var fitnessLevel: Int = 1
+    
+    
+    
+    public func getDictionary() -> Dictionary<String, Any> {
+        return ["id": self.id, "fullName": self.fullName, "username": self.username, "emailId": self.emailId, "password": self.password, "currentWeight": self.currentWeight, "currentHeight": self.currentHeight, "gender": self.gender.rawValue, "bodyType": self.bodyType.rawValue, "level": self.level.rawValue, "goal": self.goal.rawValue, "dailyPoints": self.dailyPoints, "fitnessLevel": self.fitnessLevel]
+    }
 }
 
 struct FriendRequest_t: Identifiable, Codable, Hashable {

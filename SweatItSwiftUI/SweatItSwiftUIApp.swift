@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
 
 class ApplicationStates: ObservableObject {
     @Published var userData: SignUpUserDataStore = .init(username: "", password: "", age: 0, gender: .none, height: .zero, weight: .zero, bodyType: .none, activeDaysAWeek: 0, activeHoursADay: 1, region: "", foodBudged: .zero)
@@ -28,6 +29,10 @@ class ApplicationStates: ObservableObject {
 
 @main
 struct SweatItSwiftUIApp: App {
+    
+    init() {
+        FirebaseApp.configure()
+    }
     
     @StateObject var appStates = ApplicationStates()
     

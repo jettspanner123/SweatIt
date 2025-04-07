@@ -102,11 +102,11 @@ struct FoodTypeQuestionnaireScreen: View {
                         
                         HStack(spacing: 25) {
                             Image(systemName: "fork.knife")
-//                                .foregroundStyle(self.currentSelectedFoodType == .none : .white.opacity(0.5) : .white)
+                                .foregroundStyle(self.currentSelectedFoodType == .none ? .white.opacity(0.5) : .white)
 
                             Text(self.currentSelectedFoodType == .none ? "Food Type" : self.currentSelectedFoodType.rawValue)
                                 .font(.system(size: 15, weight: .regular, design: .rounded))
-//                                .foregroundStyle(self.currentSelectedFoodType == .none : .white.opacity(0.5) : .white)
+                                .foregroundStyle(self.currentSelectedFoodType == .none ? .white.opacity(0.5) : .white)
 
                             Spacer()
                             

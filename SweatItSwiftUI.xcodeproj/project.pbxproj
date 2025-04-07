@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */; };
+		07BE4BF22DA4689B00E2748F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF12DA4689B00E2748F /* FirebaseAnalytics */; };
+		07BE4BF42DA4689B00E2748F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF32DA4689B00E2748F /* FirebaseAuth */; };
+		07BE4BF62DA4689B00E2748F /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF52DA4689B00E2748F /* FirebaseDatabase */; };
+		07BE4BF82DA4689B00E2748F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF72DA4689B00E2748F /* FirebaseFirestore */; };
+		07BE4BFA2DA4689B00E2748F /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF92DA4689B00E2748F /* FirebaseStorage */; };
+		07BE4BFC2DA4689B00E2748F /* FirebaseVertexAI in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BFB2DA4689B00E2748F /* FirebaseVertexAI */; };
 		07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */; };
 /* End PBXBuildFile section */
 
@@ -41,8 +47,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07BE4BF62DA4689B00E2748F /* FirebaseDatabase in Frameworks */,
+				07BE4BFC2DA4689B00E2748F /* FirebaseVertexAI in Frameworks */,
 				07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */,
 				07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */,
+				07BE4BF22DA4689B00E2748F /* FirebaseAnalytics in Frameworks */,
+				07BE4BFA2DA4689B00E2748F /* FirebaseStorage in Frameworks */,
+				07BE4BF42DA4689B00E2748F /* FirebaseAuth in Frameworks */,
+				07BE4BF82DA4689B00E2748F /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +99,12 @@
 			packageProductDependencies = (
 				07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */,
 				07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */,
+				07BE4BF12DA4689B00E2748F /* FirebaseAnalytics */,
+				07BE4BF32DA4689B00E2748F /* FirebaseAuth */,
+				07BE4BF52DA4689B00E2748F /* FirebaseDatabase */,
+				07BE4BF72DA4689B00E2748F /* FirebaseFirestore */,
+				07BE4BF92DA4689B00E2748F /* FirebaseStorage */,
+				07BE4BFB2DA4689B00E2748F /* FirebaseVertexAI */,
 			);
 			productName = SweatItSwiftUI;
 			productReference = 07EBA5682D7D7DC000C76E40 /* SweatItSwiftUI.app */;
@@ -119,6 +137,7 @@
 			packageReferences = (
 				07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */,
 				07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 07EBA5692D7D7DC000C76E40 /* Products */;
@@ -364,6 +383,14 @@
 				minimumVersion = 0.5.6;
 			};
 		};
+		07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
 		07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/maxnatchanon/trackable-scroll-view";
@@ -379,6 +406,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
+		};
+		07BE4BF12DA4689B00E2748F /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		07BE4BF32DA4689B00E2748F /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		07BE4BF52DA4689B00E2748F /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		07BE4BF72DA4689B00E2748F /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		07BE4BF92DA4689B00E2748F /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		07BE4BFB2DA4689B00E2748F /* FirebaseVertexAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseVertexAI;
 		};
 		07C0E3EE2D8C467F00B2D6FA /* SwiftUITrackableScrollView */ = {
 			isa = XCSwiftPackageProductDependency;

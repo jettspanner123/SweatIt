@@ -12,16 +12,39 @@ struct SelectAlergiesScreen: View {
     @Binding var selectedAlergies: Array<Extras.FoodAllergy>
     @Binding var showAlergiesSelectScreen: Bool
     
+    @State var pageTranslation: CGSize = .zero
+    
     var alergiesOption: Array<Extras.FoodAllergy> = Array(Extras.FoodAllergy.allCases)
     
     var body: some View {
         ScreenBuilder {
             
-            AccentPageHeader_NoAction(pageHeaderTitle: "Select Alergies") {
+            AccentPageHeader_NoAction(pageHeaderTitle: "Select Alergies", icon: "xmark") {
                 withAnimation {
                     self.showAlergiesSelectScreen = false
                 }
             }
+            .gesture(
+                DragGesture()
+                    .onChanged { changeValue in
+                        if changeValue.translation.height > .zero {
+                            withAnimation {
+                                self.pageTranslation = changeValue.translation
+                            }
+                        }
+                    }
+                    .onEnded { changeValue in
+                        if changeValue.translation.height > 150 {
+                            withAnimation {
+                                self.showAlergiesSelectScreen = false
+                            }
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.pageTranslation = .zero
+                            }
+                        }
+                    }
+            )
             
             ScrollContentView {
                 
@@ -109,6 +132,7 @@ struct SelectAlergiesScreen: View {
                 
             }
         }
+        .offset(y: self.pageTranslation.height)
         .background(.blue)
     }
 }
