@@ -60,6 +60,11 @@ class ApplicationLinearGradient {
 
 }
 
+
+enum Constants: String {
+    case fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel
+}
+
 class ApplicationHelper {
     
     public static func estimatedCaloriesBurned(steps: Int, weightInKg: Double) -> Double {

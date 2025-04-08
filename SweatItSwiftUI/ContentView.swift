@@ -84,6 +84,11 @@ struct ContentView: View {
                         .offset(y: self.showNotificationCenter || self.showAddAgendaPage ? -50 : 0)
                         .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
                         .transition(.blurReplace)
+                        .onAppear {
+                            Task {
+                                try await ApplicationEndpoints.get.fetchAllUsersFromDatabase()
+                            }
+                        }
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
                         .transition(.blurReplace)

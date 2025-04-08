@@ -19,7 +19,7 @@ class ApplicationDatabase {
     
     public static let databaseSingleton = FirestoreDatabaseSingleton.current
     
-    public static func getDatabase(for collection: Colleciton) -> CollectionReference {
+    public static func getDatabase(for collection: ApplicationDatabase.Colleciton) -> CollectionReference {
         return ApplicationDatabase.databaseSingleton.database.collection(collection.rawValue)
     }
 }
