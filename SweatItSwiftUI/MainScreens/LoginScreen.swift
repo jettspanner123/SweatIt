@@ -21,7 +21,7 @@ struct LoginScreen: View {
     @State var hasUserFogotTheirPassword: Bool = false
     
     @State var isSubmitButtonClicked: Bool = false
-    @State var isStartButtonClicked: Bool = true
+    @State var isStartButtonClicked: Bool = false
     
     @State var currentSelectedRegistrationType: RegistrationTypes = .SignUp
     
@@ -75,16 +75,139 @@ struct LoginScreen: View {
     }
     
     
+    
+    
+    // MARK: Signup view
     var signupScreen: some View {
         VStack {
-            Text("SignUp")
-                .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
-                .foregroundStyle(.white)
-                .takeMaxWidthLeading()
-                .offset(y: -45)
+            
+            
+            
+            // MARK: Sign up view heading
+            HStack {
+                Image(systemName: "person.fill.badge.plus")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundStyle(.white)
+                    .offset(y: 5)
+                
+                
+                Text("SignUp")
+                    .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
+                    .foregroundStyle(.white)
+                    .takeMaxWidthLeading()
+            }
+            .padding(.horizontal)
+            
+            
+            
+            // MARK: Coach card
+            HStack(alignment: .top) {
+                VStack {
+                    Text("AI Coach")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .takeMaxWidthLeading()
+                    
+                    Text("Dr. Sweat It")
+                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .takeMaxWidthLeading()
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Text("Physiologist")
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding(5)
+                            .background(.darkBG.opacity(0.54), in: RoundedRectangle(cornerRadius: 8))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(.white.opacity(0.18))
+                            }
+                        
+                        Text("Dietitian")
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding(5)
+                            .background(.darkBG.opacity(0.54), in: RoundedRectangle(cornerRadius: 8))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(.white.opacity(0.18))
+                            }
+                        
+                        Text("Statistician")
+                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .padding(5)
+                            .background(.darkBG.opacity(0.54), in: RoundedRectangle(cornerRadius: 8))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(.white.opacity(0.18))
+                            }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                }
+                
+                VStack {
+                    Image(ApplicationImages.coachImageWithBackground)
+                        .resizable()
+                        .frame(width: 75, height: 80)
+                }
+                .frame(width: 70, height: 70)
+                .background(.clear, in: defaultShape)
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(height: 110)
+            .background(.darkBG.opacity(0.54))
+            .overlay {
+                defaultShape
+                    .stroke(.white.opacity(0.18))
+            }
+            .clipShape(defaultShape)
+            
+            
+            
+            SectionHeader(text: "About Questionnaire")
+                .padding(.top, 25)
+            
+            HStack {
+                VStack(spacing: 0) {
+                    ForEach(1...4, id: \.self) { index in
+                        HStack {
+                            HStack {
+                                
+                            }
+                            .frame(width: 10, height: 10)
+                            .background(.white, in: Circle())
+                        }
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .frame(width: 2)
+                        .background(.white.opacity(0.5), in: index == 1 || index == 4 ? RoundedRectangle(cornerRadius: 8) : RoundedRectangle(cornerRadius: 0))
+                        
+                    }
+                }
+                .frame(maxHeight: .infinity)
+                .frame(width: 50)
+                
+                VStack {
+                    
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(ApplicationPadding.mainScreenHorizontalPadding)
             
             Spacer()
             
+            
+            
+            
+            
+            // MARK: Sumbit button
             SimpleButton(content: {
                 Text("Let's Get Started")
                     .font(.system(size: 13, weight: .medium, design: .rounded))
@@ -118,25 +241,37 @@ struct LoginScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-        .safeAreaPadding(.top, ApplicationPadding.mainScreenVerticalPadding)
+        .safeAreaPadding(.top, 25)
     }
     
+    
+    
+    
+    
+    // MARK: Login view
     var loginScreen: some View {
         VStack {
             
-            Text("LogIn")
-                .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
-                .foregroundStyle(.white)
-                .takeMaxWidthLeading()
-                .offset(y: -45)
-            
-            
+            HStack(spacing: 0) {
+                
+                Image(ApplicationImages.tabBarDumbbell)
+                
+                Text("LogIn")
+                    .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
+                    .foregroundStyle(.white)
+                
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
             if self.hasUserFogotTheirPassword {
                 
+                Text("This will get you a temperary password over you email, you have to change the temperory password.")
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
                 
                 // MARK: Email text field
                 CustomTextField(searchText: self.$loginStateObject.emailIfForgot, placeholder: "Email Id")
-                    .offset(y: -45)
+                    .padding(.top, 10)
                     .transition(.blurReplace)
                 
                 
@@ -150,7 +285,7 @@ struct LoginScreen: View {
                         ProgressView()
                             .tint(.white)
                     } else {
-                        Text("Get OTP")
+                        Text("Get Password")
                             .font(.system(size: 13, weight: .medium, design: .rounded))
                             .foregroundStyle(.white)
                     }
@@ -158,7 +293,6 @@ struct LoginScreen: View {
                     
                 })
                 .padding(.top)
-                .offset(y: -45)
                 .transition(.blurReplace)
                 
                 
@@ -180,19 +314,16 @@ struct LoginScreen: View {
                         self.hasUserFogotTheirPassword = false
                     }
                 }
-                .offset(y: -45)
                 .transition(.blurReplace)
             } else {
                 // MARK: Username field
                 CustomTextField(searchText: self.$loginStateObject.username, placeholder: "Username")
-                    .offset(y: -45)
                     .transition(.blurReplace)
                 
                 
                 
                 // MARK: Password field
                 CustomSecureTextField(searchText: self.$loginStateObject.password, placeholder: "Password")
-                    .offset(y: -45)
                     .transition(.blurReplace)
                 
                 
@@ -234,7 +365,6 @@ struct LoginScreen: View {
                         }
                 }
                 .frame(maxWidth: .infinity)
-                .offset(y: -45)
                 .transition(.blurReplace)
                 
                 
@@ -254,7 +384,6 @@ struct LoginScreen: View {
                     }
                 }
                 .padding(.top, 5)
-                .offset(y: -45)
                 .transition(.blurReplace)
                 
                 
@@ -276,7 +405,6 @@ struct LoginScreen: View {
                         }
                     }
             }
-            .offset(y: -45)
             
             // MARK: Or something else
             
@@ -363,7 +491,7 @@ struct LoginScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-        .safeAreaPadding(.top, ApplicationPadding.mainScreenVerticalPadding)
+        .safeAreaPadding(.top, 25)
         
         
     }

@@ -164,13 +164,14 @@ struct GenderAgeQuestionnaireScreen: View {
                     .frame(width: 20)
                 
                 
-                Text(ApplicationHelper.formatDateToHumanReadableWithoutTime(date: self.dob) + " (\(self.appStates.userData.age) years)")
+                Text(ApplicationHelper.formatDateToHumanReadableWithoutTime(date: self.dob) + " (\(self.appStates.userData.age) yo)")
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundStyle(.white.opacity(0.5))
                 
                 
                 DatePicker("", selection: self.$dob, in: ...Date().addingTimeInterval(86400 * -ApplicationConstants.minimumUserAge * 365) ,displayedComponents: .date)
                     .datePickerStyle(.compact)
+                    .tint(.appThanosLight)
             }
             .applicationDropDownButton()
             
