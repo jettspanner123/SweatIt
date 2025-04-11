@@ -21,9 +21,9 @@ struct LoginScreen: View {
     @State var hasUserFogotTheirPassword: Bool = false
     
     @State var isSubmitButtonClicked: Bool = false
-    @State var isStartButtonClicked: Bool = false
+    @State var isStartButtonClicked: Bool = true
     
-    @State var currentSelectedRegistrationType: RegistrationTypes = .SignIn
+    @State var currentSelectedRegistrationType: RegistrationTypes = .SignUp
     
     
     
@@ -60,11 +60,10 @@ struct LoginScreen: View {
         ScreenBuilder {
             if self.currentSelectedRegistrationType == .SignIn {
                 self.loginScreen
-//                    .transition(.offset(y: -UIScreen.main.bounds.height))
-                    .transition(.offset(x: -UIScreen.main.bounds.width))
+                    .transition(.offset(y: -UIScreen.main.bounds.height))
             } else {
                 self.signupScreen
-                    .transition(.offset(x: UIScreen.main.bounds.width))
+                    .transition(.offset(y: UIScreen.main.bounds.height))
             }
             
         }
@@ -78,43 +77,29 @@ struct LoginScreen: View {
     
     var signupScreen: some View {
         VStack {
-            
-            
-            // MARK: Ai coach card
-            VStack {
-                Image(ApplicationImages.coachImageWithBackground)
-                    .resizable()
-                    .frame(width: 250, height: 275)
-                    .frame(maxWidth: .infinity)
-                
-                Text("Coach Rajat 🏋️‍♀️")
-                    .font(.system(size: 20, weight: .regular, design: .rounded))
-                    .foregroundStyle(.white)
-                    .padding(.top, 5)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.darkBG.opacity(0.54))
-            .overlay {
-                defaultShape
-                    .stroke(.white.opacity(0.18))
-            }
-            .clipShape(defaultShape)
-            .padding(ApplicationPadding.mainScreenHorizontalPadding)
+            Text("SignUp")
+                .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
+                .foregroundStyle(.white)
+                .takeMaxWidthLeading()
+                .offset(y: -45)
             
             Spacer()
             
             SimpleButton(content: {
-                Text("Let'g Get Started")
+                Text("Let's Get Started")
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white)
+                    .onTapGesture {
+                        withAnimation {
+                            self.isStartButtonClicked = true
+                        }
+                    }
             }, backgroundLinearGradient: ApplicationLinearGradient.blueGradientInverted, some: {
                 
             })
-            
-            
+
             HStack {
-                Text("Apready have an account?")
+                Text("Already have an account?")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(.white.opacity(0.5))
                 
@@ -133,18 +118,11 @@ struct LoginScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .safeAreaPadding(.top, ApplicationPadding.mainScreenVerticalPadding)
     }
     
     var loginScreen: some View {
         VStack {
-            
-            HStack {
-               
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 100)
-            .background(.white.opacity(0.08))
-            
             
             Text("LogIn")
                 .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
@@ -385,6 +363,7 @@ struct LoginScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .safeAreaPadding(.top, ApplicationPadding.mainScreenVerticalPadding)
         
         
     }

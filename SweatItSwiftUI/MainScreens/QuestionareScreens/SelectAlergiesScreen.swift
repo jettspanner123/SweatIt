@@ -133,6 +133,5 @@ struct SelectAlergiesScreen: View {
             }
         }
         .offset(y: self.pageTranslation.height)
-        .background(.blue)
     }
 }

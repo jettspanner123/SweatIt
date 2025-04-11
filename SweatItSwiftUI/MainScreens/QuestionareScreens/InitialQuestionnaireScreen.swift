@@ -19,12 +19,11 @@ struct InitialQuestionnaireScreen: View {
     
     @StateObject var annualIncomes = ApplicationConstants()
     
-    @State var currentSelectedPage: QuestionPageScreens = .foodType
+    @State var currentSelectedPage: QuestionPageScreens = .intro
     @State var isMenuOpen: Bool = false
     @State var isNextButtonLoading: Bool = false
     @State var isPrevButtonLoading: Bool = false
     
-    @State public static var userQuestionnaireStore: ApplicationConstants.SignupStateObject = .init()
     @State public var currentSelectedSystem: Extras.MeasurenmentSystem = .metric
     
     @State var addAnnualIncomeCreateButtonClicked: Bool = false
@@ -119,9 +118,126 @@ struct InitialQuestionnaireScreen: View {
     }
     
     
+    func nextButtonAction() -> Void {
+        withAnimation(.smooth(duration: 0.75)) {
+            self.isNextButtonLoading = true
+            
+            switch self.currentSelectedPage {
+            case .intro:
+                if self.appStates.userData.password.isEmpty && self.appStates.confirmPassword.isEmpty {
+                    self.currentSelectedPage = .genderAge
+                    return
+                } else {
+                    if self.appStates.userData.password == self.appStates.confirmPassword {
+                        self.currentSelectedPage = .genderAge
+                        return
+                    } else {
+                        self.appStates.isPasswordAndConfirmPasswordMatching = true
+                        return
+                    }
+                }
+                
+                
+            case .genderAge:
+                self.currentSelectedPage = .heightWeight
+            case .heightWeight:
+                self.currentSelectedPage = .bodyType
+            case .bodyType:
+                self.currentSelectedPage = .activityLevel
+            case .activityLevel:
+                self.currentSelectedPage = .foodType
+            case .foodType:
+                self.currentSelectedPage = .fitnessLevel
+            case .fitnessLevel:
+                self.currentSelectedPage = .goal
+            case .goal:
+                self.currentSelectedPage = .goal
+            }
+            
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                self.isNextButtonLoading = false
+            }
+        }
+    }
+    
+    func previousButtonAction() -> Void {
+        withAnimation(.smooth(duration: 0.75)) {
+            self.isPrevButtonLoading = true
+            switch self.currentSelectedPage {
+                
+            case .goal:
+                self.currentSelectedPage = .fitnessLevel
+            case .fitnessLevel:
+                self.currentSelectedPage = .foodType
+            case .foodType:
+                self.currentSelectedPage = .activityLevel
+            case .activityLevel:
+                self.currentSelectedPage = .bodyType
+            case .bodyType:
+                self.currentSelectedPage = .heightWeight
+            case .heightWeight:
+                self.currentSelectedPage = .genderAge
+            case .genderAge:
+                self.currentSelectedPage = .intro
+            case .intro:
+                self.currentSelectedPage = .intro
+                
+            }
+            
+            
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            withAnimation {
+                self.isPrevButtonLoading = false
+            }
+        }
+    }
+    
+    
     var body: some View {
         NavigationStack {
             ScreenBuilder {
+                
+                if self.appStates.isPasswordAndConfirmPasswordMatching {
+                    DialogBox {
+                        Text("Password Do Not Match! 🥲")
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
+                            .foregroundStyle(.white)
+                            .takeMaxWidthLeading()
+                        
+                        Text("How did you even mess that up?")
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white)
+                            .takeMaxWidthLeading()
+                            .padding(.top, 1)
+                        
+                        
+                        Text("The password and confirm password fields must match in order to proceed. Please try again.")
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .takeMaxWidthLeading()
+                        
+                        SimpleButton(content: {
+                            Text("I Understand")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                        }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                            withAnimation {
+                                self.appStates.isPasswordAndConfirmPasswordMatching = false
+                            }
+                        })
+                        .padding(.top)
+                        
+                    }
+                }
+                
+                if self.appStates.isPasswordAndConfirmPasswordMatching {
+                    CustomBackDrop()
+                }
                 
                 
                 // MARK: Region page
@@ -167,7 +283,7 @@ struct InitialQuestionnaireScreen: View {
                                         .foregroundStyle(.white)
                                         .padding(.top, 1)
                                     
-                                   
+                                    
                                     if self.isEveryUserDetailsFilled {
                                         Text("Save")
                                             .font(.system(size: 15, weight: .medium, design: .rounded))
@@ -194,7 +310,7 @@ struct InitialQuestionnaireScreen: View {
                                             }
                                     } else {
                                         HStack {
-                                           Text("Please complete the questionnaire.")
+                                            Text("Please complete the questionnaire.")
                                                 .font(.system(size: 15, weight: .medium, design: .rounded))
                                                 .foregroundStyle(ApplicationLinearGradient.redGradient)
                                             
@@ -459,6 +575,15 @@ struct InitialQuestionnaireScreen: View {
                                 .padding(.vertical, 13)
                                 .background(self.currentSelectedPage == self.pageChangeOptions[pageIndex] ? .white : .white.opacity(0.18))
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .overlay {
+                                    HStack {
+                                        if !self.appStates.userData.password.isEmpty && !self.appStates.userData.username.isEmpty && !self.appStates.userData.phoneNumber.isEmpty && !self.appStates.userData.email.isEmpty && !self.appStates.confirmPassword.isEmpty {
+                                            Image(systemName: "checkmark.seal.fill")
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                                    .padding(.horizontal)
+                                }
                                 .onTapGesture {
                                     self.currentSelectedPage = self.pageChangeOptions[pageIndex]
                                     withAnimation(.spring(duration: 1).delay(0.15)) {
@@ -626,37 +751,7 @@ struct InitialQuestionnaireScreen: View {
                             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                         }
                         .onTapGesture {
-                            withAnimation(.smooth(duration: 0.75)) {
-                                self.isPrevButtonLoading = true
-                                switch self.currentSelectedPage {
-                                    
-                                case .goal:
-                                    self.currentSelectedPage = .fitnessLevel
-                                case .fitnessLevel:
-                                    self.currentSelectedPage = .foodType
-                                case .foodType:
-                                    self.currentSelectedPage = .activityLevel
-                                case .activityLevel:
-                                    self.currentSelectedPage = .bodyType
-                                case .bodyType:
-                                    self.currentSelectedPage = .heightWeight
-                                case .heightWeight:
-                                    self.currentSelectedPage = .genderAge
-                                case .genderAge:
-                                    self.currentSelectedPage = .intro
-                                case .intro:
-                                    self.currentSelectedPage = .intro
-                                    
-                                }
-                                
-                                
-                            }
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    self.isPrevButtonLoading = false
-                                }
-                            }
+                            self.previousButtonAction()
                         }
                     }
                     
@@ -701,35 +796,7 @@ struct InitialQuestionnaireScreen: View {
                         }
                         .buttonConfiguration(ApplicationLinearGradient.redGradient)
                         .onTapGesture {
-                            withAnimation(.smooth(duration: 0.75)) {
-                                self.isNextButtonLoading = true
-                                
-                                switch self.currentSelectedPage {
-                                case .intro:
-                                    self.currentSelectedPage = .genderAge
-                                case .genderAge:
-                                    self.currentSelectedPage = .heightWeight
-                                case .heightWeight:
-                                    self.currentSelectedPage = .bodyType
-                                case .bodyType:
-                                    self.currentSelectedPage = .activityLevel
-                                case .activityLevel:
-                                    self.currentSelectedPage = .foodType
-                                case .foodType:
-                                    self.currentSelectedPage = .fitnessLevel
-                                case .fitnessLevel:
-                                    self.currentSelectedPage = .goal
-                                case .goal:
-                                    self.currentSelectedPage = .goal
-                                }
-                                
-                            }
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation {
-                                    self.isNextButtonLoading = false
-                                }
-                            }
+                            self.nextButtonAction()
                         }
                     }
                     

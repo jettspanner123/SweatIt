@@ -226,6 +226,11 @@ class ApplicationPadding {
     public static let mainScreenHorizontalPadding: Double = 15
 }
 
+class ApplicationBounds {
+    public static let backdropZIndex: Double = 99999
+    public static let dialogBoxZIndex: Double = 999999
+}
+
 class ApplicationFonts {
     public static let oswaldRegular = "Oswald-Regular"
     public static let oswaldMedium = "Oswald-Medium"

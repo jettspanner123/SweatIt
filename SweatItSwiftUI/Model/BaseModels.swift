@@ -184,6 +184,7 @@ struct Notification_t: Identifiable {
 struct SignUpUserDataStore {
     var username: String
     var password: String
+    var email: String
     var age: Int
     var gender: Extras.Gender
     var height: Double
@@ -198,6 +199,7 @@ struct SignUpUserDataStore {
     var alergies: Array<Extras.FoodAllergy> = []
     var fitnessLevel: Extras.UserLevel = .none
     var goalType: Extras.Goal = .none
+    var phoneNumber: String = ""
 }
 
 struct LogInUserDataStore {
