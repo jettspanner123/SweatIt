@@ -38,7 +38,9 @@ struct SweatItSwiftUIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            LoginScreen(showLoginScreen: .constant(true), showIsland: .constant(false))
+//            OnboardingScreen()
         }
         .environmentObject(self.appStates)
     }

@@ -10,37 +10,37 @@ import SwiftUI
 struct LoginScreen: View {
     
     enum RegistrationTypes: String, CaseIterable {
-        case SignIn, SignUp
+        case SignIn = "Sign In", SignUp = "Sign Up"
     }
-    
-    struct LoginStateObject {
-        var username: String = ""
-        var password: String = ""
-    }
-    
-    
     
     @Binding var showLoginScreen: Bool
     @Binding var showIsland: Bool
     
     
-    @State var loginStateObject: LoginStateObject = .init()
+    @State var loginStateObject: LogInUserDataStore = .init(username: "", password: "", confirmPassword: "", emailIfForgot: "")
+    @State var hasUserFogotTheirPassword: Bool = false
     
     @State var isSubmitButtonClicked: Bool = false
     @State var isStartButtonClicked: Bool = false
     
     @State var currentSelectedRegistrationType: RegistrationTypes = .SignIn
     
-    @State var showOnBoardingScreen: Bool = true
     
-    var isSubmitButtonDisabled: Bool {
-        self.loginStateObject.username.isEmpty || self.loginStateObject.password.isEmpty
-    }
     
-    func performLogin() -> Void {
+    func performLogin() async throws -> Void {
         self.isSubmitButtonClicked = true
         
-        
+        do {
+            if let user_t = try await ApplicationEndpoints.get.authenticateUser(by: self.loginStateObject.username, and: self.loginStateObject.password) {
+                self.performLoginAnimationHelper()
+            }
+        } catch {
+            print(ErrorType.cannotParseUser.rawValue)
+            return
+        }
+    }
+    
+    func performLoginAnimationHelper() -> Void {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             self.isSubmitButtonClicked = false
             withAnimation(.smooth(duration: 1.5)) {
@@ -56,237 +56,348 @@ struct LoginScreen: View {
         }
     }
     
-    
-    var onboardingScreenDetils: Array<String> = [
-        "",
-        "",
-        "",
-    ]
-    
-    
     var body: some View {
-        ZStack {
-          
-            
-                        
-            
-            ScreenBuilder {
-                VStack {
-                    // MARK: Upar wala header hai bhai
-                    HStack(spacing: 1) {
-                        
-                        Text("SweatIt")
-                            .font(.custom(ApplicationFonts.oswaldRegular, size: 30))
-                            .foregroundStyle(.white)
-                            .padding(.leading, 10)
-                        
-                        
-                        Image("Workout")
-                            .resizable()
-                            .frame(width: 40, height: 35)
-                            .offset(x: 5, y: 3)
-                        
-                        
-                        
-                        HStack {
-                            ForEach(RegistrationTypes.allCases, id: \.self) { type in
-                                Text(type.rawValue.capitalized)
-                                    .font(.system(size: 15, weight: .regular, design: .rounded))
-                                    .foregroundStyle(self.currentSelectedRegistrationType == type ? .black : .white)
-                                    .padding(10)
-                                    .background(self.currentSelectedRegistrationType == type ? .white : .clear)
-                                    .clipShape(defaultShape)
-                                    .onTapGesture {
-                                        withAnimation {
-                                            self.currentSelectedRegistrationType = type
-                                        }
-                                    }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        
-                        
-                        
-                        
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 130, alignment: .bottom)
-                    .padding(.bottom, ApplicationPadding.mainScreenHorizontalPadding / 2)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding / 2.5)
-                    .overlay {
-                        defaultShape
-                            .stroke(.white.opacity(0.18))
-                    }
-                    .background(.darkBG.opacity(0.54))
-                    .clipShape(defaultShape)
-                    .offset(y: -1)
-                    
-                    
-                    
-                    
-                    // MARK: Segmented view
-                    
-                    
-                    
-                    
-                    // MARK: Condintional rendering based on if the user wants to log in or sign up
-                    
-                    
-                    // MARK: Login screen
-                    if self.currentSelectedRegistrationType == .SignIn {
-                        VStack {
-                            
-                            
-                            // MARK: Username and password files
-                            
-                            CustomTextField(searchText: self.$loginStateObject.username, placeholder: "Username")
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                                .padding(.top, 10)
-                            
-                            CustomSecureTextField(searchText: self.$loginStateObject.password, placeholder: "Password")
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                            
-                            
-                        }
-                        .transition(.blurReplace)
-                        
-                        
-                        
-                        // MARK: Sign up screen
-                    } else {
-                        VStack {
-                            VStack(spacing: -35) {
-                                Image("hero_image_group")
-                                    .scaleEffect(0.7)
-                                
-                                Text("Hello! 👋")
-                                    .font(.custom(ApplicationFonts.robotoCondensedRegular, size: 35))
-                                    .foregroundStyle(.white)
-                            }
-                            .offset(y: -30)
-                            
-                            Spacer()
-                            
-                            
-                            Text("I'm your personal coach.")
-                                .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
-                            
-                            CustomDivider()
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 8)
-                            
-                            Text("I'll be guiding you throughout our journey.")
-                                .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
-                                .padding(.top, 0.5)
-                                .multilineTextAlignment(.center)
-                            
-                            CustomDivider()
-                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 8)
-                            
-                            
-                            HStack {
-                                Text("Here are some ")
-                                    .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                    .foregroundStyle(.white) +
-                                Text("personalised questions")
-                                    .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                    .foregroundStyle(Color.appRedLight.gradient) +
-                                Text(" to tailor your ")
-                                    .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                    .foregroundStyle(.white) +
-                                Text("journey.")
-                                    .font(.custom(ApplicationFonts.robotoCondensedLight, size: 18))
-                                    .foregroundStyle(.appBlueLight.gradient)
-                                
-                            }
-                            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
-                            .padding(.top, 0.5)
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom, 50)
-                            
-                            Spacer()
-                            Spacer()
-
-                            
-                            
-                            
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                        .transition(.blurReplace)
-                    }
-                    Spacer()
-                    
-                    
-                    
-                    
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .ignoresSafeArea(edges: .top)
+        ScreenBuilder {
+            if self.currentSelectedRegistrationType == .SignIn {
+                self.loginScreen
+//                    .transition(.offset(y: -UIScreen.main.bounds.height))
+                    .transition(.offset(x: -UIScreen.main.bounds.width))
+            } else {
+                self.signupScreen
+                    .transition(.offset(x: UIScreen.main.bounds.width))
             }
             
-            // MARK: Submit button
-            if self.currentSelectedRegistrationType == .SignIn {
+        }
+        .sensoryFeedback(.increase, trigger: self.hasUserFogotTheirPassword)
+        .sensoryFeedback(.increase, trigger: self.currentSelectedRegistrationType)
+        .fullScreenCover(isPresented: self.$isStartButtonClicked) {
+            InitialQuestionnaireScreen(showLoginScreen: self.$showLoginScreen)
+        }
+    }
+    
+    
+    var signupScreen: some View {
+        VStack {
+            
+            
+            // MARK: Ai coach card
+            VStack {
+                Image(ApplicationImages.coachImageWithBackground)
+                    .resizable()
+                    .frame(width: 250, height: 275)
+                    .frame(maxWidth: .infinity)
+                
+                Text("Coach Rajat 🏋️‍♀️")
+                    .font(.system(size: 20, weight: .regular, design: .rounded))
+                    .foregroundStyle(.white)
+                    .padding(.top, 5)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(.darkBG.opacity(0.54))
+            .overlay {
+                defaultShape
+                    .stroke(.white.opacity(0.18))
+            }
+            .clipShape(defaultShape)
+            .padding(ApplicationPadding.mainScreenHorizontalPadding)
+            
+            Spacer()
+            
+            SimpleButton(content: {
+                Text("Let'g Get Started")
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+            }, backgroundLinearGradient: ApplicationLinearGradient.blueGradientInverted, some: {
+                
+            })
+            
+            
+            HStack {
+                Text("Apready have an account?")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                Text("Sign In")
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .underline()
+                    .padding(.vertical)
+                    .onTapGesture {
+                        withAnimation(.smooth(duration: 1)) {
+                            self.currentSelectedRegistrationType = .SignIn
+                        }
+                    }
+            }
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+    }
+    
+    var loginScreen: some View {
+        VStack {
+            
+            HStack {
+               
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 100)
+            .background(.white.opacity(0.08))
+            
+            
+            Text("LogIn")
+                .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
+                .foregroundStyle(.white)
+                .takeMaxWidthLeading()
+                .offset(y: -45)
+            
+            
+            if self.hasUserFogotTheirPassword {
+                
+                
+                // MARK: Email text field
+                CustomTextField(searchText: self.$loginStateObject.emailIfForgot, placeholder: "Email Id")
+                    .offset(y: -45)
+                    .transition(.blurReplace)
+                
+                
+                
+                
+                
+                
+                // MARK: Get otp button
+                SimpleButton(content: {
+                    if PostMethodStore.current.isDatabaseLoading {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Text("Get OTP")
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+                }, backgroundLinearGradient: ApplicationLinearGradient.redGradient, some: {
+                    
+                })
+                .padding(.top)
+                .offset(y: -45)
+                .transition(.blurReplace)
+                
+                
+                
+                // MARK: Cancel button
+                
                 HStack {
+                    Text("Cancel")
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .frame(maxWidth: .infinity)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 45)
+                .background(.white.opacity(0.08))
+                .clipShape(defaultShape)
+                .onTapGesture {
+                    withAnimation {
+                        self.hasUserFogotTheirPassword = false
+                    }
+                }
+                .offset(y: -45)
+                .transition(.blurReplace)
+            } else {
+                // MARK: Username field
+                CustomTextField(searchText: self.$loginStateObject.username, placeholder: "Username")
+                    .offset(y: -45)
+                    .transition(.blurReplace)
+                
+                
+                
+                // MARK: Password field
+                CustomSecureTextField(searchText: self.$loginStateObject.password, placeholder: "Password")
+                    .offset(y: -45)
+                    .transition(.blurReplace)
+                
+                
+                // MARK: Error section
+                if GetMethodStore.current.isError {
+                    
+                    Text(ErrorType.invalidArguments.rawValue)
+                        .font(.system(size: 12, weight: .regular, design: .rounded))
+                        .foregroundStyle(.appRedLight)
+                        .padding(.vertical)
+                        .padding(.horizontal, 5)
+                        .transition(.blurReplace)
+                        .transition(.blurReplace)
+                }
+                
+                HStack {
+                    
+                    
+                    if GetMethodStore.current.isError {
+                        Text(GetMethodStore.current.errorMessage.rawValue)
+                            .font(.system(size: 13, weight: .regular, design: .rounded))
+                            .foregroundStyle(.appRedLight)
+                            .padding(.vertical)
+                            .padding(.horizontal, 5)
+                        
+                        
+                    }
+                    
+                    Spacer()
+                    Text("Forgot Password?")
+                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white)
+                        .padding(.vertical, 5)
+                        .underline()
+                        .onTapGesture {
+                            withAnimation {
+                                self.hasUserFogotTheirPassword = true
+                            }
+                        }
+                }
+                .frame(maxWidth: .infinity)
+                .offset(y: -45)
+                .transition(.blurReplace)
+                
+                
+                // MARK: Submit button
+                SimpleButton(content: {
                     if self.isSubmitButtonClicked {
                         ProgressView()
                             .tint(.white)
-                            .transition(.blurReplace)
                     } else {
                         Text("Submit")
                             .font(.system(size: 15, weight: .medium, design: .rounded))
                             .foregroundStyle(.white)
-                            .transition(.blurReplace)
                     }
-                    
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 45)
-                .background(ApplicationLinearGradient.redGradient)
-                .clipShape(defaultShape)
-                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                .onTapGesture {
+                }, backgroundLinearGradient: ApplicationLinearGradient.redGradient) {
                     withAnimation {
-                        self.performLogin()
+                        self.isSubmitButtonClicked = true
                     }
                 }
-                .offset(y: UIScreen.main.bounds.height / 2 - (75))
-                .transition(.blurReplace.combined(with: .offset(y: 100)))
+                .padding(.top, 5)
+                .offset(y: -45)
+                .transition(.blurReplace)
+                
+                
             }
             
+            HStack {
+                Text("Don't have an account?")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                Text("Sign Up")
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .underline()
+                    .padding(.vertical)
+                    .onTapGesture {
+                        withAnimation(.smooth(duration: 1)) {
+                            self.currentSelectedRegistrationType = .SignUp
+                        }
+                    }
+            }
+            .offset(y: -45)
             
-            if self.currentSelectedRegistrationType == .SignUp {
+            // MARK: Or something else
+            
+            HStack {
+                CustomDivider()
+                
+                Text("Or")
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                
+                CustomDivider()
+            }
+            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            
+            
+            // MARK: Other login options
+            HStack {
+                
+                
+                
+                // MARK: Google
                 HStack {
-                    Text("Start Journey")
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white)
+                    Image(ApplicationImages.googleIcon)
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                    Text("Google")
+                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.75))
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 45)
-                .background(ApplicationLinearGradient.blueGradientInverted)
-                .clipShape(defaultShape)
-                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                .offset(y: UIScreen.main.bounds.height / 2 - (75))
-                .onTapGesture {
-                    withAnimation(.smooth) {
-                        self.isStartButtonClicked = true
-                    }
+                .frame(height: 50)
+                .background(ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.white.opacity(0.18))
                 }
-                .transition(.blurReplace.combined(with: .offset(y: 100)))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                
+                // MARK: Apple
+                HStack {
+                    Image(ApplicationImages.appleIcon)
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                    
+                    Text("Apple")
+                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.white.opacity(0.18))
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                
+                // MARK: Github
+                HStack {
+                    Image(ApplicationImages.githubIcon)
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                    Text("GitHub")
+                        .font(.system(size: 13, weight: .regular, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.white.opacity(0.18))
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 8))
             }
+            .frame(maxWidth: .infinity)
+            
+            
         }
-        .navigationDestination(isPresented: self.$isStartButtonClicked, destination: {
-            InitialQuestionnaireScreen(showLoginScreen: self.$showLoginScreen)
-        })
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .safeAreaPadding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        
+        
     }
 }
+
+
+
 
 
 #Preview {
     LoginScreen(showLoginScreen: .constant(false), showIsland: .constant(false))
 }
+
+
 
 

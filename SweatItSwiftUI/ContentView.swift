@@ -86,7 +86,7 @@ struct ContentView: View {
                         .transition(.blurReplace)
                         .onAppear {
                             Task {
-                                try await ApplicationEndpoints.get.fetchAllUsersFromDatabase()
+                                try await ApplicationEndpoints.get.fetchUserBy(id: "9578C963-DBE3-4DB9-A722-21EF1841D545")
                             }
                         }
                 } else if self.currentPage_t == .workout {

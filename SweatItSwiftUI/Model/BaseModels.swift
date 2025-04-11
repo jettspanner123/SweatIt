@@ -199,3 +199,10 @@ struct SignUpUserDataStore {
     var fitnessLevel: Extras.UserLevel = .none
     var goalType: Extras.Goal = .none
 }
+
+struct LogInUserDataStore {
+    var username: String
+    var password: String
+    var confirmPassword: String
+    var emailIfForgot: String
+}

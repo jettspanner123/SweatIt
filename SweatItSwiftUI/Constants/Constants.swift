@@ -62,7 +62,7 @@ class ApplicationLinearGradient {
 
 
 enum Constants: String {
-    case fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel
+    case id, fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel
 }
 
 class ApplicationHelper {
@@ -82,6 +82,25 @@ class ApplicationHelper {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
         return Int(dateFormatter.string(from: from)) ?? 0
+    }
+    
+    public static func getUserFrom(dictionary docData: Dictionary<String, Any>) -> User_t {
+        
+        let id = docData[Constants.id.rawValue] as! String
+        let fullName = docData[Constants.fullName.rawValue] as! String
+        let username = docData[Constants.username.rawValue] as! String
+        let emailId = docData[Constants.emailId.rawValue] as! String
+        let password = docData[Constants.password.rawValue] as! String
+        let currentWeight: Double = docData[Constants.currentWeight.rawValue] as! Double
+        let currentHeight: Double = docData[Constants.currentHeight.rawValue] as! Double
+        let gender: Extras.Gender = Extras.Gender(rawValue: docData[Constants.gender.rawValue] as! String)!
+        let bodyType: Extras.BodyType = Extras.BodyType(rawValue: docData[Constants.bodyType.rawValue] as! String)!
+        let level: Extras.UserLevel = Extras.UserLevel(rawValue: docData[Constants.level.rawValue] as! String)!
+        let goal: Extras.Goal = Extras.Goal(rawValue: docData[Constants.goal.rawValue] as! String)!
+        let dailyPoints: Int = docData[Constants.dailyPoints.rawValue] as! Int
+        let fitnessLevel: Int = docData[Constants.fitnessLevel.rawValue] as! Int
+        
+        return .init(id: id, fullName: fullName, username: username, emailId: emailId, password: password, currentWeight: currentWeight, currentHeight: currentHeight, gender: gender, bodyType: bodyType, level: level, goal: goal, dailyPoints: dailyPoints, fitnessLevel: fitnessLevel)
     }
     
     enum Sounds: Int {
@@ -222,4 +241,17 @@ class ApplicationFonts {
     public static let robotoCondensedMedium = "RobotoCondensed-Medium"
     public static let robotoCondensedRegular = "RobotoCondensed-Regular"
 
+}
+
+class ApplicationImages {
+    public static let calesthenicsWorkoutImage: String = "calesthenics_workout_image"
+    public static let weightedWorkoutImage: String = "weighted_workout_image"
+    public static let googleIcon: String = "google_icon"
+    public static let appleIcon: String = "apple_icon"
+    public static let githubIcon: String = "gitub_icon"
+    public static let coachImageWithBackground: String = "hero_image_group"
+    public static let coachImage: String = "hero_image"
+    public static let loginScreenWorkoutImage: String = "generic_workout_image"
+    public static let dumbbellImage: String = "Dumbbell"
+    public static let tabBarDumbbell: String = "TabBarDumbbell"
 }

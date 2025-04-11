@@ -444,6 +444,27 @@ class User {
         return [exampleUserTwo, currentUser]
     }
     
+    var users: Array<User_t> = []
+    
+    func setUsers(_ users: Array<User_t>) {
+        self.users = users
+    }
+    
+    func getUserBy(id: String) -> Optional<User_t> {
+        return self.users.filter { $0.id == id }.first
+    }
+    
+    func getUserBy(username: String) -> Optional<User_t> {
+        return self.users.filter { $0.username == username }.first
+    }
+    
+    func authenticateUser(by username: String, and password: String) -> Optional<User_t> {
+        if username.isEmpty || password.isEmpty {
+            return nil
+        }
+        return self.users.filter { $0.username.lowercased() == username.lowercased() && $0.password == password }.first
+    }
+    
 }
 
 class Notification {

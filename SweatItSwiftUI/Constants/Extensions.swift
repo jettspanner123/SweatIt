@@ -112,30 +112,31 @@ extension Color {
     }
 }
 
-struct BounceEffectModifier: ViewModifier {
-    @State private var isTapped: Bool = false
+struct VibrateEffectModifier: ViewModifier {
+    @State private var buttonTapCount: Int = 0
     var closure: () -> Void = {}
     
     func body(content: Content) -> some View {
         content
-            .scaleEffect(isTapped ? 0.95 : 1)
             .onTapGesture {
-                closure() // Execute the closure passed in
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                    isTapped = true
-                    
-                    // Reset the scale after the bounce effect
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        isTapped = false
-                    }
+                closure() // Execute the closur33e passed in
+                withAnimation(.bouncy(duration: 0.25)) {
+                    self.buttonTapCount += 1
                 }
             }
+            .sensoryFeedback(.impact, trigger: self.buttonTapCount)
     }
 }
+
+
 
 extension View {
-    func addBounceEffectOnTap(closure: @escaping () -> Void) -> some View {
-        self.modifier(BounceEffectModifier(closure: closure))
+    func onTapWithVibration(closure: @escaping () -> Void) -> some View {
+        self.modifier(VibrateEffectModifier(closure: closure))
+    }
+    
+    func isBottomButton() -> some View {
+        self
+            .offset(y: UIScreen.main.bounds.height / 2 - (75))
     }
 }
-
