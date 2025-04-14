@@ -40,11 +40,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-//                if !self.isUserLoggedIn {
-//                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-//                        .zIndex(99999)
-//                        .transition(ScaleBlurOffsetTransition())
-//                }
+    //                if !self.isUserLoggedIn {
+    //                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+    //                        .zIndex(99999)
+    //                        .transition(ScaleBlurOffsetTransition())
+    //                }
                 
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)

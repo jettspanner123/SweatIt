@@ -26,7 +26,7 @@ struct HomeScreen: View {
             }
             .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
             .contextMenu {
-                Text("Click me")
+                
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
 
@@ -37,9 +37,17 @@ struct HomeScreen: View {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
-                .popoverTip(InformationCardTip())
                 .contextMenu {
-                    Text("Something here")
+                    ForEach(Activity.current.exampleActivityList, id: \.id) { activity in
+                        if let workout = activity.activityDescription as? Workout_t {
+                            let workoutName = workout.workoutName
+                            let caloriesBurned = String(format: "%.1f🔥", workout.caloriesBurned)
+                            let timeTaken = String(format: "%.1f min", workout.timeTaken)
+                            
+                            Text("\(workoutName): [\(caloriesBurned)]")
+                            
+                        }
+                    }
                 }
                 
                 InformationCard(image: "Food", title: "Consumed", text: "1900", secondaryText: "", textColor: .white, wantInformationView: true) {
@@ -47,7 +55,7 @@ struct HomeScreen: View {
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                 .contextMenu {
-                    Text("Something here")
+                    
                 }
             }
             .frame(maxWidth: .infinity)
