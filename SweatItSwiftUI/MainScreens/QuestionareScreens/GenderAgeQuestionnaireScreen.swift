@@ -16,6 +16,11 @@ struct GenderAgeQuestionnaireScreen: View {
     @State var isGenderSelectionDropdownShown: Bool = false
     @State var dob: Date = .now
     
+    func getStoredAgeAndGender() -> Void {
+        self.currentSelectedGender = self.appStates.userData.gender
+        self.dob = self.appStates.userData.dob
+    }
+    
     var body: some View {
         VStack {
            Text("Choose your gender based upon who you are and what is you identity as a person.")
@@ -186,6 +191,7 @@ struct GenderAgeQuestionnaireScreen: View {
         }
         .onChange(of: self.dob) {
             let age = Calendar.current.dateComponents([.year], from: self.dob, to: .now)
+            self.appStates.userData.dob = self.dob
             self.appStates.userData.age = age.year!
         }
     }

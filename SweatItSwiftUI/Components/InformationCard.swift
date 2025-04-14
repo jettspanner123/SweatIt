@@ -6,14 +6,29 @@
 //
 
 import SwiftUI
+import TipKit
 
-struct InformationCard: View {
+struct InformationCard<Content: View>: View {
     
     var image: String = ""
     var title: String = ""
     var text: String = ""
     var secondaryText: String = ""
     var textColor: Color = .white.opacity(0.75)
+    var wantInformationView: Bool = true
+    var content: Content
+    
+    init(image: String, title: String, text: String, secondaryText: String, textColor: Color, wantInformationView: Bool, @ViewBuilder content: () -> Content) {
+        self.image = image
+        self.title = title
+        self.text = text
+        self.secondaryText = secondaryText
+        self.textColor = textColor
+        self.wantInformationView = wantInformationView
+        self.content = content()
+    }
+    
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -53,6 +68,12 @@ struct InformationCard: View {
         .frame(height: 65, alignment: .topLeading)
         .padding(10)
         .coordinateSpace(name: "InformationCardCoordinateSpace")
+        .overlay(alignment: .topTrailing) {
+            Image(systemName: "info.circle")
+                .foregroundStyle(.white.opacity(0.5))
+                .padding()
+        }
+        
     }
 }
 

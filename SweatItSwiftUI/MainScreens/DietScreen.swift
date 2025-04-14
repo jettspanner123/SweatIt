@@ -20,33 +20,31 @@ struct DietScreen: View {
             
             
             // MARK: Add food button
+            HStack {
                 
-            PrimaryNavigationButton(text: "Add Food", leadingPadding: -UIScreen.main.bounds.width / 2)
-                .background(defaultShape.fill(ApplicationLinearGradient.redGradient))
-                .overlay {
-                    HStack {
-                        Image(systemName: "plus")
-                            .foregroundStyle(.white.opacity(0.5))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal)
-                }
-                .onTapGesture {
-                    withAnimation {
-                        self.showCameraScreen = true
-                    }
-                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 150)
+            .overlay {
+                defaultShape
+                    .stroke(.white.opacity(0.18))
+            }
+            .background(.darkBG.opacity(0.54), in: defaultShape)
             
             SecondaryHeading(title: "Nutrition", secondaryText: "( per gram of body weight )")
                 .padding(.top, 20)
             
             HStack {
-                InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal")
-                    .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
+               
+                InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                    
+                }
+                .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 
-                InformationCard(image: "Food", title: "Consumed", text: "1900 kCal")
-                    .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
-                
+                InformationCard(image: "Food", title: "Consumed", text: "1900 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                    
+                }
+                .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
             }
             .frame(maxWidth: .infinity)
             

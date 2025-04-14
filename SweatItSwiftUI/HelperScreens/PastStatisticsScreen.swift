@@ -85,13 +85,15 @@ struct PastStatisticsScreen: View {
                     
                     // MARK: Calores burned and ingested
                     HStack {
+                       
+                        InformationCard(image: "FireLogo", title: "Burned", text: "\(currentSelectedDayData.caloriesBurnedForTheDay) kCal", secondaryText: "", textColor: .white, wantInformationView: false, content: {
+                            
+                        })
+                        .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
+                        .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesBurnedForTheDay)))
+
                         
-                        InformationCard(image: "FireLogo", title: "Burned", text: "\(currentSelectedDayData.caloriesBurnedForTheDay) kCal")
-                            .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
-                            .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesBurnedForTheDay)))
-                        
-                        
-                        InformationCard(image: "Food", title: "Consumed", text: "\(currentSelectedDayData.caloriesIngestedForTheDay) kCal")
+                        InformationCard(image: "Food", title: "Consumed", text: "\(currentSelectedDayData.caloriesIngestedForTheDay) kCal", secondaryText: "", textColor: .white, wantInformationView: false, content: {})
                             .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                             .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesIngestedForTheDay)))
 
@@ -103,7 +105,7 @@ struct PastStatisticsScreen: View {
                     
                     
                     // MARK: Steps taken
-                    InformationCard(image: "Boot", title: "Steps Taken", text: "\(currentSelectedDayData.stepsTaken) / 15000")
+                    InformationCard(image: "Boot", title: "Steps Taken", text: "\(currentSelectedDayData.stepsTaken) / 15000", secondaryText: "", textColor: .white, wantInformationView: false, content: {})
                         .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
                         .contentTransition(.numericText(value: Double(currentSelectedDayData.stepsTaken)))
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)

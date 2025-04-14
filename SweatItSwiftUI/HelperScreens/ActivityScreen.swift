@@ -23,21 +23,30 @@ struct ActivityScreen: View {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2)) {
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal")
-                        .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient))
+                    
+                    InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal", secondaryText: "", textColor: .white, wantInformationView: true, content: {
+                        
+                    })
+                    .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient))
+
+                    // MARK: Calories Burned card
+                    InformationCard(image: "Water", title: "Water", text: "500 ml", secondaryText: "", textColor: .white, wantInformationView: true) {
+                        
+                    }
+                    .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "Water", title: "Water", text: "500 ml")
-                        .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
+                    InformationCard(image: "Dumbbell", title: "Workout", text: "> 1 Hr", secondaryText: "", textColor: .appBloodRedDark, wantInformationView: true) {
+                        
+                    }
+                    .background(defaultShape.fill(ApplicationLinearGradient.whiteGradient))
+
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "Dumbbell", title: "Workout", text: "> 1 Hr", textColor: .appBloodRedDark.opacity(0.75))
-                        .background(defaultShape.fill(ApplicationLinearGradient.whiteGradient))
-                    
-                    // MARK: Calories Burned card
-                    InformationCard(image: "FireLogo", title: "Consumed", text: "1900 kCal")
-                        .background(defaultShape.fill(ApplicationLinearGradient.greenGradient))
-                    
+                    InformationCard(image: "FireLogo", title: "Consumed", text: "1900 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                        
+                    }
+                    .background(defaultShape.fill(ApplicationLinearGradient.greenGradient))
                 }
                 
                 

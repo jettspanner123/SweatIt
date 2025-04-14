@@ -222,18 +222,20 @@ class Exercise {
         sets: 4,
         reps: 20,
         perRepCaloriesBurned: 0.05,
-        difficulty: .easy
+        difficulty: .easy,
+        image: "closeGripPushup"
     )
     
     let bicepCurl = Exercise_t(
-        exerciseName: "Bodyweight Bicep Curl",
+        exerciseName: "Bicep Curl",
         exerciseDescription: "A bodyweight exercise that mimics the movement of a bicep curl. Involves pushing yourself up from a low position to focus on the biceps.",
         targettedMuscles: [.bicep],
         isNonActiveExercise: false,
         sets: 4,
         reps: 12,
         perRepCaloriesBurned: 0.8,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "bicepCurls"
     )
     
     let tricepDips = Exercise_t(
@@ -244,7 +246,8 @@ class Exercise {
         sets: 4,
         reps: 15,
         perRepCaloriesBurned: 0.1,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "tricepDip"
     )
     
     var plank = Exercise_t(
@@ -267,7 +270,8 @@ class Exercise {
         sets: 3,
         reps: 20,
         perRepCaloriesBurned: 0.08,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "bicycleCrunch"
     )
     
     var legRaise = Exercise_t(
@@ -278,7 +282,8 @@ class Exercise {
         sets: 3,
         reps: 15,
         perRepCaloriesBurned: 0.1,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "legRaise"
     )
     
     var russianTwist = Exercise_t(
@@ -289,7 +294,8 @@ class Exercise {
         sets: 3,
         reps: 20,
         perRepCaloriesBurned: 0.12,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "russianTwist"
     )
     
     var mountainClimbers = Exercise_t(
@@ -300,10 +306,11 @@ class Exercise {
         sets: 4,
         reps: 20,
         perRepCaloriesBurned: 0.15,
-        difficulty: .medium
+        difficulty: .medium,
+        image: "mountailClimber"
     )
     
-    var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium, image: "pullups")
+    var pullups: Exercise_t = .init(exerciseName: "Pullups", exerciseDescription: "Find a hanging bar and pull yourself up as high as you can.", targettedMuscles: [.back, .bicep, .core], sets: 3, reps: 12, perRepCaloriesBurned: 1, difficulty: .medium, image: "pullup")
     
     var allExercises: Array<Exercise_t> {
         return [pullups, mountainClimbers, russianTwist, legRaise, bicycleCrunch, plank, bicepCurl, tricepDips, closeGripPushups, calfRaise, bulgarianSplitSquat, gluteBridge, walkingLunge, bodyweightSquat, chestDip, overheadPress, inclinePushUp, benchPress, pushUp]
@@ -342,7 +349,7 @@ class Workout {
     let chestWorkout: Workout_t = .init(workoutName: "Chest Workout", workoutDescription: "Chest workout for bigger chest, bigger than chiyalis ki chati.", workoutCategory: .strength, workoutImage: "chest", exercises: [Exercise.current.pushUp, Exercise.current.inclinePushUp, Exercise.current.chestDip, Exercise.current.benchPress])
     let armsWorkout: Workout_t = .init(workoutName: "Arm Workout", workoutDescription: "Don't be like Kacchap, have bigger arms.", workoutCategory: .strength, workoutImage: "arms", exercises: [Exercise.current.bicepCurl, Exercise.current.closeGripPushups, Exercise.current.pullups, Exercise.current.tricepDips])
     let coreWorkout: Workout_t = .init(workoutName: "Core Workout", workoutDescription: "Don't have a six pack, don't be a negative rizzler. Get a pack.", workoutCategory: .strength, workoutImage: "", exercises: [Exercise.current.mountainClimbers, Exercise.current.bicycleCrunch, Exercise.current.plank, Exercise.current.russianTwist])
-    let fullBodyWorkotu: Workout_t = .init(workoutName: "Full Body Workout", workoutDescription: "Full body workout for when you don't have enought time. You are not a rizzler my friend. 😔", workoutCategory: .strength, workoutImage: "upperbody", exercises: [Exercise.current.pushUp, Exercise.current.pullups, Exercise.current.bulgarianSplitSquat, Exercise.current.plank])
+    let fullBodyWorkotu: Workout_t = .init(workoutName: "Full Body Workout", workoutDescription: "Full body workout for when you don't have enought time. You are not a rizzler my friend. 😔", workoutCategory: .strength, workoutImage: "upperbody", exercises: [Exercise.current.pushUp, Exercise.current.pullups, Exercise.current.bulgarianSplitSquat, Exercise.current.mountainClimbers])
     
     
 }
@@ -437,17 +444,28 @@ class Activity {
 class User {
     public static var current = User()
     
-    var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17)
+    @Published var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17) {
+        didSet {
+            print(currentUser)
+            Task {
+                try await ApplicationEndpoints.post.autoUpdateCurrentUserDetails(withId: self.currentUser.id)
+            }
+        }
+    }
     var exampleUserTwo: User_t = .init(fullName: "Tushar Sourav", username: "TusharKhan123", emailId: "tushar@gmail.com", password: "MyNameIsKhan", currentWeight: 70, currentHeight: 185, gender: .male, bodyType: .skinny, level: .beginner, goal: .buildMuscle)
     
     var allUsers: Array<User_t> {
         return [exampleUserTwo, currentUser]
     }
     
-    var users: Array<User_t> = []
+    @Published var users: Array<User_t> = []
     
     func setUsers(_ users: Array<User_t>) {
         self.users = users
+    }
+    
+    func setCurrentUser(_ user_t: User_t) -> Void {
+        self.currentUser = user_t
     }
     
     func getUserBy(id: String) -> Optional<User_t> {
@@ -459,10 +477,11 @@ class User {
     }
     
     func authenticateUser(by username: String, and password: String) -> Optional<User_t> {
-        if username.isEmpty || password.isEmpty {
-            return nil
-        }
         return self.users.filter { $0.username.lowercased() == username.lowercased() && $0.password == password }.first
+    }
+    
+    func doesUserExists(with id: String) -> Bool {
+        return self.users.contains { $0.id == id }
     }
     
 }
@@ -495,8 +514,3 @@ class DailyEvents {
     ]
 }
 
-extension Date {
-    func add(_ day: Int) -> Date {
-        return self.addingTimeInterval(TimeInterval(ONE_DAY * day))
-    }
-}

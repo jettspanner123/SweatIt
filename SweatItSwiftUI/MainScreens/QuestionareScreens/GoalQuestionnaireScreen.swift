@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GoalQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     @State var currentSelectedGoal: Extras.Goal = .looseFat
     
@@ -136,5 +137,9 @@ struct GoalQuestionnaireScreen: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .sensoryFeedback(.impact, trigger: self.currentSelectedGoal)
+        .onChange(of: self.currentSelectedGoal) {
+            self.appStates.userData.goalType = self.currentSelectedGoal
+        }
     }
 }

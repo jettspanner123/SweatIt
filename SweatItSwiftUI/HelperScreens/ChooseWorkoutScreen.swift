@@ -49,7 +49,7 @@ struct ChooseWorkoutScreen: View {
         var exercises: Set<Exercise_t> = []
         
         for (key, value) in self.currentSelectedMuscles {
-            for index in 0...value {
+            for _ in 0...value {
                 let filtered_exercises = allExercises.filter { $0.targettedMuscles.contains(key) }
                 var randomExercise = filtered_exercises.randomElement()!
                 
@@ -195,10 +195,16 @@ struct ChooseWorkoutScreen: View {
                 
                 ForEach(Extras.Muscle.allCases, id: \.self) { muscle in
                     if self.currentSelectedMuscles.keys.contains(muscle) {
-                        Stepper("\(muscle.rawValue) [\(self.currentSelectedMuscles[muscle]!)]", value: Binding(
+                        Stepper("\(muscle.rawValue) [\(self.currentSelectedMuscles[muscle]!) exercise]", value: Binding(
                             get: { self.currentSelectedMuscles[muscle]! },
                             set: { newValue in
-                                self.currentSelectedMuscles[muscle] = newValue
+                                
+                                if newValue > 0 {
+                                    self.currentSelectedMuscles[muscle] = newValue
+                                }
+//                                if self.currentSelectedMuscles[muscle] != 0 {
+//                                    self.currentSelectedMuscles[muscle] = newValue
+//                                }
                             }
                         ))
                         .tint(.white)
@@ -219,6 +225,7 @@ struct ChooseWorkoutScreen: View {
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         }
+        .sensoryFeedback(.increase, trigger: self.totalExercises)
         .navigationDestination(isPresented: self.$showActiveWorkoutScreen, destination: {
             
             ActiveWorkoutScreen(workout: self.generateWorkout())

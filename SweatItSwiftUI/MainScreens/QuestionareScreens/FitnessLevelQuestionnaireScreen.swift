@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct FitnessLevelQuestionnaireScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentSelectedFitnessLevel: Extras.UserLevel = .none
+    @State var currentSelectedFitnessLevel: Extras.UserLevel = .beginner
     
     @State var pullups: Int = 10
     @State var pushups: Int = 30
@@ -20,23 +21,23 @@ struct FitnessLevelQuestionnaireScreen: View {
         switch self.currentSelectedFitnessLevel {
         case .beginner:
             withAnimation {
-                self.pushups = 30
-                self.pullups = 10
-                self.squats = 30
+                self.pushups = 10
+                self.pullups = 2
+                self.squats = 15
             }
             
         case .intermediate:
             withAnimation {
-                self.pushups = 50
-                self.pullups = 15
-                self.squats = 50
+                self.pushups = 25
+                self.pullups = 8
+                self.squats = 25
             }
             
         case .advanced:
             withAnimation {
-                self.pushups = 75
-                self.pullups = 25
-                self.squats = 90
+                self.pushups = 40
+                self.pullups = 15
+                self.squats = 50
             }
             
         case .none:
@@ -182,6 +183,9 @@ struct FitnessLevelQuestionnaireScreen: View {
             self.changeFitnessScores()
         }
         .sensoryFeedback(.impact, trigger: self.currentSelectedFitnessLevel)
+        .onChange(of: self.currentSelectedFitnessLevel) {
+            self.appStates.userData.fitnessLevel = self.currentSelectedFitnessLevel
+        }
     }
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoadingButton: View {
     
-    @Binding var isLoading: Bool
+    var isLoading: Bool
     var backgroundGradient: LinearGradient = ApplicationLinearGradient.redGradient
     var action: () -> Void = {}
     

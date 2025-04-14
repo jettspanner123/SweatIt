@@ -63,7 +63,7 @@ struct FoodTypeQuestionnaireScreen: View {
                         .padding(.horizontal, 3)
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
-                    SectionHeader(text: "Regional Settings")
+                    SectionHeader(text: "Choose Region")
                         .padding(.top, 25)
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
@@ -85,7 +85,7 @@ struct FoodTypeQuestionnaireScreen: View {
                     }
                     .applicationDropDownButton(self.selectedRegion.isEmpty ? ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf : ApplicationLinearGradient.blueGradientInverted)
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                    .onTapGesture {
+                    .onTapWithVibration {
                         withAnimation(.smooth(duration: 0.4)) {
                             self.showSelectRegionScreen = true
                         }
@@ -118,7 +118,7 @@ struct FoodTypeQuestionnaireScreen: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(.white.opacity(0.001))
                         .padding(.vertical, self.showFoodTypeDropDown ? 12 : 0)
-                        .onTapGesture {
+                        .onTapWithVibration {
                             withAnimation {
                                 self.showFoodTypeDropDown.toggle()
                             }
@@ -299,7 +299,7 @@ struct FoodTypeQuestionnaireScreen: View {
                     }
                     .applicationDropDownButton()
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                    .onTapGesture {
+                    .onTapWithVibration {
                         withAnimation(.smooth(duration: 0.4)) {
                             self.showSelectAlergiesScreen = true
                         }
@@ -346,5 +346,8 @@ struct FoodTypeQuestionnaireScreen: View {
         }
         .sensoryFeedback(.impact, trigger: self.budget)
         .sensoryFeedback(.impact, trigger: self.currentSelectedBudgetType)
+        .sensoryFeedback(.impact, trigger: self.currentSelectedFoodType)
+        .sensoryFeedback(.impact, trigger: self.selectedRegion)
+        .sensoryFeedback(.impact, trigger: self.selectedFoodAlergies)
     }
 }

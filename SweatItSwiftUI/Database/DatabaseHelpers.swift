@@ -275,6 +275,31 @@ class POST {
         
     }
     
+    func autoUpdateCurrentUserDetails(withId id: String) async throws -> Void {
+        if id.isEmpty {
+            return
+        }
+        
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        let snapshot = try await ApplicationDatabase.getDatabase(for: .user).getDocuments(source: .server)
+        
+        for document in snapshot.documents {
+            let docData: Dictionary<String, Any> = document.data()
+            let temp_user: User_t = ApplicationHelper.getUserFrom(dictionary: docData)
+            
+            if temp_user.id == id {
+                let user_reference_on_database: DocumentReference = ApplicationDatabase.getDatabase(for: .user).document(id)
+                try await user_reference_on_database.setData(User.current.currentUser.getDictionary())
+                return
+            }
+        }
+    }
+    
 }
 
 class UPDATE {

@@ -1,5 +1,6 @@
 import SwiftUI
 import AudioToolbox
+import AVKit
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
@@ -67,6 +68,53 @@ enum Constants: String {
 
 class ApplicationHelper {
     
+    
+    public static func getImageFrom(exercise: String, of: Int) -> String {
+        switch exercise {
+        case "pushups":
+            return "https://static.strengthlevel.com/images/exercises/push-ups/push-ups-\(of).jpg"
+        case "inclinePushUp":
+            return "https://static.strengthlevel.com/images/exercises/incline-push-up/incline-push-up-\(of).jpg"
+        case "chestDip":
+            return "https://static.strengthlevel.com/images/exercises/dips/dips-\(of).jpg"
+        case "benchPress":
+            return "https://static.strengthlevel.com/images/exercises/bench-press/bench-press-\(of).jpg"
+        case "bicepCurls":
+            return "https://static.strengthlevel.com/images/exercises/barbell-curl/barbell-curl-\(of).jpg"
+        case "closeGripPushup":
+            return "https://static.strengthlevel.com/images/exercises/close-grip-push-up/close-grip-push-up-\(of).jpg"
+        case "pullup":
+            return "https://static.strengthlevel.com/images/exercises/pull-ups/pull-ups-\(of).jpg"
+        case "tricepDip":
+            return "https://static.strengthlevel.com/images/exercises/dips/dips-\(of).jpg"
+        case "bulgarianSplitSquat":
+            return "https://static.strengthlevel.com/images/exercises/bulgarian-split-squat/bulgarian-split-squat-\(of).jpg"
+        case "plank":
+            return "https://static.strengthlevel.com/images/exercises/bulgarian-split-squat/plank-400.jpg"
+        case "mountailClimber":
+            return "https://static.strengthlevel.com/images/exercises/mountain-climbers/mountain-climbers-\(of).jpg"
+        case "overheadPress":
+            return "https://static.strengthlevel.com/images/exercises/shoulder-press/shoulder-press-400.jpg"
+        case "bodyWeightSquat":
+            return "https://static.strengthlevel.com/images/exercises/bodyweight-squat/bodyweight-squat-400.jpg"
+        case "walkingLunges":
+            return "https://static.strengthlevel.com/images/exercises/reverse-lunge/reverse-lunge-400.jpg"
+        case "gluteBridge":
+            return "https://static.strengthlevel.com/images/exercises/glute-bridge/glute-bridge-400.jpg"
+        case "calfRaise":
+            return "https://static.strengthlevel.com/images/exercises/bodyweight-calf-raise/bodyweight-calf-raise-400.jpg"
+        case "bicycleCrunch":
+            return "https://static.strengthlevel.com/images/exercises/bicycle-crunch/bicycle-crunch-400.jpg"
+        case "legRaise":
+            return "https://static.strengthlevel.com/images/exercises/lying-leg-raise/lying-leg-raise-400.jpg"
+        case "russianTwist":
+            return "https://static.strengthlevel.com/images/exercises/russian-twist/russian-twist-400.jpg"
+        default:
+            return ""
+        }
+    }
+    
+    
     public static func estimatedCaloriesBurned(steps: Int, weightInKg: Double) -> Double {
         let caloriesPerStep = 0.04 + (weightInKg - 70) * 0.0002 // Adjust based on weight (70kg baseline)
         return Double(steps) * caloriesPerStep
@@ -83,6 +131,8 @@ class ApplicationHelper {
         dateFormatter.dateFormat = "dd"
         return Int(dateFormatter.string(from: from)) ?? 0
     }
+    
+    
     
     public static func getUserFrom(dictionary docData: Dictionary<String, Any>) -> User_t {
         
@@ -259,4 +309,138 @@ class ApplicationImages {
     public static let loginScreenWorkoutImage: String = "generic_workout_image"
     public static let dumbbellImage: String = "Dumbbell"
     public static let tabBarDumbbell: String = "TabBarDumbbell"
+
+
+    // MARK: Male body type images
+
+    public static let maleSkinny: String = "skinny"
+    public static let maleMuscular: String = "upperbody"
+    public static let maleSkinnyFat: String = "skinny_fat"
+    public static let maleFat: String = "fat"
+
+
+    // MARK: Female body type iage
+
+    public static let femaleSkinny: String = "fe_skinny"
+    public static let femaleMuscular: String = "fe_upperbody"
+    public static let femaleSkinnyFat: String = "fe_skinny_fat"
+    public static let femaleFat: String = "fe_fat"
+    
+    
+    // MARK: Something else
+    public static let smile: String = "smile"
+    public static let reverseSmile: String = "reverse_smile"
+
 }
+
+class ApplicationSounds {
+    public static let current = ApplicationSounds()
+    
+    var audioPlayer: AVAudioPlayer?
+    
+    func playBeep() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "beep", withExtension: ".wav") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
+    func playLongBeep() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "beep_long", withExtension: ".wav") else {
+            print("No long beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'Long BEEP' cannot be played'")
+        }
+    }
+    
+    func startExercise() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "start_exercise", withExtension: ".mp3") else {
+            print("cannot play sound start_exercise")
+            return
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+    
+    func comeOnReallyNeedThatMuchTime() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "need_time_res", withExtension: ".mp3") else {
+            print("cannot play sound start_exercise")
+            return
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+    
+    func playBubble() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "bubble", withExtension: ".wav") else {
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+    
+    func gayGender() -> Void {
+        
+        guard let soundURL = Bundle.main.url(forResource: "gay_gender", withExtension: ".mp3") else {
+            print("cannot play sound start_exercise")
+            return
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+    
+    func completed() -> Void {
+        
+        guard let soundURL = Bundle.main.url(forResource: "completed", withExtension: ".mp3") else {
+            print("cannot play sound start_exercise")
+            return
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+}
+
+

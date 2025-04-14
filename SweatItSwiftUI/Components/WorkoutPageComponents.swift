@@ -40,14 +40,22 @@ struct ExerciseOfTheDayCard: View {
     var body: some View {
         HStack {
             HStack {
-                AsyncImage(url: URL(string: self.url), content: { retImage in
-                    retImage
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }, placeholder: {
-                    ProgressView()
-                })
+                AsyncImage(url: URL(string: url)) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .tint(.white)
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    case .failure(let error):
+                        Text("Image here")
+                            .font(.system(size: 10, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                }
             }
             .frame(maxWidth: 113, maxHeight: .infinity)
             .background(.white)

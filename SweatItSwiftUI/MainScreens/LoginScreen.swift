@@ -24,33 +24,55 @@ struct LoginScreen: View {
     @State var isStartButtonClicked: Bool = false
     
     @State var currentSelectedRegistrationType: RegistrationTypes = .SignUp
+    @State var emptyFieldsError: Bool = false
+    @State var invalidCredentials: Bool = false
     
+    var signUpScreenData: Array<(String, String)> = [
+        ("", ""),
+    ]
     
     
     func performLogin() async throws -> Void {
         self.isSubmitButtonClicked = true
         
-        do {
-            if let user_t = try await ApplicationEndpoints.get.authenticateUser(by: self.loginStateObject.username, and: self.loginStateObject.password) {
-                self.performLoginAnimationHelper()
+        
+        if self.loginStateObject.username.isEmpty || self.loginStateObject.password.isEmpty {
+            withAnimation {
+                self.emptyFieldsError = true
             }
-        } catch {
-            print(ErrorType.cannotParseUser.rawValue)
             return
         }
+        
+        if let user_t = User.current.authenticateUser(by: self.loginStateObject.username, and: self.loginStateObject.password) {
+            User.current.setCurrentUser(user_t)
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
+                withAnimation {
+                    self.isSubmitButtonClicked = false
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.performLoginAnimationHelper()
+            }
+            return
+        }
+        
+        withAnimation {
+            self.invalidCredentials = true
+        }
+        
     }
     
     func performLoginAnimationHelper() -> Void {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.isSubmitButtonClicked = false
-            withAnimation(.smooth(duration: 1.5)) {
-                self.showLoginScreen = true
-                self.showIsland = true
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    withAnimation(.smooth(duration: 1.5)) {
-                        self.showIsland = false
-                    }
+        withAnimation(.smooth(duration: 1.5)) {
+            self.showLoginScreen = true
+            self.showIsland = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation(.smooth(duration: 1.5)) {
+                    self.showIsland = false
                 }
             }
         }
@@ -58,6 +80,65 @@ struct LoginScreen: View {
     
     var body: some View {
         ScreenBuilder {
+            
+            if self.emptyFieldsError || self.invalidCredentials {
+                DialogBox {
+                    
+                    
+                    
+                    // MARK: If the input fields are empty
+                    if self.emptyFieldsError {
+                        Text("Empty Input Fields. 🥺")
+                            .bottomDialogBoxHeading()
+                        
+                        Text("Please make sure that all the fields in the form is filled with sufficiant data.")
+                            .bottomDialogBoxBodyText()
+                            .padding(.top, 1)
+                        
+                        SimpleButton(content: {
+                            Text("I Understand")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                        }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient,some: {
+                            withAnimation {
+                                self.isSubmitButtonClicked = false
+                                self.emptyFieldsError = false
+                            }
+                        }, roundness: 12)
+                        .padding(.top)
+                    }
+                    
+                    
+                    
+                    // MARK: If the credentials are invalid
+                    if self.invalidCredentials {
+                        Text("Invalid Credentials. 🤮")
+                            .bottomDialogBoxHeading()
+                        
+                        Text("Cant remember your credentials, huh? ")
+                            .bottomDialogBoxSubHeading()
+                        
+                        Text("Please make sure that the username matches with it's corresponding password, and vice versa.")
+                            .bottomDialogBoxBodyText()
+                        
+                        SimpleButton(content: {
+                            Text("I Understand")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                        }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient,some: {
+                            withAnimation {
+                                self.isSubmitButtonClicked = false
+                                self.invalidCredentials = false
+                            }
+                        }, roundness: 12)
+                        .padding(.top)
+                    }
+                }
+            }
+            
+            if self.emptyFieldsError || self.invalidCredentials {
+                CustomBackDrop()
+            }
             if self.currentSelectedRegistrationType == .SignIn {
                 self.loginScreen
                     .transition(.offset(y: -UIScreen.main.bounds.height))
@@ -71,6 +152,12 @@ struct LoginScreen: View {
         .sensoryFeedback(.increase, trigger: self.currentSelectedRegistrationType)
         .fullScreenCover(isPresented: self.$isStartButtonClicked) {
             InitialQuestionnaireScreen(showLoginScreen: self.$showLoginScreen)
+        }
+        .onAppear {
+            Task {
+                let allUsers: Array<User_t> = try await ApplicationEndpoints.get.fetchAllUsersFromDatabase()
+                User.current.setUsers(allUsers)
+            }
         }
     }
     
@@ -193,8 +280,56 @@ struct LoginScreen: View {
                 .frame(maxHeight: .infinity)
                 .frame(width: 50)
                 
+                
+                
                 VStack {
-                    
+                    ForEach(1...4, id: \.self) { index in
+                        VStack {
+                            
+                            var headingText: String {
+                                switch index {
+                                case 1:
+                                    return "Coach's Introduction"
+                                case 2:
+                                    return "Coach's Job"
+                                case 3:
+                                    return "What's Next"
+                                default:
+                                    return "Best Wishes"
+                                }
+                            }
+                            
+                            var paragraphText: String {
+                                switch index {
+                                case 1:
+                                    return "Hey, I'm Coach. I'm here to help you get started with your fitness journey."
+                                case 2:
+                                    return "My Job is to guide you throughout your juourney. In your highs and lower, ups and downs, I'll be here for you nomatter what!"
+                                case 3:
+                                    return "Here's a questionnare for you, this questionnare will help us determine you body composition and your goal."
+                                default:
+                                    return "Good luck for what lies ahead.☀️"
+                                }
+                                
+                            }
+                            
+                            
+                            Text(headingText)
+                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                                .takeMaxWidthLeading()
+                                .offset(y: -5)
+                            
+                            Text(paragraphText)
+                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.5))
+                                .takeMaxWidthLeading()
+                                .padding(.top, 0.5)
+                                .offset(y: CGFloat(-5 - index - (index / 2)))
+                            
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
@@ -212,13 +347,10 @@ struct LoginScreen: View {
                 Text("Let's Get Started")
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundStyle(.white)
-                    .onTapGesture {
-                        withAnimation {
-                            self.isStartButtonClicked = true
-                        }
-                    }
             }, backgroundLinearGradient: ApplicationLinearGradient.blueGradientInverted, some: {
-                
+                withAnimation {
+                    self.isStartButtonClicked = true
+                }
             })
 
             HStack {
@@ -268,6 +400,7 @@ struct LoginScreen: View {
                 Text("This will get you a temperary password over you email, you have to change the temperory password.")
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.5))
+                    .padding(.top, 10)
                 
                 // MARK: Email text field
                 CustomTextField(searchText: self.$loginStateObject.emailIfForgot, placeholder: "Email Id")
@@ -379,10 +512,13 @@ struct LoginScreen: View {
                             .foregroundStyle(.white)
                     }
                 }, backgroundLinearGradient: ApplicationLinearGradient.redGradient) {
-                    withAnimation {
-                        self.isSubmitButtonClicked = true
+                    
+                    ApplicationHelper.dismissKeyboard()
+                    Task {
+                        try await self.performLogin()
                     }
                 }
+                .disabled(GetMethodStore.current.isDatabaseLoading)
                 .padding(.top, 5)
                 .transition(.blurReplace)
                 

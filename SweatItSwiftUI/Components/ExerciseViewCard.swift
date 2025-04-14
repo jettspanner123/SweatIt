@@ -8,13 +8,31 @@ struct ExerciseViewCard: View {
         HStack {
             
             // MARK: Image view
-            HStack {
-                Image("pushups")
-                    .scaleEffect(0.5)
+            GeometryReader { proxy in
+                HStack {
+                    AsyncImage(url: URL(string: ApplicationHelper.getImageFrom(exercise: self.exercise.image, of: 400))) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .tint(.darkBG)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        case .failure(let error):
+                            Text("Image not found!")
+                        @unknown default:
+                            Text("Some Error Has been found")
+                        }
+                    }
+                }
+                .padding(5)
+                .frame(maxHeight: .infinity)
+                .frame(width: 100)
+                .background(.white)
             }
-            .frame(maxHeight: .infinity)
             .frame(width: 100)
-            .background(.white)
             
             // MARK: Content view
             VStack {

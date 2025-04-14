@@ -36,13 +36,13 @@ struct HeadingWithLink: View {
             .opacity(0.75)
             .padding(.vertical, 10)
             .background(.darkBG.opacity(0.001))
+            .offset(y: 5)
             .onTapGesture {
                 self.action()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 10)
-        
     }
 }
 

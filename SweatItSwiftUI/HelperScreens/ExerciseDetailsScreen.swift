@@ -62,10 +62,10 @@ struct ExerciseDetailsScreen: View {
                                     .padding(.horizontal, 4)
                                     .background(ApplicationLinearGradient.redGradient)
                                     .overlay {
-                                        Capsule()
+                                        RoundedRectangle(cornerRadius: 8)
                                             .stroke(.white.opacity(0.18))
                                     }
-                                    .clipShape(Capsule())
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
                             }
                         }
                         .padding(.vertical, 5)
@@ -77,11 +77,29 @@ struct ExerciseDetailsScreen: View {
                     .padding(.top, 20)
                 
                 HStack {
-                    Image(self.exercise.image)
-                        .resizable()
-                        .scaleEffect(x: 0.5, anchor: .center)
+                    AsyncImage(url: URL(string: ApplicationHelper.getImageFrom(exercise: self.exercise.image, of: 400))) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                                .tint(.darkBG)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        case .failure:
+                            Text("Image Not Found!")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.darkBG)
+                        @unknown default:
+                            Text("Some Error Occured!")
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.darkBG)
+                        }
+                    }
                 }
-                .frame(maxWidth: .infinity, maxHeight: 200)
+                .padding(25)
+                .frame(width: UIScreen.main.bounds.width - (ApplicationPadding.mainScreenHorizontalPadding * 2), height: 400)
                 .background(.white)
                 .clipShape(defaultShape)
             }
@@ -90,3 +108,6 @@ struct ExerciseDetailsScreen: View {
     }
 }
 
+#Preview {
+    ExerciseDetailsScreen(exercise: Exercise.current.pushUp)
+}

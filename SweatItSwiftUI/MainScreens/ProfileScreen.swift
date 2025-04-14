@@ -109,27 +109,30 @@ struct ProfileScreen: View {
             // MARK: Settins
             
             CustomList {
-                
+               
                 // MARK: User details settings
-                HStack(spacing: 15) {
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Text("User Details")
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .scaleEffect(0.75)
-                        .foregroundStyle(.white.opacity(0.5))
+                NavigationLink(destination: UserDetailsPage()) {
+                    HStack(spacing: 15) {
+                        Image(systemName: "person.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.white.opacity(0.5))
+                        
+                        Text("User Details")
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .scaleEffect(0.75)
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 3)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 3)
+                
                 
                 CustomDivider()
                 

@@ -39,9 +39,9 @@ struct Workout_t: Identifiable, Codable, Hashable {
     var workoutDifficulty: Extras.Difficulty = .easy
     var exercises: Array<Exercise_t>
     var caloriesBurned: Double {
-        var totalCalories = 0
+        var totalCalories: Double = 0
         for exercise in self.exercises {
-            totalCalories += (exercise.sets * exercise.reps) * Int(exercise.perRepCaloriesBurned)
+            totalCalories += (Double(exercise.sets) * Double(exercise.reps)) * exercise.perRepCaloriesBurned
         }
         return Double(totalCalories)
     }
@@ -200,6 +200,7 @@ struct SignUpUserDataStore {
     var fitnessLevel: Extras.UserLevel = .none
     var goalType: Extras.Goal = .none
     var phoneNumber: String = ""
+    var dob: Date
 }
 
 struct LogInUserDataStore {

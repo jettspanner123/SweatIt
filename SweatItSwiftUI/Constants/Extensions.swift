@@ -128,6 +128,63 @@ struct VibrateEffectModifier: ViewModifier {
     }
 }
 
+struct VibrateScaleEffectModifier: ViewModifier {
+    @State private var buttonTapped: Bool = false
+    @State private var buttonTapCount: Int = 0
+    var closure: () -> Void = {}
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(self.buttonTapped ? 0.8 : 1)
+            .onTapGesture {
+                closure()
+                self.buttonTapCount += 1
+                
+                withAnimation {
+                    self.buttonTapped = true
+                }
+            }
+            .onChange(of: self.buttonTapped) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if self.buttonTapped {
+                        withAnimation {
+                            self.buttonTapped = false
+                        }
+                    }
+                }
+            }
+            .sensoryFeedback(.impact, trigger: self.buttonTapCount)
+    }
+}
+
+
+
+struct ScaleEffectModifier: ViewModifier {
+    @State private var buttonTapped: Bool = false
+    var closure: () -> Void = {}
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(self.buttonTapped ? 0.8 : 1)
+            .onTapGesture {
+                closure()
+                
+                withAnimation {
+                    self.buttonTapped = true
+                }
+            }
+            .onChange(of: self.buttonTapped) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if self.buttonTapped {
+                        withAnimation {
+                            self.buttonTapped = false
+                        }
+                    }
+                }
+            }
+    }
+}
+
 
 
 extension View {
@@ -135,8 +192,78 @@ extension View {
         self.modifier(VibrateEffectModifier(closure: closure))
     }
     
+    func onTapWithScale(closure: @escaping () -> Void) -> some View {
+        self.modifier(ScaleEffectModifier(closure: closure))
+    }
+    
+    func onTapWithScaleVibrate(closure: @escaping () -> Void) -> some View {
+        self.modifier(VibrateScaleEffectModifier(closure: closure))
+    }
+    
     func isBottomButton() -> some View {
         self
             .offset(y: UIScreen.main.bounds.height / 2 - (75))
+    }
+    
+}
+
+extension CustomTextField {
+    func isEditable() -> some View {
+        self
+            .overlay {
+                HStack {
+                    Image(systemName: "square.and.pencil")
+                        .foregroundStyle(.white.opacity(0.5))
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.horizontal, 15)
+            }
+    }
+}
+
+extension BottomBlur {
+    func toBottom() -> some View {
+        self
+            .offset(y: UIScreen.main.bounds.height - (55 * 2.1))
+    }
+}
+
+
+extension Text {
+    
+    func dropDownItem() -> some View {
+        self
+            .font(.system(size: 15, weight: .regular, design: .rounded))
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 35)
+    }
+    func bottomDialogBoxHeading() -> some View {
+        self
+            .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
+            .foregroundStyle(.white)
+            .takeMaxWidthLeading()
+    }
+    
+    func bottomDialogBoxSubHeading() -> some View {
+        self
+            .font(.system(size: 15, weight: .regular, design: .rounded))
+            .foregroundStyle(.white)
+            .takeMaxWidthLeading()
+            .padding(.top, 1)
+        
+    }
+    
+    func bottomDialogBoxBodyText() -> some View {
+        self
+            .font(.system(size: 15, weight: .regular, design: .rounded))
+            .foregroundStyle(.white.opacity(0.5))
+            .takeMaxWidthLeading()
+    }
+}
+
+extension Date {
+    func add(_ day: Int) -> Date {
+        return self.addingTimeInterval(TimeInterval(ONE_DAY * day))
     }
 }

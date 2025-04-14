@@ -19,7 +19,7 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 struct ContentView: View {
     
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -40,11 +40,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                if !self.isUserLoggedIn {
-                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-                        .zIndex(99999)
-                        .transition(ScaleBlurOffsetTransition())
-                }
+//                if !self.isUserLoggedIn {
+//                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+//                        .zIndex(99999)
+//                        .transition(ScaleBlurOffsetTransition())
+//                }
                 
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)
@@ -84,11 +84,6 @@ struct ContentView: View {
                         .offset(y: self.showNotificationCenter || self.showAddAgendaPage ? -50 : 0)
                         .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
                         .transition(.blurReplace)
-                        .onAppear {
-                            Task {
-                                try await ApplicationEndpoints.get.fetchUserBy(id: "9578C963-DBE3-4DB9-A722-21EF1841D545")
-                            }
-                        }
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
                         .transition(.blurReplace)
