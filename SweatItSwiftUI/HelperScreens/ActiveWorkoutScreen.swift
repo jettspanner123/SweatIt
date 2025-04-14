@@ -33,11 +33,6 @@ struct ActiveWorkoutScreen: View {
         ScreenBuilder {
             
             
-            
-            
-            
-            
-            
             if self.appState.workoutStatus == .started {
                 WorkoutEngine(workout: self.workout)
                     .zIndex(.infinity)

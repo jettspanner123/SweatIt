@@ -161,8 +161,9 @@ struct ActivityQuestionnaireScreen: View {
         .onChange(of: self.hoursADay) {
             self.appStates.userData.activeHoursADay = self.hoursADay
         }
-        .sensoryFeedback(.impact, trigger: self.hoursADay)
+        .sensoryFeedback(.impact, trigger: String(format: "%.1f", self.hoursADay))
         .sensoryFeedback(.impact, trigger: self.currentSelectedDays.count)
+        .sensoryFeedback(.impact, trigger: self.currentSelectedState)
     }
 }
 

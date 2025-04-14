@@ -446,7 +446,7 @@ class User {
     
     @Published var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17) {
         didSet {
-            print(currentUser)
+//            print(currentUser)
             Task {
                 try await ApplicationEndpoints.post.autoUpdateCurrentUserDetails(withId: self.currentUser.id)
             }
@@ -484,6 +484,34 @@ class User {
         return self.users.contains { $0.id == id }
     }
     
+    func isUsernameAvailable(by username: String) -> Bool {
+        for user in self.users {
+            if user.username.lowercased() == username.lowercased() { return false }
+        }
+        return true
+    }
+    
+}
+
+class ExtraInfo {
+    public static let current = ExtraInfo()
+    
+    @Published var extraInfos: Array<ExtraInfo_t> = []
+    
+    func infoExists(of id: String) -> Bool {
+        return self.extraInfos.filter { $0.ofUserId == id }.count != 0
+    }
+    
+    func getInfo(of user: String) -> Optional<ExtraInfo_t> {
+        
+        for info in self.extraInfos {
+            if info.ofUserId == user {
+                return info
+            }
+        }
+        
+        return nil
+    }
 }
 
 class Notification {

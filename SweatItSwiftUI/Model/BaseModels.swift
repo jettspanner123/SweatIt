@@ -182,6 +182,7 @@ struct Notification_t: Identifiable {
 
 
 struct SignUpUserDataStore {
+    var fullName: String
     var username: String
     var password: String
     var email: String
@@ -208,4 +209,33 @@ struct LogInUserDataStore {
     var password: String
     var confirmPassword: String
     var emailIfForgot: String
+}
+
+struct ExtraInfo_t {
+    var id: String = UUID().uuidString
+    var ofUserId: String
+    var age: Int
+    var activeDaysAWeek: Int
+    var activehoursADay: Double
+    var activeDays: Array<String>
+    var region: String
+    var foodType: Extras.UserFoodType
+    var foodBudget: Double
+    var alergies: Array<Extras.FoodAllergy>
+    var fitnessLevel: Extras.UserLevel
+    var goalType: Extras.Goal
+    var phontNumber: String
+    var dateOfBirth: Date
+    
+    func getDictionary() -> Dictionary<String, Any> {
+        var dict: Dictionary<String, Any> = ["id": self.id, "ofUserId": self.ofUserId, "age": self.age, "activeDaysAWeek": self.activeDaysAWeek, "activehoursADay": self.activehoursADay, "activeDays": self.activeDays, "region": self.region, "foodType": self.foodType.rawValue, "foodBudget": self.foodBudget, "fitnessLevel": self.fitnessLevel.rawValue, "goalType": self.goalType.rawValue, "phontNumber": self.phontNumber, "dateOfBirth": self.dateOfBirth]
+        
+        var alergies_t: Array<String> = []
+        for alergy in self.alergies {
+            alergies_t.append(alergy.rawValue)
+        }
+        
+        dict["alergies"] = alergies_t
+        return dict
+    }
 }

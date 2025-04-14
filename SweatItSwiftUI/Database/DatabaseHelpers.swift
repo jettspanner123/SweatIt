@@ -104,7 +104,7 @@ class GET {
             userArray.append(tempUser)
         }
         
-        print(userArray)
+//        print(userArray)
         
         return userArray
     }
@@ -297,6 +297,27 @@ class POST {
                 try await user_reference_on_database.setData(User.current.currentUser.getDictionary())
                 return
             }
+        }
+    }
+    
+    func createNewUser(with user: User_t, andInfo info: ExtraInfo_t) async throws {
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        let userReference: DocumentReference = ApplicationDatabase.getDatabase(for: .user).document(user.id)
+        let extraInfoReference: DocumentReference = ApplicationDatabase.getDatabase(for: .extraInfo).document(info.id)
+        
+        do {
+            try await userReference.setData(user.getDictionary())
+            try await extraInfoReference.setData(info.getDictionary())
+            
+            User.current.currentUser = user
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .serverBusy)
+            return
         }
     }
     

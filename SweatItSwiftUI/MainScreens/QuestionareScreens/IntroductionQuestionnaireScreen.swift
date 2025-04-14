@@ -13,7 +13,7 @@ struct IntroductionQuestionnaireScreen: View {
     @Binding var currentSelectedPage: InitialQuestionnaireScreen.QuestionPageScreens
     @State var isUsernameAvailable: Bool = false
     
-    
+   
     var body: some View {
         ScrollView {
             VStack {
@@ -25,24 +25,17 @@ struct IntroductionQuestionnaireScreen: View {
                 
                 SectionHeader(text: "App Profile Details")
                     .padding(.top, 25)
+                
+                CustomTextField(searchText: self.$appStates.userData.fullName, placeholder: "Full Name")
                 CustomTextField(searchText: self.$appStates.userData.username, placeholder: "Username")
                     .autocapitalization(.none)
-                    .overlay {
-                        //                    HStack {
-                        //                        if !InitialQuestionnaireScreen.userQuestionnaireStore.username.isEmpty && !isUsernameAvailable {
-                        //                            ProgressView()
-                        //                                .tint(.white.opacity(0.5))
-                        //                        }
-                        //
-                        //                        if self.isUsernameAvailable {
-                        //                            Text("✅")
-                        //                        }
-                        //
-                        //
-                        //                    }
-                        //                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                        //                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    .overlay(alignment: .trailing) {
+                        if !self.appStates.userData.username.isEmpty && self.appStates.userData.username.count >= 8{
+                            Text(self.isUsernameAvailable ? "✅" : "❌")
+                                .padding(.horizontal, 20)
+                        }
                     }
+                    
                 
                 CustomSecureTextField(searchText: self.$appStates.userData.password, placeholder: "Password")
                     .autocapitalization(.none)
@@ -69,6 +62,11 @@ struct IntroductionQuestionnaireScreen: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            .onChange(of: self.appStates.userData.username) {
+                self.isUsernameAvailable = User.current.isUsernameAvailable(by: self.appStates.userData.username)
+                self.appStates.isUsernameAvailable = self.isUsernameAvailable
+                print(self.appStates.userData.username, User.current.allUsers, self.isUsernameAvailable)
+            }
         }
     }
 }

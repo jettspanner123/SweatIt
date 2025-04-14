@@ -29,6 +29,12 @@ struct GoalQuestionnaireScreen: View {
             return ""
         }
     }
+    
+    func prepareSingUp() -> Void {
+        
+    }
+    
+    
     var body: some View {
         VStack {
             

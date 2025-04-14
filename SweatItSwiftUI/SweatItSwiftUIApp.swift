@@ -15,15 +15,20 @@ class ApplicationStates: ObservableObject {
     enum WorkoutState: String {
         case none = "None", started = "Started", ended = "Ended"
     }
-    @Published var userData: SignUpUserDataStore = .init(username: "", password: "", email: "", age: 0, gender: .male, height: .zero, weight: .zero, bodyType: .none, activeDaysAWeek: 0, activeHoursADay: 1, region: "", foodBudged: .zero, phoneNumber: "", dob: .now) {
+    @Published var userData: SignUpUserDataStore = .init(fullName: "", username: "", password: "", email: "", age: 0, gender: .male, height: .zero, weight: .zero, bodyType: .none, activeDaysAWeek: 0, activeHoursADay: 1, region: "", foodBudged: .zero, phoneNumber: "", dob: .now) {
         didSet {
-            print(userData)
         }
     }
     @Published var confirmPassword: String = ""
+    @Published var isUsernameAvailable: Bool = true
 
     @Published var isError: Bool = false
     @Published var isPasswordAndConfirmPasswordMatching: Bool = false
+    @Published var showUsernameNotAvailable: Bool = false
+    @Published var showPhoneNumberWrong: Bool = false
+    @Published var showEmailIdNotValid: Bool = false
+    @Published var showFullNameNotValid: Bool = false
+    
     
     @Published var workoutStatus: WorkoutState = .none
     
@@ -55,11 +60,10 @@ struct SweatItSwiftUIApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
+            ContentView()
 //            OnboardingScreen()
 //            WorkoutEngine(workout: Workout.current.armsWorkout)
 //            RatingsScreen()
-            LoginScreen(showLoginScreen: .constant(false), showIsland: .constant(false))
         }
         .environmentObject(self.appStates)
     }

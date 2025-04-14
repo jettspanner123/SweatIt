@@ -124,18 +124,28 @@ struct InitialQuestionnaireScreen: View {
             
             switch self.currentSelectedPage {
             case .intro:
+                if !self.appStates.isUsernameAvailable || self.appStates.userData.username.count < 8 {
+                    self.appStates.showUsernameNotAvailable = true
+                    return
+                }
+                
+
                 if self.appStates.userData.password.isEmpty && self.appStates.confirmPassword.isEmpty {
                     self.currentSelectedPage = .genderAge
                     return
                 } else {
                     if self.appStates.userData.password == self.appStates.confirmPassword {
                         self.currentSelectedPage = .genderAge
-                        return
                     } else {
                         self.appStates.isPasswordAndConfirmPasswordMatching = true
-                        return
                     }
                 }
+                
+                if self.appStates.userData.phoneNumber.count < 10 {
+                    self.appStates.showPhoneNumberWrong = true
+                    return
+                }
+                
                 
                 
             case .genderAge:
@@ -197,6 +207,29 @@ struct InitialQuestionnaireScreen: View {
         }
     }
     
+    func prepareSignUp() async throws -> Void {
+        let userData = self.appStates.userData
+        let tempUser_t: User_t = .init(fullName: userData.fullName, username: userData.username, emailId: userData.email, password: userData.password, currentWeight: userData.weight, currentHeight: userData.height, gender: userData.gender, bodyType: userData.bodyType, level: userData.fitnessLevel, goal: userData.goalType, dailyPoints: 0, fitnessLevel: 1)
+        let extraInformation_t: ExtraInfo_t = .init(ofUserId: tempUser_t.id, age: userData.age, activeDaysAWeek: userData.activeDaysAWeek, activehoursADay: userData.activeHoursADay, activeDays: userData.activeDays, region: userData.region, foodType: userData.foodType, foodBudget: userData.foodBudged, alergies: userData.alergies, fitnessLevel: userData.fitnessLevel, goalType: userData.goalType, phontNumber: userData.phoneNumber, dateOfBirth: userData.dob)
+        
+        try await ApplicationEndpoints.post.createNewUser(with: tempUser_t, andInfo: extraInformation_t)
+        
+        
+        withAnimation(.smooth(duration: 0.5)) {
+            self.saveChanges = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.dissmis()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation(.smooth(duration: 1.5)) {
+                self.showLoginScreen = true
+            }
+        }
+    }
+    
     
     var body: some View {
         NavigationStack {
@@ -235,7 +268,31 @@ struct InitialQuestionnaireScreen: View {
                     }
                 }
                 
-                if self.appStates.isPasswordAndConfirmPasswordMatching {
+                if self.appStates.showUsernameNotAvailable {
+                    DialogBox {
+                        Text("Username Not Available! ❌")
+                            .bottomDialogBoxHeading()
+                        
+                        Text("The Indicator Is Right Up There Bro! 🥲")
+                            .bottomDialogBoxSubHeading()
+                        
+                        Text("The username that you are trying to aquire is already taken. Please try again!")
+                            .bottomDialogBoxBodyText()
+                        
+                        SimpleButton(content: {
+                           Text("I Understand")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(.white)
+                        }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                            withAnimation {
+                                self.appStates.showUsernameNotAvailable = false
+                            }
+                        })
+                        .padding(.top)
+                    }
+                }
+                
+                if self.appStates.isPasswordAndConfirmPasswordMatching || self.appStates.showUsernameNotAvailable {
                     CustomBackDrop()
                 }
                 
@@ -294,18 +351,8 @@ struct InitialQuestionnaireScreen: View {
                                             .clipShape(RoundedRectangle(cornerRadius: 8))
                                             .padding(.top, 25)
                                             .onTapGesture {
-                                                withAnimation(.smooth(duration: 0.5)) {
-                                                    self.saveChanges = true
-                                                }
-                                                
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                                    self.dissmis()
-                                                }
-                                                
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                    withAnimation(.smooth(duration: 1.5)) {
-                                                        self.showLoginScreen = true
-                                                    }
+                                                Task {
+                                                    try await self.prepareSignUp()
                                                 }
                                             }
                                     } else {
@@ -812,6 +859,12 @@ struct InitialQuestionnaireScreen: View {
     }
 }
 
-#Preview {
-    InitialQuestionnaireScreen(showLoginScreen: .constant(false))
+struct InitialQuestionnaireScreen_Preview: PreviewProvider {
+    
+    static let appStates: ApplicationStates = .init()
+    
+    static var previews: some View {
+        InitialQuestionnaireScreen(showLoginScreen: .constant(false))
+            .environmentObject(self.appStates)
+    }
 }
