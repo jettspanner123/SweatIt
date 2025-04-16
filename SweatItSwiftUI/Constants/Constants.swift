@@ -56,7 +56,7 @@ class ApplicationLinearGradient {
     public static let darkBGSameGradientWithOpacityHalf = LinearGradient(gradient: Gradient(colors: [.darkBG.opacity(0.54), .darkBG.opacity(0.54)]), startPoint: .top, endPoint: .bottom)
     public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
     public static let whiteGradientInverted = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
-    
+    public static let silverGradient = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
 
 
 }
@@ -68,6 +68,12 @@ enum Constants: String {
 
 class ApplicationHelper {
     
+    public func stringToDate(_ dateString: String, format: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        return dateFormatter.date(from: dateString)
+    }
     
     public static func getImageFrom(exercise: String, of: Int) -> String {
         switch exercise {
@@ -158,6 +164,7 @@ class ApplicationHelper {
         
         return .init(id: id, fullName: fullName, username: username, emailId: emailId, password: password, currentWeight: currentWeight, currentHeight: currentHeight, gender: gender, bodyType: bodyType, level: level, goal: goal, dailyPoints: dailyPoints, fitnessLevel: fitnessLevel)
     }
+    
     
     enum Sounds: Int {
         case cameraShutter
@@ -359,6 +366,36 @@ class ApplicationSounds {
         
     }
     
+    func successful() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "duolingo", withExtension: ".mp3") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
+    func unsuccessful() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "not_completed", withExtension: ".mp3") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
     func playLongBeep() -> Void {
         guard let soundURL = Bundle.main.url(forResource: "beep_long", withExtension: ".wav") else {
             print("No long beep found")
@@ -450,3 +487,10 @@ class ApplicationSounds {
 }
 
 
+enum ApplicationCache: String {
+    case cacheForAddFriendsPage
+}
+
+func getCacheValue(for cache: ApplicationCache) -> String {
+    return cache.rawValue
+}

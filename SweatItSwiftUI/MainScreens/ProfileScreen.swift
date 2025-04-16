@@ -13,7 +13,7 @@ struct ProfileScreen: View {
     
     
     @State var showPastStatisticsScreen: Bool = false
-    @State var showAddFriendScreen: Bool = false
+    @State var showAddFriendScreen: Bool = true
     @State var showLeaderboardScreen: Bool = false
     
     var body: some View {

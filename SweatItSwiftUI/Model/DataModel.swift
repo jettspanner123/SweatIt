@@ -518,7 +518,6 @@ class Notification {
     public static var current = Notification()
     
     var notifications: Array<Notification_t> = [
-        .init(forUserId: User.current.currentUser.id, notificationName: "Friend Request", notificationDescription: "Mister bihari ji apke friend request aaya hai", notificationType: .friendRequest, notificationAction: FriendRequest_t(fromUser: User.current.exampleUserTwo, toUserId: User.current.currentUser))
     ]
     
     var notificationHistory: Array<Notification_t> = [
@@ -527,9 +526,19 @@ class Notification {
     
 }
 
+class FriendRequest {
+    public static let current = FriendRequest()
+    
+    @Published var requests: Array<FriendRequest_t> = []
+    
+    func hasRequest(from fromUser: String, to toUser: String) -> Bool {
+        return self.requests.contains { $0.fromUser == fromUser && $0.toUserId == toUser }
+    }
+}
+
 
 class DailyEvents {
-    public static var current = DailyEvents()
+    public static let current = DailyEvents()
     
     var weeklyEvents: Array<DailyEvents_t> = [
         .init(date: .now.add(-6), caloriesBurnedForTheDay: 800, caloriesIngestedForTheDay: 1570, waterIntakeForTheDay: 1000, workoutTimingForTheDay: 32, mealsHad: Meal.current.exampleMeals,workoutsDone: [Workout.current.armsWorkout] ,stepsTaken: 13020),

@@ -163,11 +163,15 @@ struct User_t: Identifiable, Codable, Hashable {
 
 struct FriendRequest_t: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
-    var fromUser: User_t
-    var toUserId: User_t
+    var fromUser: String
+    var toUserId: String
     var requestDate: Date = .now
     var actionDate: Date? = nil
     var status: Extras.FriendRequestStatus = .pending
+    
+    func getDictionary() -> Dictionary<String, Any> {
+        return ["id": self.id, "fromUser": self.fromUser, "toUser": self.toUserId, "requestDate": self.requestDate, "actionDate": self.actionDate ?? "none", "status": self.status.rawValue]
+    }
 }
 
 struct Notification_t: Identifiable {

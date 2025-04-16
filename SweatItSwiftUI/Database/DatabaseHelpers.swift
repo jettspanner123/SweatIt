@@ -30,7 +30,6 @@ class GetMethodStore: ObservableObject {
     
     public func toggleErrorState(with message: ErrorType) -> Void {
         
-        print(message.rawValue)
         
         self.errorMessage = message
         
@@ -202,6 +201,84 @@ class GET {
         return nil
     }
     
+    public func getAllRequests() async throws -> Array<FriendRequest_t> {
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        let snapshot = try await ApplicationDatabase.getDatabase(for: .friendRequest).getDocuments()
+        
+        var requests: Array<FriendRequest_t> = []
+        
+        for snapshotDocument in snapshot.documents {
+            let docData = snapshotDocument.data()
+            let fromUserId: String = docData["fromUser"] as! String
+            let toUserId: String = docData["toUser"] as! String
+            let status: Extras.FriendRequestStatus = Extras.FriendRequestStatus(rawValue: docData["status"] as! String)!
+            requests.append(.init(fromUser: fromUserId, toUserId: toUserId, requestDate: .now, actionDate: .now, status: status))
+        }
+        
+        return requests
+    }
+    
+    public func hasRequested(from fromUser: String, to toUser: String) async throws -> Bool {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        let snapshot = try await ApplicationDatabase.getDatabase(for: .friendRequest).getDocuments()
+        
+        for document in snapshot.documents {
+            let docData = document.data()
+            let fromUserId: String = docData["fromUser"] as! String
+            let toUserId: String = docData["toUser"] as! String
+            
+            if fromUserId == fromUser && toUserId == toUser {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    public func getAllFriendsFor(userId id: String) async throws -> Array<User_t> {
+        var users: Array<User_t> = []
+        var requests: Array<FriendRequest_t> = []
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        let snapshot = try await ApplicationDatabase.getDatabase(for: .friendRequest).getDocuments()
+        
+        do {
+            for document in snapshot.documents {
+                let docData = document.data()
+                let friendRequest: FriendRequest_t = .init(id: docData["id"] as! String, fromUser: docData["fromUser"] as! String, toUserId: docData["toUser"] as! String, status: Extras.FriendRequestStatus(rawValue: docData["status"] as! String)!)
+                requests.append(friendRequest)
+            }
+            
+            for request in requests {
+                if request.status == .accepted {
+                    let user_t: User_t = try await self.fetchUserBy(id: request.toUserId)!
+                    users.append(user_t)
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .serverBusy)
+        }
+        
+        return users
+    }
+    
+    
+    
 }
 
 class PostMethodStore {
@@ -226,7 +303,6 @@ class PostMethodStore {
     
     public func toggleErrorState(with message: ErrorType) -> Void {
         
-        print(message.rawValue)
         
         self.errorMessage = message
         
@@ -319,6 +395,26 @@ class POST {
             PostMethodStore.current.toggleErrorState(with: .serverBusy)
             return
         }
+    }
+    
+    public func createRequest(from fromUser: User_t, to toUser: User_t) async throws -> Void {
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        let friendRequest: FriendRequest_t = .init(fromUser: fromUser.id, toUserId: toUser.id)
+        let friendRequestReference: DocumentReference = ApplicationDatabase.getDatabase(for: .friendRequest).document(friendRequest.id)
+        
+        do {
+            try await friendRequestReference.setData(friendRequest.getDictionary())
+            ApplicationSounds.current.successful()
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .wentWrong)
+            ApplicationSounds.current.successful()
+        }
+        
     }
     
 }

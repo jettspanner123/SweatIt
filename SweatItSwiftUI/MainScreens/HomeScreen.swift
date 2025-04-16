@@ -42,7 +42,6 @@ struct HomeScreen: View {
                         if let workout = activity.activityDescription as? Workout_t {
                             let workoutName = workout.workoutName
                             let caloriesBurned = String(format: "%.1f🔥", workout.caloriesBurned)
-                            let timeTaken = String(format: "%.1f min", workout.timeTaken)
                             
                             Text("\(workoutName): [\(caloriesBurned)]")
                             
