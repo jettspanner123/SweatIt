@@ -143,6 +143,50 @@ struct FoodScannerScreen: View {
     
     
     @State var pageTranslation: CGSize = .zero
+    @State var responseText: String = ""
+    
+    let model: GenerativeModel
+    
+    init() {
+        let apiKey = "AIzaSyAnqRlW22bqKvIKWNgzKCT3UgbHK8vqlhw"
+        model = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: apiKey)
+    }
+    private func resizeImage(_ image: UIImage, to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        image.draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+    
+    private func analyzeFood(image: UIImage) {
+        
+        
+        Task {
+            withAnimation {
+                self.appStates.isFoodScannerLoading = true
+            }
+            guard let resizedImage = resizeImage(image, to: CGSize(width: 512, height: 512)) else {
+                responseText = "Failed to resize image."
+                return
+            }
+            let prompt = "Identify the food item and estimate it's nutritional value, also give me the answer in this format: [food_name,description_of_food_item_atleast_3_lines_without_any_commas_here,estimated_quantity_in_gm_only_number,total_calories_only_numbers,protien_only_numbers,carbohydrates_only_numbers,fats_only_numbers], and this should be the only data that comes in, nothing else, do not keep the array brackets, only comma separated values. Make sure there are always 7 elements, should be no prefix or postfix things, if no food is found simply give me null"
+            
+            do {
+                let response = try await model.generateContent(prompt, resizedImage)
+                responseText = response.text ?? "No response received."
+                self.appStates.scannedFoodDetail = response.text ?? "No response received."
+                print(responseText)
+            } catch {
+                responseText = "Error: \(error.localizedDescription)"
+            }
+            withAnimation {
+                self.appStates.isFoodScannerLoading = false
+            }
+        }
+        
+        
+    }
     
     
     var body: some View {
@@ -183,6 +227,20 @@ struct FoodScannerScreen: View {
                 }
         )
         .zIndex(.infinity)
+        .onChange(of: self.appStates.currentSelectedFoodImage) {
+            if let image = self.appStates.currentSelectedFoodImage {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.analyzeFood(image: image)
+                }
+                return
+            }
+            
+            print("didn't get image")
+        }
+        .onChange(of: self.appStates.isFoodScannerLoading) {
+            print("Food loading", self.appStates.isFoodScannerLoading)
+        }
     }
 }
+
 

@@ -31,11 +31,11 @@ struct ContentView: View {
     
     @State var showAddAgendaPage: Bool = false
     
+    @State var showScannedFoodDetailScreen: Bool = false
+    
+    
     
     @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
-    
-    
-    
     
     var body: some View {
         NavigationStack {
@@ -45,6 +45,55 @@ struct ContentView: View {
 //                        .zIndex(99999)
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
+                
+                if self.appStates.showScanFoodErrorDialogBox {
+                    VStack {
+                        VStack {
+                            Text("No Food Item Found")
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
+                                .foregroundStyle(.white)
+                            
+                            CustomDivider()
+                            
+                            Text("There was an error scanning food items, either there is no food items in the screen or the scanner is not working properly.")
+                                .font(.system(size: 13, weight: .regular, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.75))
+                                .multilineTextAlignment(.center)
+                            
+                            SimpleButton(content: {
+                               Text("I Understand")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                                self.appStates.scannedFoodDetail = ""
+                                withAnimation {
+                                    self.appStates.showScanFoodErrorDialogBox = false
+                                }
+                            })
+                            .padding(.top)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.darkBG, in: defaultShape)
+                    }
+                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .zIndex(ApplicationBounds.dialogBoxZIndex)
+                    .transition(.offset(y: UIScreen.main.bounds.height))
+                }
+                
+                if self.appStates.showScanFoodErrorDialogBox {
+                    CustomBackDrop()
+                }
+                
+                if self.appStates.isFoodScannerLoading {
+                    FullScreenLoadingView()
+                        .transition(.scale)
+                }
+                
+                if self.appStates.isFoodScannerLoading {
+                    CustomBackDrop()
+                }
                 
                 if self.appStates.showFoodDetails {
                     FoodDetailScreen(food: self.appStates.currentSelectedFood!, showFoodDetailsScreen: self.$appStates.showFoodDetails)
@@ -115,6 +164,9 @@ struct ContentView: View {
                     .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
             }
             .coordinateSpace(name: "MainScreenCoordinateSpace")
+            .navigationDestination(isPresented: self.$showScannedFoodDetailScreen) {
+                ScannedFoodDetailScreen()
+            }
         }
         .onAppear {
             withAnimation {
@@ -122,6 +174,22 @@ struct ContentView: View {
             }
         }
         .sensoryFeedback(.impact, trigger: self.currentPage_t)
+        .onChange(of: self.appStates.scannedFoodDetail) {
+            print(self.appStates.scannedFoodDetail, self.appStates.scannedFoodDetail.count, type(of: self.appStates.scannedFoodDetail))
+            let scannedFoodDetails = self.appStates.scannedFoodDetail.trimmingCharacters(in: .whitespacesAndNewlines)
+            if scannedFoodDetails == "null" {
+                print("Found nothing")
+                withAnimation {
+                    self.appStates.showScanFoodErrorDialogBox = true
+                }
+            } else {
+                print("Found something")
+                self.appStates.showScannedFoodDetailScreen = true
+            }
+        }
+        .onChange(of: self.appStates.showScannedFoodDetailScreen) {
+            self.showScannedFoodDetailScreen = true
+        }
         
     }
 }
@@ -136,3 +204,27 @@ struct ContentViewPreviewProvider: PreviewProvider {
     }
     
 }
+
+struct FullScreenLoadingView: View {
+    var body: some View {
+        VStack {
+            VStack {
+                ProgressView()
+                    .tint(.white)
+                    .scaleEffect(1.5)
+                
+                Text("Analizing Food Data....")
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                    .padding(.top)
+            }
+            .padding(25)
+            .background(.darkBG, in: defaultShape)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .zIndex(ApplicationBounds.dialogBoxZIndex)
+        .ignoresSafeArea()
+    }
+}
+
+

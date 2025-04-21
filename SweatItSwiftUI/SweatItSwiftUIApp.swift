@@ -38,6 +38,14 @@ class ApplicationStates: ObservableObject {
     @Published var currentSelectedFoodImage: Optional<UIImage> = nil
     @Published var showCameraScreen: Bool = false
     
+    @Published var scannedFoodDetail: String = ""
+    @Published var showScannerdFoodDetailScreen: Bool = false
+    @Published var isFoodScannerLoading: Bool = false
+    
+    @Published var showScanFoodErrorDialogBox: Bool = false
+    @Published var showScannedFoodDetailScreen: Bool = false
+    
+    
     
     
     public func showError() -> Void {

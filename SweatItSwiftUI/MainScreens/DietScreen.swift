@@ -23,29 +23,7 @@ struct DietScreen: View {
             
             HStack {
                 
-                
-                // MARK: Add food button
-                //                VStack(spacing: 10) {
-                //                    Image(systemName: "camera.fill")
-                //                        .foregroundStyle(.white.opacity(0.75))
-                //                        .frame(width: 50, height: 50)
-                //                        .overlay {
-                //                            Circle()
-                //                                .stroke(.white.opacity(0.18))
-                //                        }
-                //                        .background(.white.opacity(0.08), in: Circle())
-                //
-                //                    Text("Scan Food")
-                //                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                //                        .foregroundStyle(.white.opacity(0.75))
-                //                }
-                //                .frame(maxWidth: .infinity)
-                //                .frame(height: 125)
-                //                .overlay {
-                //                    defaultShape
-                //                        .stroke(.white.opacity(0.08))
-                //                }
-                //                .background(.darkBG.opacity(0.54), in: defaultShape)
+                // MARK: Scan food button
                 PrimaryNavigationButton(text: "Scan Food")
                     .background(ApplicationLinearGradient.redGradient, in: defaultShape)
                     .overlay(alignment: .leading) {
@@ -64,27 +42,6 @@ struct DietScreen: View {
                 
                 
                 // MARK: Search Food button
-                //                VStack(spacing: 10) {
-                //                    Image(systemName: "camera.fill")
-                //                        .foregroundStyle(.white.opacity(0.75))
-                //                        .frame(width: 50, height: 50)
-                //                        .overlay {
-                //                            Circle()
-                //                                .stroke(.white.opacity(0.18))
-                //                        }
-                //                        .background(.white.opacity(0.08), in: Circle())
-                //
-                //                    Text("Scan Food")
-                //                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                //                        .foregroundStyle(.white.opacity(0.75))
-                //                }
-                //                .frame(maxWidth: .infinity)
-                //                .frame(height: 125)
-                //                .overlay {
-                //                    defaultShape
-                //                        .stroke(.white.opacity(0.08))
-                //                }
-                //                .background(.darkBG.opacity(0.54), in: defaultShape)
                 PrimaryNavigationButton(text: "Find Food")
                     .background(ApplicationLinearGradient.thanosGradient, in: defaultShape)
                     .overlay(alignment: .leading) {
@@ -97,10 +54,6 @@ struct DietScreen: View {
                     }
             }
             .frame(maxWidth: .infinity)
-            
-            
-            
-            
             
             
             // MARK: Nutiritions
