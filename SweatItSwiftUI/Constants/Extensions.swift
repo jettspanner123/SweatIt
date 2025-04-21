@@ -131,12 +131,17 @@ struct VibrateEffectModifier: ViewModifier {
 struct VibrateScaleEffectModifier: ViewModifier {
     @State private var buttonTapped: Bool = false
     @State private var buttonTapCount: Int = 0
+    var scaleBy: Double = 0.5
+    var wantSound: Bool = true
     var closure: () -> Void = {}
     
     func body(content: Content) -> some View {
         content
-            .scaleEffect(self.buttonTapped ? 0.8 : 1)
+            .scaleEffect(self.buttonTapped ? self.scaleBy : 1)
             .onTapGesture {
+                if self.wantSound {
+                    ApplicationSounds.current.bubble()
+                }
                 closure()
                 self.buttonTapCount += 1
                 
@@ -161,6 +166,7 @@ struct VibrateScaleEffectModifier: ViewModifier {
 
 struct ScaleEffectModifier: ViewModifier {
     @State private var buttonTapped: Bool = false
+    
     var closure: () -> Void = {}
     
     func body(content: Content) -> some View {
@@ -196,8 +202,8 @@ extension View {
         self.modifier(ScaleEffectModifier(closure: closure))
     }
     
-    func onTapWithScaleVibrate(closure: @escaping () -> Void) -> some View {
-        self.modifier(VibrateScaleEffectModifier(closure: closure))
+    func onTapWithScaleVibrate(scaleBy: Double = 0.5, wantSound: Bool = true, closure: @escaping () -> Void) -> some View {
+        self.modifier(VibrateScaleEffectModifier(scaleBy: scaleBy, wantSound: wantSound, closure: closure))
     }
     
     func isBottomButton() -> some View {

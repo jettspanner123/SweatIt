@@ -23,6 +23,7 @@ struct HomeScreen: View {
             
             // MARK: Steps Taken card
             InformationCard(image: "Boot", title: "Steps", text: "8000", secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
+                print("Hello world")
             }
             .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
             .contextMenu {

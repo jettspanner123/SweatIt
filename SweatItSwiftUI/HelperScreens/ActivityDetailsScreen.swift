@@ -10,9 +10,22 @@ import SwiftUI
 struct ActivityDetailsScreen: View {
     
     var activity: Activity_t
+    @State var currentSelectedFoodItem: Optional<Food_t> = nil
+    @State var showFoodDetails: Bool = false
     
     var body: some View {
         ScreenBuilder {
+            
+            if self.showFoodDetails {
+                FoodDetailScreen(food: self.currentSelectedFoodItem!, showFoodDetailsScreen: self.$showFoodDetails)
+                    .zIndex(ApplicationBounds.dialogBoxZIndex)
+                    .transition(.offset(y: UIScreen.main.bounds.height))
+            }
+            
+            if self.showFoodDetails {
+                CustomBackDrop()
+            }
+            
             AccentPageHeader(pageHeaderTitle: "Activity Details")
             
             ScrollContentView {
@@ -120,20 +133,24 @@ struct ActivityDetailsScreen: View {
                 }
                 
                 if let food = self.activity.activityDescription as? Food_t {
-                    NavigationLink(destination: EmptyView()) {
-                        
-                        // MARK: Outer wraper
-                        HStack {
-                            FoodCard(food: food)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background(.darkBG.opacity(0.54))
-                        .overlay {
-                            defaultShape
-                                .stroke(.white.opacity(0.18))
-                        }
-                        .clipShape(defaultShape)
+                    // MARK: Outer wraper
+                    HStack {
+                        FoodCard(food: food)
                     }
+                    .frame(maxWidth: .infinity)
+                    .background(.darkBG.opacity(0.54))
+                    .overlay {
+                        defaultShape
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .clipShape(defaultShape)
+                    .onTapWithScale {
+                        self.currentSelectedFoodItem = food
+                        withAnimation {
+                            self.showFoodDetails = true
+                        }
+                    }
+                    
                 }
                 
             }

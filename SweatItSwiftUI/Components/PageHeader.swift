@@ -65,6 +65,11 @@ struct PageHeader: View {
                         }
                 }
                 .offset(x: -24, y: 30)
+                .onAppear {
+                    withAnimation(.linear(duration: 500).repeatForever()) {
+                        self.isRotating = true
+                    }
+                }
                 .transition(.offset(x: 300))
             }
             
@@ -89,11 +94,7 @@ struct PageHeader: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .offset(y: -70)
         .zIndex(100)
-        .onAppear {
-            withAnimation(.linear(duration: 1000).repeatForever()) {
-                self.isRotating = true
-            }
-        }
+        
     }
 }
 

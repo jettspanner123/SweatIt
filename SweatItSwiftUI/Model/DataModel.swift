@@ -72,6 +72,10 @@ class Extras {
         case vegiterian = "Vegiterian", nonVegiterian = "Non Vegiterian", eggitarian = "Eggiterian", flexiterian = "Flexiterian", pescaterian = "Pescaterian", none
     }
     
+    enum GlobalNotificationType: String, CaseIterable {
+        case sounded, muted
+    }
+    
     enum MeasurenmentSystem {
         case metric, imperial
     }

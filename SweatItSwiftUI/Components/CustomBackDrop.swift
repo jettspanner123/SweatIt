@@ -16,6 +16,7 @@ struct CustomBackDrop: View {
         .background(AppBackgroundBlur(radius: 5, opaque: true))
         .background(.black.opacity(0.75))
         .zIndex(ApplicationBounds.backdropZIndex)
+        .ignoresSafeArea()
     }
 }
 

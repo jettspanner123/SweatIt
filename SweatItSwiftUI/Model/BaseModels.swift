@@ -73,6 +73,7 @@ struct Activity_t {
 
 struct Food_t: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
+    var timeOfHaving: Date = .now
     var foodName: String
     var foodDescription: String
     var foodQuantity: Double

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FoodDetailScreen: View {
     var food: Food_t = Food.current.sandwich
+    @Binding var showFoodDetailsScreen: Bool
     
     @Environment(\.dismiss) var dismiss
     
@@ -21,178 +22,149 @@ struct FoodDetailScreen: View {
     
     
     var body: some View {
-        ZStack(alignment: .top) {
-            
-            
-            HStack(spacing: 15) {
-                
-                // MARK: Back button
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .foregroundStyle(.black)
-                    
-                }
-                .frame(width: 35, height: 35)
-                .background(.white.opacity(0.75))
-                .clipShape(Circle())
-                .onTapGesture {
-                    self.dismiss()
-                }
-                
-                // MARK: Food name
+        VStack {
+            VStack {
                 Text(self.food.foodName)
-                    .font(.custom(ApplicationFonts.oswaldRegular, size: 30))
+                    .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
                     .foregroundStyle(.white)
                 
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
-            .offset(y: 10)
-            .zIndex(100)
-            
-            
-            // MARK: image view
-            HStack {
-                Image(self.food.foodImage)
-                    .resizable()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                CustomDivider()
+                    .offset(y: -5)
+                
+                
+                SectionHeader(text: "Food Macros")
+                    .padding(.top, 5)
+                // MARK: Protien, fats and carbs
+                HStack {
+                    
+                    // MARK: Protient card
+                    HStack(spacing: 5) {
+                        Text(String(format: "%.f 🍖", self.food.protein))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                            .foregroundStyle(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 8)
+                    .background(.darkBG.opacity(0.54))
+                    .overlay {
+                        defaultShape
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .clipShape(defaultShape)
+                    
+                    
+                    
+                    
+                    // MARK: Carbs card
+                    HStack(spacing: 5) {
+                        Text(String(format: "%.f 🍞", self.food.carbs))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                            .foregroundStyle(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 8)
+                    .background(.darkBG.opacity(0.54))
+                    .overlay {
+                        defaultShape
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .clipShape(defaultShape)
+                    
+                    
+                    
+                    
+                    
+                    // MARK: Fats card
+                    HStack(spacing: 5) {
+                        Text(String(format: "%.f 🍖", self.food.fats))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                            .foregroundStyle(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 8)
+                    .background(.darkBG.opacity(0.54))
+                    .overlay {
+                        defaultShape
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .clipShape(defaultShape)
+                }
+                
+                
+                
+                // MARK: Other food details
+                
+                SectionHeader(text: "Other Details")
+                    .padding(.top, 15)
+
+                CustomList {
+                    
+                    SpaceSeparatedKeyValue(key: "Calories", value: String(format: "%.f kCal", self.food.calories))
+                        .padding(.horizontal)
+                        .padding(.vertical, 5)
+                    
+                    CustomDivider()
+                    
+                    
+                    SpaceSeparatedKeyValue(key: "Time", value: ApplicationHelper.getTimeString(from: self.food.timeOfHaving))
+                        .padding(.horizontal)
+                        .padding(.vertical, 5)
+                    
+                    CustomDivider()
+                    
+                    SpaceSeparatedKeyValue(key: "Quantity", value: String(format: "%.1f gm", self.food.foodQuantity))
+                        .padding(.horizontal)
+                        .padding(.vertical, 5)
+                    
+                    CustomDivider()
+                    
+                    
+                    if self.food.foodDescription.split(separator: "").count > 20 {
+                        
+                        SpaceSeparatedKeyValue(key: "Description Provided", value: "")
+                            .padding(.horizontal)
+                            .padding(.top, 5)
+                        
+                        Text(self.food.foodDescription)
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                            .takeMaxWidthLeading()
+                            .padding(.horizontal)
+                            .padding(.bottom, 5)
+                        
+                    } else {
+                        SpaceSeparatedKeyValue(key: "Description Provided", value: self.food.foodDescription)
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                    }
+                    
+                }
+                
+                
+                SimpleButton(content: {
+                   Text("Okay")
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white)
+                }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                    withAnimation {
+                        self.showFoodDetailsScreen = false
+                    }
+                })
+                .padding(.top, 25)
+
+                
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 400)
-            
-            
-            
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    
-                    
-                    ForEach(1...3, id: \.self) { _ in
-                        HStack {
-                            Text("")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 200)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .background(AppBackgroundBlur(radius: 100, opaque: true))
-                .padding(.top, 300)
-                .overlay {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(AppBackgroundBlur(radius: 100, opaque: true))
-                            .fill(.darkBG)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 1400)
-                            .visualEffect { view, phase in
-                                view
-                                    .offset(y: phase.bounds(of: .named("CustomScrollView"))!.maxY - 260)
-                            }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .coordinateSpace(name: "CustomScrollView")
-                }
-                .overlay {
-                    VStack {
-                        
-                        
-                        // MARK: Ye jaga chodne ke liye
-                        HStack {
-                            
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 300)
-                       
-                        
-                        
-                        // MARK: YE hai aapna macro stack
-                        HStack {
-                           
-                            
-                            
-                            // MARK: Proteing bnox
-                            HStack {
-                                Text(String(format: "%.fg", self.food.protein))
-                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
-                                    .foregroundStyle(.white)
-                                
-                                Text("🍖")
-                                    .font(.system(size: 25))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 8)
-                            .background(ApplicationLinearGradient.redGradient)
-                            .overlay {
-                                defaultShape
-                                    .stroke(.white.opacity(0.18))
-                            }
-                            .clipShape(defaultShape)
-                            
-                            
-                            
-                            // MARK: Carbs box
-                            HStack {
-                                Text(String(format: "%.fg", self.food.carbs))
-                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
-                                    .foregroundStyle(.white)
-                                
-                                Text("🍞")
-                                    .font(.system(size: 25))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 8)
-                            .background(ApplicationLinearGradient.brownGradient)
-                            .overlay {
-                                defaultShape
-                                    .stroke(.white.opacity(0.18))
-                            }
-                            .clipShape(defaultShape)
-                            
-                            
-                            
-                            // MARK: Fats box
-                            HStack {
-                                Text(String(format: "%.fg", self.food.protein))
-                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
-                                    .foregroundStyle(.white)
-                                
-                                Text("🥐")
-                                    .font(.system(size: 25))
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 8)
-                            .background(ApplicationLinearGradient.redGradient)
-                            .overlay {
-                                defaultShape
-                                    .stroke(.white.opacity(0.18))
-                            }
-                            .clipShape(defaultShape)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(.vertical, 30)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                }
-            }
-            .scrollBounceBehavior(.basedOnSize)
+            .padding()
+            .background(.darkBG, in: defaultShape)
+            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            .shadow(radius: 10)
         }
-        .background(
-            VStack {
-                Image(self.food.foodImage)
-                    .resizable()
-                    .frame(maxWidth: .infinity, maxHeight: UIScreen.main.bounds.height/2)
-                    .blur(radius: 100)
-            }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .background(ApplicationLinearGradient.applicationGradient)
-            
-        )
-        .navigationBarBackButtonHidden()
-        
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-#Preview {
-    FoodDetailScreen()
-}
+

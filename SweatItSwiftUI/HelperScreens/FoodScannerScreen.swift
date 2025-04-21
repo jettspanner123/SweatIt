@@ -144,21 +144,19 @@ struct FoodScannerScreen: View {
     
     @State var pageTranslation: CGSize = .zero
     
-    @State var cameraObject = CameraModel()
-    
     var body: some View {
         ZStack {
-            
-            CameraPreview(camera: self.cameraObject)
-                .ignoresSafeArea()
-            
-            
+                        
             VStack {
                 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(AppBackgroundBlur(radius: 100, opaque: true))
+        .background(.darkBG.opacity(0.54))
+        .ignoresSafeArea()
         .offset(y: self.pageTranslation.height)
         .gesture(
             DragGesture()
@@ -188,74 +186,7 @@ struct FoodScannerScreen: View {
                     
                 }
         )
-        .onAppear {
-            self.cameraObject.checkPermissiont()
-        }
         .zIndex(.infinity)
     }
 }
 
-class CameraModel: ObservableObject {
-    @Published var isTaken: Bool = false
-    
-    @Published var session = AVCaptureSession()
-    @Published var output = AVCapturePhotoOutput()
-    
-    @Published var previewLayer: AVCaptureVideoPreviewLayer!
-    
-    func checkPermissiont() -> Void {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized:
-            self.setUp()
-            return
-        default:
-            return
-        }
-    }
-    
-    func setUp() -> Void {
-        do {
-            self.session.beginConfiguration()
-            
-            let device = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
-            let input = try AVCaptureDeviceInput(device: device!)
-            
-            if self.session.canAddInput(input) {
-                self.session.addInput(input)
-            }
-            
-            if self.session.canAddOutput(self.output) {
-                self.session.addOutput(self.output)
-            }
-            
-            self.session.commitConfiguration()
-            
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-}
-
-
-struct CameraPreview: UIViewRepresentable {
-    
-    @ObservedObject var camera: CameraModel
-    
-    func makeUIView(context: Context) -> UIView {
-        
-        let view = UIViewType(frame: UIScreen.main.bounds)
-        self.camera.previewLayer = AVCaptureVideoPreviewLayer(session: self.camera.session)
-        self.camera.previewLayer.frame = view.frame
-        self.camera.previewLayer.videoGravity = .resizeAspectFill
-        view.layer.addSublayer(self.camera.previewLayer)
-        
-        self.camera.session.startRunning()
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-        
-    }
-    
-    
-}

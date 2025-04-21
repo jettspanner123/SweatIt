@@ -16,6 +16,8 @@ struct PastStatisticsScreen: View {
    
     @State var currentSelectedDate: String = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: .now)
     @State var showAllFoodAndMeals: Bool = false
+    @State var currentSelectedFoodItem: Optional<Food_t> = nil
+    @State var showFoodDetails: Bool = false
     
     var currentSelectedDayData: DailyEvents_t? {
         for day in self.weeklyEvents where ApplicationHelper.formatDateToHumanReadableWithoutTime(date: day.date) == self.currentSelectedDate {
@@ -28,47 +30,81 @@ struct PastStatisticsScreen: View {
     var body: some View {
         ScreenBuilder {
             
+            if self.showFoodDetails {
+                FoodDetailScreen(food: self.currentSelectedFoodItem!, showFoodDetailsScreen: self.$showFoodDetails)
+                    .zIndex(ApplicationBounds.dialogBoxZIndex)
+                    .transition(.offset(y: UIScreen.main.bounds.height))
+            }
+            
+            if self.showFoodDetails {
+                CustomBackDrop()
+                    .onTapGesture {
+                        withAnimation {
+                            self.showFoodDetails = false
+                            self.currentSelectedFoodItem = nil
+                        }
+                    }
+            }
+            
             AccentPageHeader(pageHeaderTitle: self.currentSelectedDate)
                 .contentTransition(.numericText(value: Double(self.currentSelectedDate.count)))
             
             ScrollContentView {
                 
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(self.datesToShow, id: \.timeIntervalSince1970) { date in
-                            VStack {
-                                Text(ApplicationHelper.getDay(from: date).prefix(1))
-                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
-                                    .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
-                                    .frame(maxWidth: .infinity)
-                                
-                                Spacer()
-                                
-                                Text(String(ApplicationHelper.getDate(from: date)))
-                                    .font(.system(size: 20, weight: .light, design: .rounded))
-                                    .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
-                                    .frame(maxWidth: .infinity)
-                                
-                                Spacer()
-                                
-                            }
-                            .frame(width: 60, height: 70, alignment: .topLeading)
-                            .padding(.vertical, 8)
-                            .background(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? ApplicationLinearGradient.whiteGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
-                            .overlay {
-                                defaultShape
-                                    .stroke(.white.opacity(0.18))
-                            }
-                            .clipShape(defaultShape)
-                            .onTapGesture {
-                                withAnimation {
-                                    self.currentSelectedDate = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date)
+                ScrollViewReader { scrollProxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            
+                            Divider()
+                                .frame(width: 10)
+                                .frame(maxHeight: .infinity)
+                            
+                            ForEach(self.datesToShow, id: \.timeIntervalSince1970) { date in
+                                VStack {
+                                    Text(ApplicationHelper.getDay(from: date).prefix(1))
+                                        .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                                        .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    Spacer()
+                                    
+                                    Text(String(ApplicationHelper.getDate(from: date)))
+                                        .font(.system(size: 20, weight: .light, design: .rounded))
+                                        .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    Spacer()
+                                    
+                                }
+                                .frame(width: 60, height: 70, alignment: .topLeading)
+                                .padding(.vertical, 8)
+                                .background(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? ApplicationLinearGradient.whiteGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                                .overlay {
+                                    defaultShape
+                                        .stroke(.white.opacity(0.18))
+                                }
+                                .clipShape(defaultShape)
+                                .onTapGesture {
+                                    withAnimation {
+                                        self.currentSelectedDate = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date)
+                                    }
                                 }
                             }
+                            
+                            Divider()
+                                .frame(width: 10)
+                                .frame(maxHeight: .infinity)
+                                .id("lastObservableObject")
+                                .tag("lastObservableObject")
+                            
                         }
                     }
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    .onAppear {
+                        withAnimation(.spring(duration: 1)) {
+                            scrollProxy.scrollTo("lastObservableObject", anchor: .trailing)
+                        }
+                    }
                 }
                 
                 
@@ -79,8 +115,6 @@ struct PastStatisticsScreen: View {
                 
                 
                 if let currentSelectedDayData {
-                    
-                    
                     
                     
                     // MARK: Calores burned and ingested
@@ -121,10 +155,14 @@ struct PastStatisticsScreen: View {
                     
                     ForEach(currentSelectedDayData.mealsHad, id: \.id) { meal in
                         ForEach(meal.foodItems.prefix(1), id: \.id) { food in
-                            NavigationLink(destination: FoodDetailScreen(food: food)) {
-                                FoodViewCard(food: food)
-                            }
-                            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                            FoodViewCard(food: food)
+                                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                                .onTapWithScale {
+                                    self.currentSelectedFoodItem = food
+                                    withAnimation {
+                                        self.showFoodDetails = true
+                                    }
+                                }
                         }
                     }
                     

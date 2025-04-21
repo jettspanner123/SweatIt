@@ -123,13 +123,12 @@ struct HeightQuestionnaireScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 55)
                 }
-                .onTapGesture {
+                .onTapWithScaleVibrate(scaleBy: 0.75) {
                     withAnimation {
                         self.currentSelectedState = .height
                     }
                     self.vibrationState = 0
                 }
-                
                 
                 
                 
@@ -183,7 +182,7 @@ struct HeightQuestionnaireScreen: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 50)
                 }
-                .onTapGesture {
+                .onTapWithScaleVibrate(scaleBy: 0.75) {
                     withAnimation {
                         self.currentSelectedState = .weight
                     }
@@ -242,16 +241,12 @@ struct HeightQuestionnaireScreen: View {
                                         Text(String(format: "%.f", heightInCm))
                                             .font(.system(size: 35, weight: .bold, design: .rounded))
                                             .foregroundStyle(.white)
-                                            .contentTransition(.numericText(value: heightInCm))
-                                            .animation(.snappy, value: heightInCm)
                                         
                                     } else {
                                         Text(ApplicationHelper.convertCmToFeetAndInches(cm: heightInCm))
                                             .font(.system(size: 35, weight: .bold, design: .rounded))
                                             .foregroundStyle(.white)
                                             .frame(width: 150)
-                                            .contentTransition(.numericText(value: heightInCm))
-                                            .animation(.snappy, value: heightInCm)
                                         
                                     }
                                     
@@ -289,14 +284,10 @@ struct HeightQuestionnaireScreen: View {
                                 Text(String(format: "%.f", ApplicationHelper.toKg(lbs: weightInPound)))
                                     .font(.system(size: 35, weight: .bold, design: .rounded))
                                     .foregroundStyle(.white)
-                                    .contentTransition(.numericText(value: weightInPound))
-                                    .animation(.snappy, value: weightInPound)
                             } else {
                                 Text(String(format: "%.f", weightInPound))
                                     .font(.system(size: 35, weight: .bold, design: .rounded))
                                     .foregroundStyle(.white)
-                                    .contentTransition(.numericText(value: weightInPound))
-                                    .animation(.snappy, value: weightInPound)
                             }
                             
                             Text(self.currentSelectedSystem == .metric ? "kg" : "lbs")

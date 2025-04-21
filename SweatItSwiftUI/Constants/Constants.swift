@@ -57,8 +57,32 @@ class ApplicationLinearGradient {
     public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
     public static let whiteGradientInverted = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
     public static let silverGradient = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
-
-
+    
+    public static var allGradients: [LinearGradient] {
+        return [
+            lavaGradient,
+            orangeGradient,
+            greenGradient,
+            blueGradient,
+            blueGradientInverted,
+            thanosGradient,
+            whiteGradient,
+            applicationGradient,
+            redGradient,
+            bloodRedGradient,
+            cyanGradient,
+            waterGradient,
+            lavaPurpleGradient,
+            goldenGradient,
+            brownGradient,
+            clearGradient,
+            darkBGSameGradient,
+            darkBGSameGradientWithOpacityHalf,
+            whiteSameGradientWithOpacityPoint8,
+            whiteGradientInverted,
+            silverGradient
+        ]
+    }
 }
 
 
@@ -67,6 +91,12 @@ enum Constants: String {
 }
 
 class ApplicationHelper {
+    
+    public static func getTimeString(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm a" // Example: "02:45 PM"
+        return formatter.string(from: date)
+    }
     
     public func stringToDate(_ dateString: String, format: String) -> Date? {
         let dateFormatter = DateFormatter()
@@ -290,8 +320,8 @@ class ApplicationPadding {
 }
 
 class ApplicationBounds {
-    public static let backdropZIndex: Double = 99999
-    public static let dialogBoxZIndex: Double = 999999
+    public static let backdropZIndex: Double = 999999
+    public static let dialogBoxZIndex: Double = 9999999
 }
 
 class ApplicationFonts {
@@ -410,6 +440,24 @@ class ApplicationSounds {
         }
     }
     
+    func click() -> Void {
+        
+        if let player = audioPlayer, player.isPlaying {
+            player.stop()
+        }
+        guard let soundURL = Bundle.main.url(forResource: "click", withExtension: ".wav") else {
+            print("No long beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'Long BEEP' cannot be played'")
+        }
+    }
+    
     func startExercise() -> Void {
         guard let soundURL = Bundle.main.url(forResource: "start_exercise", withExtension: ".mp3") else {
             print("cannot play sound start_exercise")
@@ -472,6 +520,22 @@ class ApplicationSounds {
     func completed() -> Void {
         
         guard let soundURL = Bundle.main.url(forResource: "completed", withExtension: ".mp3") else {
+            print("cannot play sound start_exercise")
+            return
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            
+        }
+    }
+    
+    func bubble() -> Void {
+        
+        guard let soundURL = Bundle.main.url(forResource: "bubble", withExtension: ".wav") else {
             print("cannot play sound start_exercise")
             return
         }

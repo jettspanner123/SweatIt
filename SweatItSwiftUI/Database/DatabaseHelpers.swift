@@ -85,7 +85,7 @@ class GET {
         
         for document in snapshotQuery.documents {
             let docData = document.data()
-            let id = docData[Constants.id.rawValue] as! String
+            let id: String = docData[Constants.id.rawValue] as! String
             let fullName = docData[Constants.fullName.rawValue] as! String
             let username = docData[Constants.username.rawValue] as! String
             let emailId = docData[Constants.emailId.rawValue] as! String
@@ -276,6 +276,33 @@ class GET {
         
         return users
     }
+    
+    public func getAllRequestsFor(userId id: String) async throws -> Array<FriendRequest_t> {
+        var requests: Array<FriendRequest_t> = []
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        let snapshot = try await ApplicationDatabase.getDatabase(for: .friendRequest).getDocuments()
+        
+        do {
+            for document in snapshot.documents {
+                let docData = document.data()
+                let fromUserId: String = docData["fromUser"] as! String
+                let toUserId: String = docData["toUser"] as! String
+                
+                let friendRequest_t: FriendRequest_t = .init(fromUser: fromUserId, toUserId: toUserId)
+                requests.append(friendRequest_t)
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .wentWrong)
+        }
+        
+        return requests
+   }
     
     
     

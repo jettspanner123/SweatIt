@@ -18,8 +18,9 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
+    @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .coach
     
     @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
@@ -45,6 +46,17 @@ struct ContentView: View {
 //                        .zIndex(99999)
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
+                
+                if self.appStates.showFoodDetails {
+                    FoodDetailScreen(food: self.appStates.currentSelectedFood!, showFoodDetailsScreen: self.$appStates.showFoodDetails)
+                        .zIndex(ApplicationBounds.dialogBoxZIndex)
+                        .transition(.offset(y: UIScreen.main.bounds.height))
+                }
+                
+                if self.appStates.showFoodDetails {
+                    CustomBackDrop()
+                }
+                
                 
                 CustomDynamicIsland(showIsland: self.$showIsland, color: .green)
                     .zIndex(.infinity)

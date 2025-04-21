@@ -97,7 +97,7 @@ struct FoodCard: View {
         }
         .frame(maxWidth: .infinity)
         .frame(height: self.isViewCard ? 90 : 110)
-        .background(self.isViewCard ? .darkBG.opacity(0.54) : .clear)
+        .background(self.isViewCard ? .darkBG.opacity(0.54) : .white.opacity(0.001))
         .overlay {
             self.isViewCard ? defaultShape.stroke(.white.opacity(0.18)) : RoundedRectangle(cornerRadius: 0).stroke(.clear)
         }

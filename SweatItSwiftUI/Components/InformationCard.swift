@@ -8,7 +8,7 @@
 import SwiftUI
 import TipKit
 
-struct InformationCard<Content: View>: View {
+struct InformationCard: View {
     
     var image: String = ""
     var title: String = ""
@@ -16,16 +16,16 @@ struct InformationCard<Content: View>: View {
     var secondaryText: String = ""
     var textColor: Color = .white.opacity(0.75)
     var wantInformationView: Bool = true
-    var content: Content
+    var content: () -> Void = {}
     
-    init(image: String, title: String, text: String, secondaryText: String, textColor: Color, wantInformationView: Bool, @ViewBuilder content: () -> Content) {
+    init(image: String, title: String, text: String, secondaryText: String, textColor: Color, wantInformationView: Bool, content: @escaping () -> Void ) {
         self.image = image
         self.title = title
         self.text = text
         self.secondaryText = secondaryText
         self.textColor = textColor
         self.wantInformationView = wantInformationView
-        self.content = content()
+        self.content = content
     }
     
     
@@ -72,6 +72,10 @@ struct InformationCard<Content: View>: View {
             Image(systemName: "info.circle")
                 .foregroundStyle(.white.opacity(0.5))
                 .padding()
+                .onTapWithScale {
+//                    print("Hello world")
+                    self.content()
+                }
         }
         
     }

@@ -55,7 +55,6 @@ struct CoachScreen: View {
             // MARK: HOrizontal scroll widgets
             SecondaryHeading(title: "Fitness Metrics", secondaryText: "( avg per week )")
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-//                .padding(.top, 25)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
@@ -83,37 +82,34 @@ struct CoachScreen: View {
             
             
             
-            // MARK: Hello wrold
+            // MARK: Total weekly volume
             SecondaryHeading(title: "Total Weekly Volume", secondaryText: "( total sets did for each muscles )")
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                 .padding(.top, 25)
             
+            
+            
+            
+            // MARK: All muscles
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(Extras.Muscle.allCases, id: \.self) { muscle in
-                        Text(muscle.rawValue)
-                            .font(.system(size: 12, weight: .regular, design: .rounded))
-                            .foregroundStyle(self.currentSelectedMuscle == muscle ? .white : .white.opacity(0.5))
-                            .padding(.vertical, 10)
-                            .padding(.horizontal)
-                            .overlay {
-                                Capsule()
-                                    .stroke(.white.opacity(0.18))
+                        HStack {
+                            Text(muscle.rawValue)
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(self.currentSelectedMuscle == muscle ? .white : .white.opacity(0.5))
+                        }
+                        .applicationDropDownButton(self.currentSelectedMuscle == muscle ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+                        .onTapWithScaleVibrate(scaleBy: 0.75) {
+                            withAnimation {
+                                self.currentSelectedMuscle = muscle
                             }
-                            .background(self.currentSelectedMuscle == muscle ? ApplicationLinearGradient.blueGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf, in: Capsule())
-                            .onTapGesture {
-                                withAnimation {
-                                    self.currentSelectedMuscle = muscle
-                                }
-                            }
+                        }
                     }
                 }
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
-            
-            VStack {
-            }
-            .frame(maxWidth: .infinity)
+           
             
         }
     }

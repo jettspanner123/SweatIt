@@ -7,7 +7,10 @@
 
 import SwiftUI
 
+
 struct DietScreen: View {
+    
+    @EnvironmentObject var appStates: ApplicationStates
     
     @State var foodItemList: Array<Food_t> = [Food.current.apple, Food.current.friedChicken, Food.current.sandwich, Food.current.smoothie]
     
@@ -20,17 +23,37 @@ struct DietScreen: View {
             
             
             // MARK: Add food button
-            HStack {
+            VStack(spacing: 10) {
+                Image(systemName: "camera.fill")
+                    .foregroundStyle(.white.opacity(0.75))
+                    .frame(width: 50, height: 50)
+                    .overlay {
+                        Circle()
+                            .stroke(.white.opacity(0.18))
+                    }
+                    .background(.white.opacity(0.08), in: Circle())
                 
+                Text("Scan Food")
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.75))
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 150)
+            .frame(height: 125)
             .overlay {
                 defaultShape
-                    .stroke(.white.opacity(0.18))
+                    .stroke(.white.opacity(0.08))
             }
             .background(.darkBG.opacity(0.54), in: defaultShape)
+            .onTapWithScaleVibrate(scaleBy: 0.85) {
+                withAnimation {
+                    self.showCameraScreen = true
+                }
+            }
             
+            
+            
+            
+            // MARK: Nutiritions
             SecondaryHeading(title: "Nutrition", secondaryText: "( per gram of body weight )")
                 .padding(.top, 20)
             
@@ -61,9 +84,13 @@ struct DietScreen: View {
             VStack(spacing: 0) {
                 
                 ForEach(self.foodItemList.indices, id: \.self) { index in
-                    NavigationLink(destination: FoodDetailScreen(food: self.foodItemList[index])) {
-                        FoodCard(food: self.foodItemList[index])
-                    }
+                    FoodCard(food: self.foodItemList[index])
+                        .onTapGesture {
+                            self.appStates.currentSelectedFood = self.foodItemList[index]
+                            withAnimation {
+                                self.appStates.showFoodDetails = true
+                            }
+                        }
                     
                     if index != self.foodItemList.count - 1 {
                         CustomDivider()

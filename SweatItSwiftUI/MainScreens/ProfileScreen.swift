@@ -10,10 +10,12 @@ import SwiftUI
 struct ProfileScreen: View {
     
     @Binding var user: User_t
-    
+    var profileViewText: String {
+        return self.user.fullName.split(separator: " ").map { String($0.first!) }.joined()
+    }
     
     @State var showPastStatisticsScreen: Bool = false
-    @State var showAddFriendScreen: Bool = true
+    @State var showAddFriendScreen: Bool = false
     @State var showLeaderboardScreen: Bool = false
     
     var body: some View {
@@ -24,11 +26,12 @@ struct ProfileScreen: View {
                 
                 // MARK: Profile icon
                 HStack {
-                    
+                    Text(self.profileViewText)
+                        .font(.custom(ApplicationFonts.oswaldRegular, size: 35))
+                        .foregroundStyle(.white)
                 }
                 .frame(width: 100, height: 100)
-                .background(ApplicationLinearGradient.blueGradient)
-                .clipShape(defaultShape)
+                .background(ApplicationLinearGradient.blueGradient, in: RoundedRectangle(cornerRadius: 12))
 //                .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 // MARK: User profile
@@ -50,30 +53,27 @@ struct ProfileScreen: View {
                     
                     
                     // MARK: Add friend button
-                    HStack(spacing: 15) {
-                        Image(systemName: "person.badge.plus")
-                            .foregroundStyle(.white.opacity(0.5))
-                        Text("Add Fiend")
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.5))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .frame(height: 40)
-                    .padding(.horizontal, 15)
-                    .background(ApplicationLinearGradient.redGradient)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay {
-                        HStack {
+                    NavigationLink(destination: AddFriendScreen()) {
+                        HStack(spacing: 15) {
+                            Image(systemName: "person.badge.plus")
+                                .foregroundStyle(.white)
+                                .offset(y: 2)
+                            Text("Add Fiend")
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 13))
+                                .foregroundStyle(.white)
+                            
+                            Spacer()
+                            
                             Image(systemName: "chevron.right")
-                                .foregroundStyle(.white.opacity(0.5))
-                                .scaleEffect(0.55)
+                                .foregroundStyle(.white)
+                                .scaleEffect(0.65)
                         }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 40)
                         .padding(.horizontal, 15)
+                        .background(ApplicationLinearGradient.redGradient, in: RoundedRectangle(cornerRadius: 8))
                     }
-                    .onTapGesture {
-                        self.showAddFriendScreen = true
-                    }
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .padding(.top, 8)
@@ -112,71 +112,21 @@ struct ProfileScreen: View {
                
                 // MARK: User details settings
                 NavigationLink(destination: UserDetailsPage()) {
-                    HStack(spacing: 15) {
-                        Image(systemName: "person.fill")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.white.opacity(0.5))
-                        
-                        Text("User Details")
-                            .font(.system(size: 15, weight: .regular, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.5))
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .scaleEffect(0.75)
-                            .foregroundStyle(.white.opacity(0.5))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 3)
+                    CustomListNavigationButton(image: "person.fill", name: "User Details")
                 }
                 
                 
                 CustomDivider()
                 
-                HStack(spacing: 15) {
-                    Image(systemName: "bell.fill")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Text("Notifications")
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .scaleEffect(0.75)
-                        .foregroundStyle(.white.opacity(0.5))
+                NavigationLink(destination: ManageNotificationScreen()) {
+                    CustomListNavigationButton(image: "bell.fill", name: "Notifications")
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 3)
                 
                 CustomDivider()
                 
-                HStack(spacing: 15) {
-                    Image(systemName: "hand.thumbsup.fill")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Text("Recommendations")
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .scaleEffect(0.75)
-                        .foregroundStyle(.white.opacity(0.5))
+                NavigationLink(destination: EmptyView()) {
+                    CustomListNavigationButton(image: "hand.thumbsup.fill", name: "Recommendations")
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 3)
             }
             .padding(.top, 20)
             
@@ -262,5 +212,34 @@ struct ProfileScreen: View {
         .navigationDestination(isPresented: self.$showLeaderboardScreen, destination: {
             LeaderboardScreen()
         })
+    }
+}
+
+
+struct CustomListNavigationButton: View {
+    
+    var image: String
+    var name: String
+    
+    var body: some View {
+        HStack(spacing: 15) {
+            Image(systemName: self.image)
+                .resizable()
+                .frame(width: 20, height: 20)
+                .foregroundStyle(.white.opacity(0.5))
+            
+            Text(self.name)
+                .font(.system(size: 15, weight: .regular, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .scaleEffect(0.75)
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 3)
     }
 }

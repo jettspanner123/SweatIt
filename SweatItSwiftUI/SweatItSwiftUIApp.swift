@@ -32,6 +32,9 @@ class ApplicationStates: ObservableObject {
     
     @Published var workoutStatus: WorkoutState = .none
     
+    @Published var currentSelectedFood: Food_t? = nil
+    @Published var showFoodDetails: Bool = false
+    
     
     public func showError() -> Void {
         withAnimation {
