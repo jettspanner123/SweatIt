@@ -18,7 +18,7 @@ struct PrimaryNavigationButton: View {
             Spacer()
             Text(self.text)
                 .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
-                .foregroundStyle(.white.opacity(0.75))
+                .foregroundStyle(.white)
             
             Spacer()
             HStack {

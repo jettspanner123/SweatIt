@@ -20,9 +20,8 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .coach
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
     
-    @State var showCameraScreen: Bool = false
     @State var showNotificationCenter: Bool = false
     
     @AppStorage("isUserLoggedIn") var isUserLoggedIn: Bool = true
@@ -73,8 +72,8 @@ struct ContentView: View {
                         .zIndex(9999)
                 }
                 
-                if self.showCameraScreen {
-                    FoodScannerScreen(showCameraScreen: self.$showCameraScreen)
+                if self.appStates.showCameraScreen {
+                    FoodScannerScreen()
                         .transition(.offset(y: UIScreen.main.bounds.height))
                         .zIndex(.infinity)
                 }
@@ -88,8 +87,8 @@ struct ContentView: View {
                         self.isUserLoggedIn = false
                     }
                 })
-                .offset(y: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? -50 : 0)
-                .blur(radius: self.showNotificationCenter || self.showCameraScreen || self.showAddAgendaPage ? 10 : 0)
+                .offset(y: self.showNotificationCenter || self.appStates.showCameraScreen || self.showAddAgendaPage ? -50 : 0)
+                .blur(radius: self.showNotificationCenter || self.appStates.showCameraScreen || self.showAddAgendaPage ? 10 : 0)
                 
                 if self.currentPage_t == .home {
                     HomeScreen(showAddAgendaPage: self.$showAddAgendaPage, AgendaToday: self.$AgendaToday)
@@ -103,9 +102,9 @@ struct ContentView: View {
                     CoachScreen()
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .diet {
-                    DietScreen(showCameraScreen: self.$showCameraScreen)
-                        .offset(y: self.showCameraScreen ? -50 : 0)
-                        .blur(radius: self.showCameraScreen ? 10 : 0)
+                    DietScreen()
+                        .offset(y: self.appStates.showCameraScreen ? -50 : 0)
+                        .blur(radius: self.appStates.showCameraScreen ? 10 : 0)
                         .transition(.blurReplace)
                 } else {
                     ProfileScreen(user: $currentUser)

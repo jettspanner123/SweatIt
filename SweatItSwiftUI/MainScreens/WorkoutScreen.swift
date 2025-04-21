@@ -48,18 +48,20 @@ struct WorkoutScreen: View {
                             }
                     }
                     
-                    PrimaryNavigationButton(text: "Today Split")
-                        .padding(.leading)
-                        .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
-                        .overlay {
-                            HStack {
-                                Image("bucket")
-                                    .scaleEffect(0.75)
-                                    .offset(y: 1)
+                    NavigationLink(destination: ChooseWorkoutScreen()) {
+                        PrimaryNavigationButton(text: "Today Split")
+                            .padding(.leading)
+                            .background(defaultShape.fill(ApplicationLinearGradient.thanosGradient))
+                            .overlay {
+                                HStack {
+                                    Image("bucket")
+                                        .scaleEffect(0.75)
+                                        .offset(y: 1)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 15)
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 15)
-                        }
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 

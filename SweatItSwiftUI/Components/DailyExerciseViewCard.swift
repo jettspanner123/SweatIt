@@ -28,7 +28,7 @@ struct DailyExerciseViewCard: View {
                     case .failure(let error):
                         Text("Failed 🥺")
                             .font(.system(size: 12, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.darkBG)
                     @unknown default:
                         Text("Error!")
                             .font(.system(size: 12, weight: .semibold, design: .rounded))

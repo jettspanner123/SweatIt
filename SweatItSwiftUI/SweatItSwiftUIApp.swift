@@ -35,6 +35,10 @@ class ApplicationStates: ObservableObject {
     @Published var currentSelectedFood: Food_t? = nil
     @Published var showFoodDetails: Bool = false
     
+    @Published var currentSelectedFoodImage: Optional<UIImage> = nil
+    @Published var showCameraScreen: Bool = false
+    
+    
     
     public func showError() -> Void {
         withAnimation {

@@ -9,6 +9,7 @@ import SwiftUI
 import TipKit
 
 struct HomeScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     @Binding var showAddAgendaPage: Bool
     
@@ -152,6 +153,11 @@ struct HomeScreen: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 15)
+                    }
+                    .onTapWithScaleVibrate {
+                        withAnimation {
+                            self.appStates.showCameraScreen = true
+                        }
                     }
                 
                 

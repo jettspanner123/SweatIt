@@ -139,19 +139,15 @@ import AVFoundation
 //}
 
 struct FoodScannerScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
-    @Binding var showCameraScreen: Bool
     
     @State var pageTranslation: CGSize = .zero
     
+    
     var body: some View {
         ZStack {
-                        
-            VStack {
-                
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+            CameraView(capturedImage: self.$appStates.currentSelectedFoodImage)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppBackgroundBlur(radius: 100, opaque: true))
@@ -170,7 +166,7 @@ struct FoodScannerScreen: View {
                 .onEnded { value in
                     if value.translation.height > 100 {
                         withAnimation {
-                            self.showCameraScreen = false
+                            self.appStates.showCameraScreen = false
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation {

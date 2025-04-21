@@ -16,39 +16,89 @@ struct DietScreen: View {
     
     @State var dietCompletedPrecentage: CGFloat = 20.0
     
-    @Binding var showCameraScreen: Bool 
     var body: some View {
         ScrollContentView {
             
             
             
-            // MARK: Add food button
-            VStack(spacing: 10) {
-                Image(systemName: "camera.fill")
-                    .foregroundStyle(.white.opacity(0.75))
-                    .frame(width: 50, height: 50)
-                    .overlay {
-                        Circle()
-                            .stroke(.white.opacity(0.18))
-                    }
-                    .background(.white.opacity(0.08), in: Circle())
+            HStack {
                 
-                Text("Scan Food")
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.75))
+                
+                // MARK: Add food button
+                //                VStack(spacing: 10) {
+                //                    Image(systemName: "camera.fill")
+                //                        .foregroundStyle(.white.opacity(0.75))
+                //                        .frame(width: 50, height: 50)
+                //                        .overlay {
+                //                            Circle()
+                //                                .stroke(.white.opacity(0.18))
+                //                        }
+                //                        .background(.white.opacity(0.08), in: Circle())
+                //
+                //                    Text("Scan Food")
+                //                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                //                        .foregroundStyle(.white.opacity(0.75))
+                //                }
+                //                .frame(maxWidth: .infinity)
+                //                .frame(height: 125)
+                //                .overlay {
+                //                    defaultShape
+                //                        .stroke(.white.opacity(0.08))
+                //                }
+                //                .background(.darkBG.opacity(0.54), in: defaultShape)
+                PrimaryNavigationButton(text: "Scan Food")
+                    .background(ApplicationLinearGradient.redGradient, in: defaultShape)
+                    .overlay(alignment: .leading) {
+                        Image(systemName: "barcode.viewfinder")
+                            .foregroundStyle(.white)
+                            .padding(.horizontal)
+                    }
+                    .onTapWithScaleVibrate(scaleBy: 0.85) {
+                        withAnimation {
+                            self.appStates.showCameraScreen = true
+                        }
+                    }
+                
+                
+                
+                
+                
+                // MARK: Search Food button
+                //                VStack(spacing: 10) {
+                //                    Image(systemName: "camera.fill")
+                //                        .foregroundStyle(.white.opacity(0.75))
+                //                        .frame(width: 50, height: 50)
+                //                        .overlay {
+                //                            Circle()
+                //                                .stroke(.white.opacity(0.18))
+                //                        }
+                //                        .background(.white.opacity(0.08), in: Circle())
+                //
+                //                    Text("Scan Food")
+                //                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                //                        .foregroundStyle(.white.opacity(0.75))
+                //                }
+                //                .frame(maxWidth: .infinity)
+                //                .frame(height: 125)
+                //                .overlay {
+                //                    defaultShape
+                //                        .stroke(.white.opacity(0.08))
+                //                }
+                //                .background(.darkBG.opacity(0.54), in: defaultShape)
+                PrimaryNavigationButton(text: "Find Food")
+                    .background(ApplicationLinearGradient.thanosGradient, in: defaultShape)
+                    .overlay(alignment: .leading) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundStyle(.white)
+                            .padding(.horizontal)
+                    }
+                    .onTapWithScaleVibrate(scaleBy: 0.85) {
+                        
+                    }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: 125)
-            .overlay {
-                defaultShape
-                    .stroke(.white.opacity(0.08))
-            }
-            .background(.darkBG.opacity(0.54), in: defaultShape)
-            .onTapWithScaleVibrate(scaleBy: 0.85) {
-                withAnimation {
-                    self.showCameraScreen = true
-                }
-            }
+            
+            
             
             
             
@@ -58,7 +108,7 @@ struct DietScreen: View {
                 .padding(.top, 20)
             
             HStack {
-               
+                
                 InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
@@ -113,6 +163,3 @@ struct DietScreen: View {
     }
 }
 
-#Preview {
-    DietScreen(showCameraScreen: .constant(false))
-}
