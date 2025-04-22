@@ -211,8 +211,52 @@ extension View {
             .offset(y: UIScreen.main.bounds.height / 2 - (75))
     }
     
+    
+    
 }
 
+struct MacroStyleCardMaxWidth: View {
+    
+    var text: String = ""
+    var body: some View {
+        HStack(spacing: 5) {
+            Text(self.text)
+                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                .foregroundStyle(.white)
+        }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+        .background(.darkBG.opacity(0.54))
+        .background(AppBackgroundBlur(radius: 100, opaque: true))
+        .overlay {
+            defaultShape
+                .stroke(.white.opacity(0.18))
+        }
+        .clipShape(defaultShape)
+    }
+}
+
+struct MacroStyleCard: View {
+    
+    var text: String = ""
+    var body: some View {
+        HStack(spacing: 5) {
+            Text(self.text)
+                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                .foregroundStyle(.white)
+        }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 8)
+        .background(.darkBG.opacity(0.54))
+        .background(AppBackgroundBlur(radius: 100, opaque: true))
+        .overlay {
+            defaultShape
+                .stroke(.white.opacity(0.18))
+        }
+        .clipShape(defaultShape)
+    }
+}
 extension CustomTextField {
     func isEditable() -> some View {
         self

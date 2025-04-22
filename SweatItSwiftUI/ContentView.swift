@@ -36,6 +36,14 @@ struct ContentView: View {
     
     
     @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
+    func cleanResponse(jsonString: String) -> String {
+        if jsonString.hasPrefix("```json") {
+            let index = jsonString.index(jsonString.startIndex, offsetBy: 8) // 5 chars to skip "json:"
+            let toIndex = jsonString.index(jsonString.endIndex, offsetBy: -5)
+            return String(jsonString[index...toIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return jsonString
+    }
     
     var body: some View {
         NavigationStack {
@@ -86,12 +94,12 @@ struct ContentView: View {
                     CustomBackDrop()
                 }
                 
-                if self.appStates.isFoodScannerLoading {
+                if true {
                     FullScreenLoadingView()
                         .transition(.scale)
                 }
                 
-                if self.appStates.isFoodScannerLoading {
+                if true {
                     CustomBackDrop()
                 }
                 
@@ -176,19 +184,21 @@ struct ContentView: View {
         .sensoryFeedback(.impact, trigger: self.currentPage_t)
         .onChange(of: self.appStates.scannedFoodDetail) {
             print(self.appStates.scannedFoodDetail, self.appStates.scannedFoodDetail.count, type(of: self.appStates.scannedFoodDetail))
-            let scannedFoodDetails = self.appStates.scannedFoodDetail.trimmingCharacters(in: .whitespacesAndNewlines)
+            let scannedFoodDetails = self.cleanResponse(jsonString: self.appStates.scannedFoodDetail)
+            print(scannedFoodDetails)
             if scannedFoodDetails == "null" {
                 print("Found nothing")
                 withAnimation {
                     self.appStates.showScanFoodErrorDialogBox = true
                 }
+                return
             } else {
                 print("Found something")
                 self.appStates.showScannedFoodDetailScreen = true
             }
         }
         .onChange(of: self.appStates.showScannedFoodDetailScreen) {
-            self.showScannedFoodDetailScreen = true
+            self.showScannedFoodDetailScreen = self.appStates.showScannedFoodDetailScreen
         }
         
     }

@@ -45,6 +45,8 @@ class ApplicationStates: ObservableObject {
     @Published var showScanFoodErrorDialogBox: Bool = false
     @Published var showScannedFoodDetailScreen: Bool = false
     
+    @Published var textTransitionState: Int = 0
+    
     
     
     

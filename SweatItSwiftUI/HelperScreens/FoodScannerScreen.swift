@@ -170,7 +170,15 @@ struct FoodScannerScreen: View {
                 responseText = "Failed to resize image."
                 return
             }
-            let prompt = "Identify the food item and estimate it's nutritional value, also give me the answer in this format: [food_name,description_of_food_item_atleast_3_lines_without_any_commas_here,estimated_quantity_in_gm_only_number,total_calories_only_numbers,protien_only_numbers,carbohydrates_only_numbers,fats_only_numbers], and this should be the only data that comes in, nothing else, do not keep the array brackets, only comma separated values. Make sure there are always 7 elements, should be no prefix or postfix things, if no food is found simply give me null"
+//            var caloriesPerGram: Double
+//        var protienPerGram: Double
+//        var carbsPerGram: Double
+//        var fatsPerGram: Double
+            let prompt: String = """
+            Generate a strict JSON object with foodName as non-empty string of max 5 words, 
+            foodDescription as non-empty of atleast 50 words and max 75 words and foodType which is also a non-empty string and can be either of these [`Junk 💩`, `Clean 🥦`, `Beverage 🥛`], just like the others foodImage shoudl also be non-empty string with a link to the image anywhere from the web,
+            don't generate it yourself, make sure that the food should be in the middle of the image and the image should be white, and one thing over everything is the the image should be valid, not like that broken image,foodQuantity as a double value representing grams, calories, protein, carbs, fats, protienPerGram, carbsPerGram, fatsPerGram and calories_per_gram as double values if the image is of food, just give out null if the image is not a food item — and return only the JSON object without extra text and if there is no food item just return null no other text.
+            """
             
             do {
                 let response = try await model.generateContent(prompt, resizedImage)
