@@ -1,6 +1,54 @@
 import SwiftUI
 
 struct MacrosViewCard: View {
+    
+    @EnvironmentObject var appStates: ApplicationStates
+    
+    
+    var protienConsumed: Double {
+        var totalProtienConsumed: Double = .zero
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                totalProtienConsumed += food.protein
+            }
+        }
+        return totalProtienConsumed
+    }
+    
+    var carbsConsumed: Double {
+        var totalCarbsConsumed: Double = .zero
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                totalCarbsConsumed += food.protein
+            }
+        }
+        return totalCarbsConsumed
+    }
+    
+    var fatsConsumed: Double {
+        var totalFatsConsumed: Double = .zero
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                totalFatsConsumed += food.protein
+            }
+        }
+        return totalFatsConsumed
+    }
+    
+    var protienProgressDecimal: Double {
+        let e = Double(self.protienConsumed / self.appStates.dailyNeeds.dailyProtien)
+        return e > 1 ? 1 : e
+    }
+    
+    var carbsProgressDecimal: Double {
+        let e = Double(self.carbsConsumed / self.appStates.dailyNeeds.dailyCarbs)
+        return e > 1 ? 1 : e
+    }
+    
+    var fatsProgressDecimal: Double {
+        let e = Double(self.fatsConsumed / self.appStates.dailyNeeds.dailyFats)
+        return e > 1 ? 1 : e
+    }
     var body: some View {
         VStack {
             Text("Macros")
@@ -24,12 +72,12 @@ struct MacrosViewCard: View {
                         
                     }
                     .frame(maxHeight: .infinity)
-                    .frame(width: geometry.size.width * 0.2)
+                    .frame(width: geometry.size.width * self.protienProgressDecimal)
                     .background(ApplicationLinearGradient.greenGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         HStack {
-                           Text("12g")
+                            Text(String(format: "%.fg", self.protienConsumed))
                                 .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                                 .foregroundStyle(.white)
                         }
@@ -43,7 +91,7 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
-                        Text("82g")
+                        Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyProtien))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))
                     }
@@ -73,12 +121,12 @@ struct MacrosViewCard: View {
                         
                     }
                     .frame(maxHeight: .infinity)
-                    .frame(width: geometry.size.width * 0.65)
+                    .frame(width: geometry.size.width * self.carbsProgressDecimal)
                     .background(ApplicationLinearGradient.brownGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         HStack {
-                           Text("17g")
+                            Text(String(format: "%.fg", self.carbsConsumed))
                                 .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                                 .foregroundStyle(.white)
                         }
@@ -92,7 +140,7 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
-                        Text("30g")
+                        Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyCarbs))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))
                     }
@@ -123,12 +171,12 @@ struct MacrosViewCard: View {
                         
                     }
                     .frame(maxHeight: .infinity)
-                    .frame(width: geometry.size.width * 0.5)
+                    .frame(width: geometry.size.width * self.fatsProgressDecimal)
                     .background(ApplicationLinearGradient.goldenGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay {
                         HStack {
-                           Text("7g")
+                            Text(String(format: "%.fg", self.fatsConsumed))
                                 .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                                 .foregroundStyle(.white)
                         }
@@ -142,7 +190,7 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
-                        Text("15g")
+                        Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyFats))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))
                     }
@@ -162,7 +210,6 @@ struct MacrosViewCard: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(defaultShape)
-        
     }
 }
 

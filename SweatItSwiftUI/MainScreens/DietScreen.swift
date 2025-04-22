@@ -12,9 +12,28 @@ struct DietScreen: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var foodItemList: Array<Food_t> = [Food.current.apple, Food.current.friedChicken, Food.current.sandwich, Food.current.smoothie]
+    var foodItemList: Array<Food_t> {
+        var allFoods: Array<Food_t> = []
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                allFoods.append(food)
+            }
+        }
+        return allFoods
+            
+    }
     
-    @State var dietCompletedPrecentage: CGFloat = 20.0
+    var caloriesConsumed: Double {
+        var totalCaloriesConsumed: Double = .zero
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                totalCaloriesConsumed += food.calories
+            }
+        }
+        return totalCaloriesConsumed
+    }
+    
+    
     
     var body: some View {
         ScrollContentView {
@@ -67,7 +86,7 @@ struct DietScreen: View {
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 
-                InformationCard(image: "Food", title: "Consumed", text: "1900 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", self.caloriesConsumed), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
@@ -82,7 +101,10 @@ struct DietScreen: View {
             
             SecondaryHeading(title: "Calories Intake", secondaryText: "( As per \(ApplicationHelper.formatDateToHumanReadable(date: .now)) )")
                 .padding(.top, 20)
-            
+           
+            if self.appStates.dailyEvents.mealsHad.isEmpty {
+                
+            }
             
             VStack(spacing: 0) {
                 

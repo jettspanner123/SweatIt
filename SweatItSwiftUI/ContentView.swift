@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import AVKit
 
 class AnimatedNamespaceCoordinator: ObservableObject {
     public var current = AnimatedNamespaceCoordinator()
@@ -94,12 +95,12 @@ struct ContentView: View {
                     CustomBackDrop()
                 }
                 
-                if true {
+                if self.appStates.isFoodScannerLoading {
                     FullScreenLoadingView()
-                        .transition(.scale)
+                        .transition(.blurReplace)
                 }
                 
-                if true {
+                if self.appStates.isFoodScannerLoading {
                     CustomBackDrop()
                 }
                 
@@ -216,22 +217,34 @@ struct ContentViewPreviewProvider: PreviewProvider {
 }
 
 struct FullScreenLoadingView: View {
+    
+    
     var body: some View {
         VStack {
             VStack {
                 ProgressView()
                     .tint(.white)
                     .scaleEffect(1.5)
+                    .offset(y: 8)
+                
                 
                 Text("Analizing Food Data....")
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(.white)
-                    .padding(.top)
+                    .padding(10)
+                    .offset(y: 8)
             }
-            .padding(25)
-            .background(.darkBG, in: defaultShape)
+            .padding()
+            .overlay {
+                defaultShape
+                    .stroke(.white.opacity(0.18))
+            }
+            .background(AppBackgroundBlur(radius: 100, opaque: true))
+            .background(.darkBG.opacity(0.54))
+            .clipShape(defaultShape)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
         .zIndex(ApplicationBounds.dialogBoxZIndex)
         .ignoresSafeArea()
     }

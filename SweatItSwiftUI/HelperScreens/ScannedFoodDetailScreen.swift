@@ -22,6 +22,7 @@ struct ScannedFoodDetailScreen: View {
         var protienPerGram: Double
         var carbsPerGram: Double
         var fatsPerGram: Double
+        var mealType: Extras.MealType
         
         enum CodingKeys: String, CodingKey {
             case foodName
@@ -37,6 +38,7 @@ struct ScannedFoodDetailScreen: View {
             case protienPerGram
             case carbsPerGram
             case fatsPerGram
+            case mealType
         }
     }
     
@@ -55,6 +57,8 @@ struct ScannedFoodDetailScreen: View {
     @State var scannedFoodItem: Optional<ScannedFood_t> = nil
     @State var foodQuantity: Double = .zero
     
+    @State var isSaveButtonClicked: Bool = false
+    
     var body: some View {
         ScreenBuilder {
             
@@ -71,11 +75,17 @@ struct ScannedFoodDetailScreen: View {
             // MARK: Bottom button
             
             VStack {
-                Text("Add Food")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 13 , weight: .medium, design: .rounded))
-                    .transition(.blurReplace)
-                
+                if self.isSaveButtonClicked {
+                    ProgressView()
+                        .tint(.white)
+                        .transition(.blurReplace)
+                } else {
+                    Text("Add Food")
+                        .foregroundStyle(.white)
+                        .font(.system(size: 13 , weight: .medium, design: .rounded))
+                        .transition(.blurReplace)
+                }
+               
             }
             .frame(width: BOTTOM_BUTTON_WIDTH, height: BOTTOM_BUTTON_HEIGHT)
             .background(ApplicationLinearGradient.redGradient)
@@ -83,6 +93,29 @@ struct ScannedFoodDetailScreen: View {
             .offset(y: BOTTOM_BUTTON_OFFSET)
             .zIndex(9999)
             .ignoresSafeArea()
+            .onTapGesture {
+                withAnimation {
+                    self.isSaveButtonClicked = true
+                }
+                if let food = self.scannedFoodItem, let foodItem = self.foodItem {
+                        self.appStates.dailyEvents.mealsHad.append(.init(mealName: food.foodName, mealType: food.mealType, foodItems: [foodItem]))
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation {
+                        self.appStates.showScannedFoodDetailScreen = false
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        ApplicationSounds.current.completed()
+                        withAnimation {
+                            self.isSaveButtonClicked = false
+                        }
+                    }
+                }
+                
+                
+            }
             
             
             
@@ -131,7 +164,8 @@ struct ScannedFoodDetailScreen: View {
                     
                     Text(food.foodDescription)
                         .bottomDialogBoxBodyText()
-                        .padding(.horizontal, 10)
+                        .padding(.vertical, 10)
+                        .applicationDropDownButton()
                     
                     SecondaryHeading(title: "Nutirional Values")
                         .padding(.top, 25)
@@ -150,7 +184,8 @@ struct ScannedFoodDetailScreen: View {
                     
                     Text("Please adjust your food macro intake, the ai would have analyzed the quantity of food, but if you think this is incorrect please change it below.")
                         .bottomDialogBoxBodyText()
-                        .padding(.horizontal, 10)
+                        .padding(.vertical, 10)
+                        .applicationDropDownButton()
                     
                     VStack {
                         Text(String(format: "Food Quantity: %.1fg", self.foodQuantity))

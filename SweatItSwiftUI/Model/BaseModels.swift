@@ -244,3 +244,22 @@ struct ExtraInfo_t {
         return dict
     }
 }
+
+struct DailyNeeds_t {
+    var dailyCalories: Double {
+        return Double(2500)
+    }
+    var dailyProtien: Double {
+       return Double(User.current.currentUser.currentWeight * 1.5)
+    }
+    var dailyCarbs: Double {
+        return Double(2 * User.current.currentUser.currentWeight)
+    }
+    var dailyFats: Double {
+        return Double(0.5 * User.current.currentUser.currentWeight)
+    }
+    var dailySteps: Int {
+        return 15000
+    }
+}
+

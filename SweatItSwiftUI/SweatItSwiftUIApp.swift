@@ -47,6 +47,9 @@ class ApplicationStates: ObservableObject {
     
     @Published var textTransitionState: Int = 0
     
+    @Published var dailyEvents: DailyEvents_t = .init()
+    @Published var dailyNeeds: DailyNeeds_t = .init()
+    
     
     
     

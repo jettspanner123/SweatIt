@@ -177,9 +177,12 @@ struct FoodScannerScreen: View {
             let prompt: String = """
             Generate a strict JSON object with foodName as non-empty string of max 5 words, 
             foodDescription as non-empty of atleast 50 words and max 75 words and foodType which is also a non-empty string and can be either of these [`Junk 💩`, `Clean 🥦`, `Beverage 🥛`], just like the others foodImage shoudl also be non-empty string with a link to the image anywhere from the web,
-            don't generate it yourself, make sure that the food should be in the middle of the image and the image should be white, and one thing over everything is the the image should be valid, not like that broken image,foodQuantity as a double value representing grams, calories, protein, carbs, fats, protienPerGram, carbsPerGram, fatsPerGram and calories_per_gram as double values if the image is of food, just give out null if the image is not a food item — and return only the JSON object without extra text and if there is no food item just return null no other text.
+            don't generate it yourself, make sure that the food should be in the middle of the image and the image should be white, and one thing over everything is the the image should be valid, not like that broken image,foodQuantity as a double value representing grams, calories, protein, carbs, fats, protienPerGram, carbsPerGram, fatsPerGram and calories_per_gram as double values, mealType which is also a non-empty string and can be either of these [`Breakfast ☕️`, `Lunch 🍽️`, `Beverage 🥛`, `Dinner 🍝`, ``Snack 🍿] if the image is of food, just give out null if the image is not a food item — and return only the JSON object without extra text and if there is no food item just return null no other text.
             """
             
+            
+//        case breakfast = "Breakfast ☕️", lunch = "Lunch 🍽️", dinner = "Dinner 🍝", snack = "Snack 🍿"
+
             do {
                 let response = try await model.generateContent(prompt, resizedImage)
                 responseText = response.text ?? "No response received."
