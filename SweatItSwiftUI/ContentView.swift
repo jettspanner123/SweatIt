@@ -210,10 +210,12 @@ struct ContentView: View {
 
 struct ContentViewPreviewProvider: PreviewProvider {
     static let appStates: ApplicationStates = .init()
+    static let healthManager: HealthManager = .init()
     
     static var previews: some View {
         ContentView()
             .environmentObject(self.appStates)
+            .environmentObject(self.healthManager)
     }
     
 }

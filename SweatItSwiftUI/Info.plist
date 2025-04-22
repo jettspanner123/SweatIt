@@ -15,7 +15,9 @@
 		<string>Poppins-Medium.ttf</string>
 	</array>
     
-    <key>NSMotionUsageDescription</key>
-    <string>We need access to your motion data to track steps.</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>This app uses your health data to track your steps.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>This app updates your health data.</string>
 </dict>
 </plist>

@@ -10,6 +10,7 @@ import TipKit
 
 struct HomeScreen: View {
     @EnvironmentObject var appStates: ApplicationStates
+    @EnvironmentObject var healthManager: HealthManager
     
     @Binding var showAddAgendaPage: Bool
     
@@ -17,6 +18,8 @@ struct HomeScreen: View {
     @State var RescentActivities: Array<Activity_t> = Activity.current.exampleActivityList
     
     @State var showAllActivitiesPage: Bool = false
+    
+    @State var currentDayStepCount: Int = .zero
     
     var burnedCalores: Double {
         return self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
@@ -40,7 +43,7 @@ struct HomeScreen: View {
         ScrollContentView {
             
             // MARK: Steps Taken card
-            InformationCard(image: "Boot", title: "Steps", text: String(self.appStates.pedometer.steps), secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
+            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
                 print("Hello world")
             }
             .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
@@ -48,37 +51,62 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             // MARK: Calories burned and gained
             HStack {
+                
+                
+                // MARK: Calories burned
                 InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.burnedCalores), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 .contextMenu {
+                    if self.appStates.dailyEvents.workoutsDone.isEmpty {
+                        VStack {
+                            Text("No workouts done yet! 🥺")
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
+                        }
+                    }
+                    
                     ForEach(self.appStates.dailyEvents.workoutsDone, id: \.id) { workout in
                         Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
                     }
                 }
                 
+                
+                
+                
+                
+                
+                // MARK: Calories gained
                 InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                 .contextMenu {
+                    if self.appStates.dailyEvents.workoutsDone.isEmpty {
+                        VStack {
+                            Text("No meals had yet! 🥺")
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
+                        }
+                    }
                     
+                    ForEach(self.appStates.dailyEvents.mealsHad, id: \.id) { meal in
+                        Text("\(meal.mealName): [\(String(format: "%.f kCal", meal.totalCalories))]")
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             // MARK: Agenda today section
             SecondaryHeading(title: "Agenda Today")
                 .padding(.top, 25)
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             // MARK: Agenda today card
             VStack(spacing: 0) {
                 
@@ -119,7 +147,7 @@ struct HomeScreen: View {
             }
             .clipShape(defaultShape)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             // MARK: Create agenda button
             
@@ -146,7 +174,7 @@ struct HomeScreen: View {
             SecondaryHeading(title: "Quick Links")
                 .padding(.top, 25)
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             
             // MARK: Quick link twin buttons
@@ -199,19 +227,19 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             
             // MARK: Recent Activities
-//            SecondaryHeading(title: "Recent Activities")
-//                .padding(.top, 25)
+            //            SecondaryHeading(title: "Recent Activities")
+            //                .padding(.top, 25)
             
             HeadingWithLink(titleHeading: "Recent Activities") {
                 self.showAllActivitiesPage = true
             }
             .padding(.top, 25)
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
             
             VStack(spacing: 5) {
                 ForEach(self.RescentActivities, id: \.id) { activity in
@@ -222,7 +250,12 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-
+            
+        }
+        .onAppear {
+            Task {
+                self.currentDayStepCount = await self.healthManager.getStepsToday()
+            }
         }
         .sensoryFeedback(.impact, trigger: self.showAddAgendaPage)
         .navigationDestination(isPresented: self.$showAllActivitiesPage, destination: {

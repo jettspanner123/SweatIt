@@ -32,7 +32,7 @@ struct ActiveWorkoutScreen: View {
     var body: some View {
         ScreenBuilder {
             if self.appState.workoutStatus == .started {
-                WorkoutEngine(workout: Workout.current.armsWorkout)
+                WorkoutEngine(workout: self.workout)
                     .zIndex(.infinity)
                     .transition(.offset(y: UIScreen.main.bounds.height))
             }

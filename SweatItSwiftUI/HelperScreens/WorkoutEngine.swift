@@ -19,6 +19,8 @@ struct WorkoutEngine: View {
     @State var isMenuOpen: Bool = false
     @State var menuPageTranslation: CGSize = .zero
     
+    @State var isExitDialogOpen: Bool = false
+    
     @State var completedExercises: Set<Exercise_t> = []
     @State var showTimerScreen: Bool = false
     
@@ -69,6 +71,46 @@ struct WorkoutEngine: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
+                
+                if self.isExitDialogOpen {
+                    DialogBox {
+                       Text("Wanna Quit? 🤡")
+                            .bottomDialogBoxHeading()
+                        Text("If you quit now all your progress will be lost, which is a shame!")
+                            .bottomDialogBoxBodyText()
+                        
+                        HStack {
+                            SimpleButton(content: {
+                                Text("Quit")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                                withAnimation {
+                                    self.appStates.workoutStatus = .none
+                                }
+                                
+                                ApplicationSounds.current.lost()
+                            })
+                            
+                            SimpleButton(content: {
+                                Text("Stay")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }, backgroundLinearGradient: ApplicationLinearGradient.redGradient, some: {
+                                withAnimation {
+                                    self.isExitDialogOpen = false
+                                }
+                            })
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top)
+                        
+                    }
+                }
+                
+                if self.isExitDialogOpen {
+                    CustomBackDrop()
+                }
                 
                 if self.showTimerScreen {
                     self.TimerScreen
@@ -582,7 +624,7 @@ struct WorkoutEngine: View {
                     .background(.darkBG.opacity(0.18), in: Circle())
                     .onTapGesture {
                         withAnimation {
-                            self.appStates.workoutStatus = .none
+                            self.isExitDialogOpen = true
                         }
                     }
                 

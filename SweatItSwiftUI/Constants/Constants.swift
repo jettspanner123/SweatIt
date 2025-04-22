@@ -2,6 +2,7 @@ import SwiftUI
 import AudioToolbox
 import AVKit
 import CoreMotion
+import HealthKit
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
@@ -152,7 +153,7 @@ class ApplicationHelper {
         case "bodyWeightSquat":
             return "https://static.strengthlevel.com/images/exercises/bodyweight-squat/bodyweight-squat-400.jpg"
         case "walkingLunges":
-            return "https://static.strengthlevel.com/images/exercises/reverse-lunge/reverse-lunge-400.jpg"
+            return "https://static.strengthlevel.com/images/exercises/walking-lunge/walking-lunge-400.jpg"
         case "gluteBridge":
             return "https://static.strengthlevel.com/images/exercises/glute-bridge/glute-bridge-400.jpg"
         case "calfRaise":
@@ -634,4 +635,69 @@ enum ApplicationCache: String {
 
 func getCacheValue(for cache: ApplicationCache) -> String {
     return cache.rawValue
+}
+
+class ApplicationHealthData {
+    public static let current = ApplicationHealthData()
+    
+    @Published var currentDateSteps: Int = .zero
+}
+
+class HealthManager: ObservableObject {
+    let healthStore = HKHealthStore()
+    
+    
+    init() {
+        let steps = HKQuantityType(.stepCount)
+        
+        let healthTypes: Set = [steps]
+        Task {
+            do {
+                try await self.healthStore.requestAuthorization(toShare: [], read: healthTypes)
+            } catch {
+                print("Error fetching health data")
+            }
+        }
+        
+    }
+    
+//    func getStepsToday() -> Int {
+//        var stepCount: Int = .zero
+//        let steps = HKQuantityType(.stepCount)
+//        let predicate = HKQuery.predicateForSamples(withStart: Calendar.current.startOfDay(for: Date()), end: Date())
+//        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, res, error in
+//            guard let res = res, let qualtity = res.sumQuantity(), error == nil else { return  }
+//            print(Int(qualtity.doubleValue(for: .count())))
+//            
+//            stepCount = Int(qualtity.doubleValue(for: .count()))
+//            print("From closure: ", stepCount)
+//        }
+//        
+//        
+//        self.healthStore.execute(query)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            print("From function: ", stepCount)
+//        }
+//        
+//        return stepCount
+//    }
+    
+    func getStepsToday() async -> Int {
+        let steps = HKQuantityType(.stepCount)
+        let predicate = HKQuery.predicateForSamples(withStart: Calendar.current.startOfDay(for: Date()), end: Date(), options: .strictEndDate)
+        
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, result, error in
+                guard let result = result, let quantity = result.sumQuantity(), error == nil else {
+                    continuation.resume(returning: 0)
+                    return
+                }
+                
+                let stepCount = Int(quantity.doubleValue(for: .count()))
+                continuation.resume(returning: stepCount)
+            }
+            
+            self.healthStore.execute(query)
+        }
+    }
 }

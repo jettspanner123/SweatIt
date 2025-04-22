@@ -54,7 +54,6 @@ class ApplicationStates: ObservableObject {
     @Published var dailyEvents: DailyEvents_t = .init()
     @Published var dailyNeeds: DailyNeeds_t = .init()
     
-    @Published var pedometer = ApplicationHelper.PedometerManager()
     
     
     
@@ -82,8 +81,10 @@ struct SweatItSwiftUIApp: App {
         try? Tips.configure()
     }
     
-    @StateObject var appStates = ApplicationStates()
     
+    @StateObject var appStates = ApplicationStates()
+    @StateObject var healthManager = HealthManager()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -92,5 +93,6 @@ struct SweatItSwiftUIApp: App {
 //            RatingsScreen()
         }
         .environmentObject(self.appStates)
+        .environmentObject(self.healthManager)
     }
 }
