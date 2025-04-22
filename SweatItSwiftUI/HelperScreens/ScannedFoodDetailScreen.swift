@@ -58,9 +58,16 @@ struct ScannedFoodDetailScreen: View {
     @State var foodQuantity: Double = .zero
     
     @State var isSaveButtonClicked: Bool = false
+    @State var showErrorState: Bool = false
     
     var body: some View {
         ScreenBuilder {
+            
+            if self.showErrorState {
+                ScannedFoodItemLoadingFailedScreen()
+                    .zIndex(ApplicationBounds.dialogBoxZIndex)
+                    .transition(.offset(y: UIScreen.main.bounds.height))
+            }
             
             
             AccentPageHeader_NoAction(pageHeaderTitle: "Scanned Food") {
@@ -242,6 +249,9 @@ struct ScannedFoodDetailScreen: View {
                     self.foodQuantity = scannedFoodItem.foodQuantity
                 } catch {
                     print(error)
+                    withAnimation {
+                        self.showErrorState = true
+                    }
                 }
             }
             
@@ -249,6 +259,3 @@ struct ScannedFoodDetailScreen: View {
     }
 }
 
-#Preview {
-    ScannedFoodDetailScreen()
-}

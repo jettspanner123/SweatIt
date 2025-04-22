@@ -18,12 +18,29 @@ struct HomeScreen: View {
     
     @State var showAllActivitiesPage: Bool = false
     
+    var burnedCalores: Double {
+        return self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
+    }
+    
+    var consumedCalories: Double {
+        var totalCaloriesConsumed: Double = .zero
+        
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for food in meal.foodItems {
+                totalCaloriesConsumed += food.calories
+            }
+        }
+        
+        return totalCaloriesConsumed
+    }
+    
+    
     
     var body: some View {
         ScrollContentView {
             
             // MARK: Steps Taken card
-            InformationCard(image: "Boot", title: "Steps", text: "8000", secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
+            InformationCard(image: "Boot", title: "Steps", text: String(self.appStates.pedometer.steps), secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
                 print("Hello world")
             }
             .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
@@ -35,23 +52,17 @@ struct HomeScreen: View {
             
             // MARK: Calories burned and gained
             HStack {
-                InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.burnedCalores), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 .contextMenu {
-                    ForEach(Activity.current.exampleActivityList, id: \.id) { activity in
-                        if let workout = activity.activityDescription as? Workout_t {
-                            let workoutName = workout.workoutName
-                            let caloriesBurned = String(format: "%.1f🔥", workout.caloriesBurned)
-                            
-                            Text("\(workoutName): [\(caloriesBurned)]")
-                            
-                        }
+                    ForEach(self.appStates.dailyEvents.workoutsDone, id: \.id) { workout in
+                        Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
                     }
                 }
                 
-                InformationCard(image: "Food", title: "Consumed", text: "1900", secondaryText: "", textColor: .white, wantInformationView: true) {
+                InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))

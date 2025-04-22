@@ -31,6 +31,7 @@ struct WorkoutScreen: View {
             
             if self.searchText.isEmpty {
                 // MARK: Double navigation button
+                
                 HStack {
                     
                     NavigationLink(destination: ChallengesScreen()) {
@@ -107,6 +108,8 @@ struct WorkoutScreen: View {
                     
                 }
             } else {
+                
+                
                 
                 SectionHeader(text: "Workouts")
                     .padding(.top, 15)

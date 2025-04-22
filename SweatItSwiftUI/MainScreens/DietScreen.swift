@@ -33,6 +33,10 @@ struct DietScreen: View {
         return totalCaloriesConsumed
     }
     
+    var caloriesBurned: Double {
+        return self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
+    }
+    
     
     
     var body: some View {
@@ -81,7 +85,7 @@ struct DietScreen: View {
             
             HStack {
                 
-                InformationCard(image: "FireLogo", title: "Burned", text: "195 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.caloriesBurned), secondaryText: "", textColor: .white, wantInformationView: true) {
                     
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))

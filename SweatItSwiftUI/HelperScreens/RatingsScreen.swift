@@ -196,7 +196,15 @@ struct RatingsScreen: View {
                 withAnimation {
                     self.appStates.workoutStatus = .none
                 }
-                ApplicationSounds.current.completed()
+                
+                switch self.currentSelectedPage {
+                case .average:
+                    ApplicationSounds.current.medium()
+                case .good:
+                    ApplicationSounds.current.successful()
+                case .bad:
+                    ApplicationSounds.current.lost()
+                }
             }
             
             

@@ -43,9 +43,11 @@ struct CountDownTimer: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onReceive(self.timer) { timer_t in
-            if self.countdownNumber == -1 {
-                withAnimation {
-                    self.appState.workoutStatus = .started
+            if self.countdownNumber == 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation {
+                        self.appState.workoutStatus = .started
+                    }
                 }
                 self.timer.upstream.connect().cancel()
             }

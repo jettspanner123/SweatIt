@@ -31,12 +31,16 @@ struct ActiveWorkoutScreen: View {
     
     var body: some View {
         ScreenBuilder {
-            
-            
             if self.appState.workoutStatus == .started {
-                WorkoutEngine(workout: self.workout)
+                WorkoutEngine(workout: Workout.current.armsWorkout)
                     .zIndex(.infinity)
-            } else {
+                    .transition(.offset(y: UIScreen.main.bounds.height))
+            }
+            
+//            if self.appState.workoutStatus == .started {
+//                WorkoutEngine(workout: self.workout)
+//                    .zIndex(.infinity)
+//            } else {
                 
                 AccentPageHeader(pageHeaderTitle: self.workout.workoutName)
                     .blur(radius: self.showTransitionScreen ? 10 : 0)
@@ -200,7 +204,7 @@ struct ActiveWorkoutScreen: View {
                 }
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                 .blur(radius: self.showTransitionScreen ? 10 : 0)
-            }
+//            }
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {

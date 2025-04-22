@@ -30,7 +30,11 @@ class ApplicationStates: ObservableObject {
     @Published var showFullNameNotValid: Bool = false
     
     
-    @Published var workoutStatus: WorkoutState = .none
+    @Published var workoutStatus: WorkoutState = .none {
+        didSet {
+            print("Application State Workout State Updated", workoutStatus.rawValue)
+        }
+    }
     
     @Published var currentSelectedFood: Food_t? = nil
     @Published var showFoodDetails: Bool = false
@@ -49,6 +53,8 @@ class ApplicationStates: ObservableObject {
     
     @Published var dailyEvents: DailyEvents_t = .init()
     @Published var dailyNeeds: DailyNeeds_t = .init()
+    
+    @Published var pedometer = ApplicationHelper.PedometerManager()
     
     
     

@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showNotificationCenter: Bool = false
     
@@ -54,6 +54,8 @@ struct ContentView: View {
 //                        .zIndex(99999)
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
+                
+                
                 
                 if self.appStates.showScanFoodErrorDialogBox {
                     VStack {

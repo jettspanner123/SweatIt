@@ -41,8 +41,20 @@ struct WorkoutEngine: View {
     
     func markWorkoutCompleted() -> Void {
         if self.workoutArrayIndex == self.workout.exercises.count - 1 {
+            
+            self.appStates.dailyEvents.workoutsDone.append(self.workout)
             withAnimation {
-                self.appStates.workoutStatus = .ended
+                self.appStates.workoutStatus = .none
+            }
+            
+            ApplicationSounds.current.completed()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation {
+                    self.appStates.workoutStatus = .ended
+                }
+                
+                ApplicationSounds.current.playBubble()
             }
             return
         }
@@ -51,6 +63,7 @@ struct WorkoutEngine: View {
         withAnimation {
             self.showTimerScreen = true
         }
+        ApplicationSounds.current.whistle()
     }
     
     var body: some View {
@@ -276,6 +289,7 @@ struct WorkoutEngine: View {
                 if self.showTimerScreen {
                     if self.secondsToElapse > 0 {
                         self.secondsToElapse -= 1
+                        ApplicationSounds.current.time()
                     }
                     
                     if self.secondsToElapse == 0 {
@@ -285,6 +299,7 @@ struct WorkoutEngine: View {
                         }
                         self.secondsToElapse = 20
                     }
+                    
                 }
             }
             .sensoryFeedback(.impact, trigger: self.workoutArrayIndex)

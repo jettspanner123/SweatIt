@@ -14,5 +14,8 @@
 		<string>Oswald-Medium.ttf</string>
 		<string>Poppins-Medium.ttf</string>
 	</array>
+    
+    <key>NSMotionUsageDescription</key>
+    <string>We need access to your motion data to track steps.</string>
 </dict>
 </plist>

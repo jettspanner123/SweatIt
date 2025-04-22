@@ -1,6 +1,7 @@
 import SwiftUI
 import AudioToolbox
 import AVKit
+import CoreMotion
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
@@ -91,6 +92,23 @@ enum Constants: String {
 }
 
 class ApplicationHelper {
+    
+    class MotionManager: ObservableObject {
+        private let motionManager = CMMotionManager()
+        
+        @Published var x: Double = .zero
+        @Published var y: Double = .zero
+        
+        
+        init() {
+            self.motionManager.startDeviceMotionUpdates(to: .main) { [weak self] data, error in
+                guard let motion = data?.attitude else { return }
+                self?.x = motion.roll
+                self?.y = motion.pitch
+            }
+        }
+        
+    }
     
     public static func getTimeString(from date: Date) -> String {
         let formatter = DateFormatter()
@@ -381,6 +399,35 @@ class ApplicationSounds {
     
     var audioPlayer: AVAudioPlayer?
     
+    func time() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "time", withExtension: ".wav") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    func whistle() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "whistle", withExtension: ".mp3") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
     func playBeep() -> Void {
         guard let soundURL = Bundle.main.url(forResource: "beep", withExtension: ".wav") else {
             print("No beep found")
@@ -396,8 +443,38 @@ class ApplicationSounds {
         
     }
     
+    func lost() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "lost", withExtension: ".mp3") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
     func successful() -> Void {
         guard let soundURL = Bundle.main.url(forResource: "duolingo", withExtension: ".mp3") else {
+            print("No beep found")
+            return
+        }
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            self.audioPlayer?.play()
+        } catch {
+            print("Sound 'BEEP' cannot be played!")
+        }
+        
+    }
+    
+    func medium() -> Void {
+        guard let soundURL = Bundle.main.url(forResource: "medium", withExtension: ".mp3") else {
             print("No beep found")
             return
         }
