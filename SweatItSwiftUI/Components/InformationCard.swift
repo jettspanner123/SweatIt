@@ -16,15 +16,17 @@ struct InformationCard: View {
     var secondaryText: String = ""
     var textColor: Color = .white.opacity(0.75)
     var wantInformationView: Bool = true
+    var value: Double = .zero
     var content: () -> Void = {}
     
-    init(image: String, title: String, text: String, secondaryText: String, textColor: Color, wantInformationView: Bool, content: @escaping () -> Void ) {
+    init(image: String, title: String, text: String, secondaryText: String, textColor: Color, wantInformationView: Bool, value: Double = .zero ,content: @escaping () -> Void ) {
         self.image = image
         self.title = title
         self.text = text
         self.secondaryText = secondaryText
         self.textColor = textColor
         self.wantInformationView = wantInformationView
+        self.value = value
         self.content = content
     }
     
@@ -52,6 +54,8 @@ struct InformationCard: View {
                     .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
                     .foregroundStyle(self.textColor)
                     .padding(.leading, 5)
+                    .contentTransition(.numericText(value: self.value))
+                    .animation(.snappy, value: self.value)
                 
                 if !self.secondaryText.isEmpty {
                     Text(self.secondaryText)

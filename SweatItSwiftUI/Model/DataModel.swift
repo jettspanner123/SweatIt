@@ -385,17 +385,38 @@ class Agenda: ObservableObject, Observable {
 class Food {
     public static var current = Food()
     
-    let pizza = Food_t(foodName: "Pizza", foodDescription: "Cheese pizza with pepperoni", foodQuantity: 1, calories: 300, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 35, fats: 10, recommendation: .noRecommendation)
-    let salad = Food_t(foodName: "Salad", foodDescription: "Fresh salad with mixed greens and dressing", foodQuantity: 1, calories: 150, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 15, fats: 7, recommendation: .moreRecommended)
-    let burger = Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese and lettuce", foodQuantity: 1, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
-    let smoothie = Food_t(foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
-    let friedChicken = Food_t(foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 1, calories: 400, foodImage: "chickenDish", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
-    let pasta = Food_t(foodName: "Pasta", foodDescription: "Pasta with marinara sauce", foodQuantity: 1, calories: 350, foodImage: "pasta.jpg", foodType: .junk, protein: 10, carbs: 50, fats: 10, recommendation: .noRecommendation)
-    let sandwich = Food_t(foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
-    let apple = Food_t(foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
-    let icedCoffee = Food_t(foodName: "Iced Coffee", foodDescription: "Iced coffee with milk and sugar", foodQuantity: 1, calories: 120, foodImage: "iced_coffee.jpg", foodType: .beverage, protein: 2, carbs: 15, fats: 4, recommendation: .noRecommendation)
-    let donut = Food_t(foodName: "Donut", foodDescription: "Glazed chocolate donut", foodQuantity: 1, calories: 200, foodImage: "donut.jpg", foodType: .junk, protein: 2, carbs: 30, fats: 10, recommendation: .lessRecommended)
+    let pizza = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -4, to: .now)!, foodName: "Pizza", foodDescription: "Cheese pizza with pepperoni", foodQuantity: 1, calories: 300, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 35, fats: 10, recommendation: .noRecommendation)
+
+    let salad = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -2, to: .now)!, foodName: "Salad", foodDescription: "Fresh salad with mixed greens and dressing", foodQuantity: 1, calories: 150, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 15, fats: 7, recommendation: .moreRecommended)
+
+    let burger = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -7, to: .now)!, foodName: "Burger", foodDescription: "Beef burger with cheese and lettuce", foodQuantity: 1, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
+
+    let smoothie = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -1, to: .now)!, foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
+
+    let friedChicken = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -5, to: .now)!, foodName: "Fried Chicken", foodDescription: "Crispy fried chicken wings", foodQuantity: 1, calories: 400, foodImage: "chickenDish", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
+
+    let pasta = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -9, to: .now)!, foodName: "Pasta", foodDescription: "Pasta with marinara sauce", foodQuantity: 1, calories: 350, foodImage: "pasta.jpg", foodType: .junk, protein: 10, carbs: 50, fats: 10, recommendation: .noRecommendation)
+
+    let sandwich = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -3, to: .now)!, foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
+
+    let apple = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -6, to: .now)!, foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
+
+    let icedCoffee = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -8, to: .now)!, foodName: "Iced Coffee", foodDescription: "Iced coffee with milk and sugar", foodQuantity: 1, calories: 120, foodImage: "iced_coffee.jpg", foodType: .beverage, protein: 2, carbs: 15, fats: 4, recommendation: .noRecommendation)
+
+    let donut = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -10, to: .now)!, foodName: "Donut", foodDescription: "Glazed chocolate donut", foodQuantity: 1, calories: 200, foodImage: "donut.jpg", foodType: .junk, protein: 2, carbs: 30, fats: 10, recommendation: .lessRecommended)
+
     
+//    let pizza = Food_t(timeOfHaving: Calendar.current.date(byAdding: .hour, value: -4,to: .now)!, foodName: "Pizza" ,foodDescription: "Cheese pizza with pepperoni", foodQuantity: 1, calories: 300, foodImage: "pizza.jpg", foodType: .junk, protein: 15, carbs: 35, fats: 10, recommendation: .noRecommendation)
+//    let salad = Food_t(foodName: "Salad", foodDescription: "Fresh salad with mixed greens and dressing", foodQuantity: 1, calories: 150, foodImage: "salad.jpg", foodType: .clean, protein: 5, carbs: 15, fats: 7, recommendation: .moreRecommended)
+//    let burger = Food_t(foodName: "Burger", foodDescription: "Beef burger with cheese and lettuce", foodQuantity: 1, calories: 500, foodImage: "burger.jpg", foodType: .junk, protein: 25, carbs: 40, fats: 30, recommendation: .lessRecommended)
+//    let smoothie = Food_t(foodName: "Smoothie", foodDescription: "Mixed fruit smoothie with yogurt", foodQuantity: 1, calories: 200, foodImage: "smoothie", foodType: .beverage, protein: 8, carbs: 35, fats: 5, recommendation: .moreRecommended)
+//    let friedChicken = Food_t(foodName: "Fried Chicken" ,foodDescription: "Crispy fried chicken wings", foodQuantity: 1, calories: 400, foodImage: "chickenDish", foodType: .junk, protein: 25, carbs: 30, fats: 20, recommendation: .lessRecommended)
+//    let pasta = Food_t(foodName: "Pasta", foodDescription: "Pasta with marinara sauce", foodQuantity: 1, calories: 350, foodImage: "pasta.jpg", foodType: .junk, protein: 10, carbs: 50, fats: 10, recommendation: .noRecommendation)
+//    let sandwich = Food_t(foodName: "Sandwich", foodDescription: "Turkey sandwich with lettuce and tomato", foodQuantity: 1, calories: 300, foodImage: "sandwich", foodType: .clean, protein: 20, carbs: 40, fats: 8, recommendation: .moreRecommended)
+//    let apple = Food_t(foodName: "Apple", foodDescription: "Fresh apple", foodQuantity: 1, calories: 95, foodImage: "apple", foodType: .clean, protein: 0.5, carbs: 25, fats: 0, recommendation: .moreRecommended)
+//    let icedCoffee = Food_t(foodName: "Iced Coffee", foodDescription: "Iced coffee with milk and sugar", foodQuantity: 1, calories: 120, foodImage: "iced_coffee.jpg", foodType: .beverage, protein: 2, carbs: 15, fats: 4, recommendation: .noRecommendation)
+//    let donut = Food_t(foodName: "Donut", foodDescription: "Glazed chocolate donut", foodQuantity: 1, calories: 200, foodImage: "donut.jpg", foodType: .junk, protein: 2, carbs: 30, fats: 10, recommendation: .lessRecommended)
+//    
     
 }
 

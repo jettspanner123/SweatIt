@@ -21,8 +21,14 @@ struct HomeScreen: View {
     
     @State var currentDayStepCount: Int = .zero
     
+    var caloriesBurnedByWalking: Double {
+        return Double(self.currentDayStepCount) * Double(User.current.currentUser.currentWeight * 0.0005)
+    }
+    
     var burnedCalores: Double {
-        return self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
+        let caloriesBurnedByExercise = self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
+        let caloriesBurnedByWalking: Double = Double(self.currentDayStepCount) * Double(User.current.currentUser.currentWeight * 0.0005)
+        return caloriesBurnedByWalking + caloriesBurnedByExercise
     }
     
     var consumedCalories: Double {
@@ -39,6 +45,7 @@ struct HomeScreen: View {
     
     
     @State var showCaloriesStatsScreen: Bool = false
+    @State var showCaloriesGainedStatsScreen: Bool = false
     
     
     
@@ -46,7 +53,7 @@ struct HomeScreen: View {
         ScrollContentView {
             
             // MARK: Steps Taken card
-            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: true) {
+            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: true, value: Double(self.currentDayStepCount)) {
                 print("Hello world")
             }
             .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
@@ -73,6 +80,10 @@ struct HomeScreen: View {
                         }
                     }
                     
+                    if self.caloriesBurnedByWalking != .zero {
+                        Text(String(format: "%.1f kCal From Walking", self.caloriesBurnedByWalking))
+                    }
+                    
                     ForEach(self.appStates.dailyEvents.workoutsDone, id: \.id) { workout in
                         Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
                     }
@@ -85,7 +96,7 @@ struct HomeScreen: View {
                 
                 // MARK: Calories gained
                 InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: true) {
-                    
+                    self.showCaloriesGainedStatsScreen = true
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                 .contextMenu {
@@ -261,6 +272,9 @@ struct HomeScreen: View {
             }
         }
         .sensoryFeedback(.impact, trigger: self.showAddAgendaPage)
+        .navigationDestination(isPresented: self.$showCaloriesGainedStatsScreen, destination: {
+            CaloriesConsumedGraphPage()
+        })
         .navigationDestination(isPresented: self.$showCaloriesStatsScreen, destination: {
             CaloriesBurnedGraphPage()
         })

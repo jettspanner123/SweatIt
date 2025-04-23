@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 
 struct CaloriesBurnedGraphPage: View {
+    @EnvironmentObject var appStates: ApplicationStates
     @EnvironmentObject var healthManager: HealthManager
     enum CaloriesBurnedGraphCategory: String, CaseIterable {
         case today, weekly, monthly
@@ -17,12 +18,18 @@ struct CaloriesBurnedGraphPage: View {
     @State var selectedCategory: CaloriesBurnedGraphCategory = .today
     @State var stepsTakenForTheDay: Int = .zero
     
+    var caloriesBurnedByWalking: Double {
+        return Double(self.stepsTakenForTheDay) * Double(User.current.currentUser.currentWeight * 0.0005)
+    }
+    
     @State var stepsTakenEachHour: Array<(Int, Int, Int)> = []
     @State var stringStepsTakenEachHour: Dictionary<String, String> = [:]
 
     
     
-    var workouts: Array<Workout_t> = Workout.current.exampleWorkoutList
+    var workouts: Array<Workout_t> {
+        return self.appStates.dailyEvents.workoutsDone
+    }
     
     var totalCaloriesBurned: Double {
         return self.workouts.reduce(0) { $0 + $1.caloriesBurned }
@@ -35,13 +42,14 @@ struct CaloriesBurnedGraphPage: View {
             let valueInt: Int = Int(value)!
             
             self.stepsTakenEachHour.append((keyInt, valueInt, index))
+            index += 1
         }
         
         print(self.stepsTakenEachHour)
     }
     var body: some View {
         ScreenBuilder {
-            AccentPageHeader(pageHeaderTitle: "Calories Stats")
+            AccentPageHeader(pageHeaderTitle: "Calories Burned")
             
             ScrollContentView {
                 
@@ -123,11 +131,26 @@ struct CaloriesBurnedGraphPage: View {
             
             // MARK: Bar chart
             HStack {
-                Chart(self.workouts) { workout in
-                    BarMark(x: .value("Time", ApplicationHelper.getTimeString(from: workout.timing)), y: .value("Calories Burned", workout.caloriesBurned))
-                        .foregroundStyle(ApplicationLinearGradient.redGradient)
+                if self.workouts.isEmpty {
+                    VStack {
+                        Image(systemName: "figure.run")
+                            .resizable()
+                            .frame(width: 50, height: 70)
+                            .foregroundStyle(.white.opacity(0.5))
+
+                        Text("Exercise Performed Will Display Here.")
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 25)
+                } else {
+                    Chart(self.workouts) { workout in
+                        BarMark(x: .value("Time", ApplicationHelper.getTimeString(from: workout.timing)), y: .value("Calories Burned", workout.caloriesBurned))
+                            .foregroundStyle(ApplicationLinearGradient.redGradient)
+                    }
+                    .padding(.vertical)
                 }
-                .padding(.vertical)
             }
             .applicationDropDownButton()
        
@@ -147,18 +170,32 @@ struct CaloriesBurnedGraphPage: View {
                     .takeMaxWidthLeading()
                     .padding(.top, 10)
                 
-                
-                Text("Over the last \(self.workouts.count) workouts, you burned an average of \(String(format: "%.f kCal", self.totalCaloriesBurned)) calories.")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.5))
-                    .takeMaxWidthLeading()
-                
-                Chart(self.workouts) { workout in
-                    LineMark(x: .value("Exercise Count", ApplicationHelper.getTimeString(from: workout.timing)), y: .value("Calories Burned", workout.caloriesBurned))
-                        .foregroundStyle(.appThanosLight)
+                if self.workouts.isEmpty {
+                    VStack {
+                        Image(systemName: "flame.fill")
+                            .resizable()
+                            .frame(width: 50, height: 70)
+                            .foregroundStyle(.white.opacity(0.5))
+                        
+                        Text("No Exercise Done Yet!")
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.5))
+                    }
+                    .padding(.vertical, 25)
+                } else {
+                    
+                    Text("Over the last \(self.workouts.count) workouts, you burned an average of \(String(format: "%.f kCal", self.totalCaloriesBurned)) calories.")
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .takeMaxWidthLeading()
+                    
+                    Chart(self.workouts) { workout in
+                        LineMark(x: .value("Exercise Count", ApplicationHelper.getTimeString(from: workout.timing)), y: .value("Calories Burned", workout.caloriesBurned))
+                            .foregroundStyle(.appThanosLight)
+                    }
+                    .padding(.top)
+                    .padding(.bottom)
                 }
-                .padding(.top)
-                .padding(.bottom)
             }
             .applicationDropDownButton()
             
@@ -190,14 +227,13 @@ struct CaloriesBurnedGraphPage: View {
                 }
                 .takeMaxWidthLeading()
                 
-                Text(String(self.stepsTakenForTheDay) + " Steps")
+                Text(String(self.stepsTakenForTheDay) + " Steps" + " and " + String(format: "%.f kCal", self.caloriesBurnedByWalking))
                     .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
                     .foregroundStyle(.white)
                     .takeMaxWidthLeading()
-                
-                
+
                 Chart(self.stepsTakenEachHour, id: \.2) { item in
-                    LineMark(x: .value("Hour", item.0), y: .value("Steps Taken", item.1))
+                    BarMark(x: .value("Hour", item.0), y: .value("Calories Burned", Double(item.1) * Double(User.current.currentUser.currentWeight * 0.0005)))
                         .foregroundStyle(.appThanosLight)
                 }
                 .chartYAxis(.visible)
@@ -235,15 +271,3 @@ struct CaloriesBurnedGraphPage: View {
     }
 }
 
-
-struct CaloriesGraphPagePreviewProvider: PreviewProvider {
-    static let appStates: ApplicationStates = .init()
-    static let healthManager: HealthManager = .init()
-    
-    static var previews: some View {
-        CaloriesBurnedGraphPage()
-            .environmentObject(self.appStates)
-            .environmentObject(self.healthManager)
-    }
-    
-}
