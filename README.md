@@ -1,3 +1,2 @@
 
-
-<h1>Swieat It: Fitness Application of the future.</h1>
+<h1>SweatIt It: Fitness Application for IOS.</h1>
