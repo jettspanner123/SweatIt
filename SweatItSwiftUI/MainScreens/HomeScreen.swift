@@ -38,6 +38,9 @@ struct HomeScreen: View {
     }
     
     
+    @State var showCaloriesStatsScreen: Bool = false
+    
+    
     
     var body: some View {
         ScrollContentView {
@@ -59,7 +62,7 @@ struct HomeScreen: View {
                 
                 // MARK: Calories burned
                 InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.burnedCalores), secondaryText: "", textColor: .white, wantInformationView: true) {
-                    
+                    self.showCaloriesStatsScreen = true
                 }
                 .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 .contextMenu {
@@ -258,6 +261,9 @@ struct HomeScreen: View {
             }
         }
         .sensoryFeedback(.impact, trigger: self.showAddAgendaPage)
+        .navigationDestination(isPresented: self.$showCaloriesStatsScreen, destination: {
+            CaloriesBurnedGraphPage()
+        })
         .navigationDestination(isPresented: self.$showAllActivitiesPage, destination: {
             ActivityScreen()
         })

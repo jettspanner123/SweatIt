@@ -68,7 +68,6 @@ class ApplicationLinearGradient {
             blueGradient,
             blueGradientInverted,
             thanosGradient,
-            whiteGradient,
             applicationGradient,
             redGradient,
             bloodRedGradient,
@@ -630,7 +629,7 @@ class ApplicationSounds {
 
 
 enum ApplicationCache: String {
-    case cacheForAddFriendsPage
+    case cacheForAddFriendsPage, stepCountPerHour
 }
 
 func getCacheValue(for cache: ApplicationCache) -> String {
@@ -661,26 +660,6 @@ class HealthManager: ObservableObject {
         
     }
     
-//    func getStepsToday() -> Int {
-//        var stepCount: Int = .zero
-//        let steps = HKQuantityType(.stepCount)
-//        let predicate = HKQuery.predicateForSamples(withStart: Calendar.current.startOfDay(for: Date()), end: Date())
-//        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, res, error in
-//            guard let res = res, let qualtity = res.sumQuantity(), error == nil else { return  }
-//            print(Int(qualtity.doubleValue(for: .count())))
-//            
-//            stepCount = Int(qualtity.doubleValue(for: .count()))
-//            print("From closure: ", stepCount)
-//        }
-//        
-//        
-//        self.healthStore.execute(query)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//            print("From function: ", stepCount)
-//        }
-//        
-//        return stepCount
-//    }
     
     func getStepsToday() async -> Int {
         let steps = HKQuantityType(.stepCount)
@@ -700,4 +679,44 @@ class HealthManager: ObservableObject {
             self.healthStore.execute(query)
         }
     }
+    
+    func getStepsFromEachHourOfDay() async -> [String: String] {
+        let now = Date()
+        let startOfDay = Calendar.current.startOfDay(for: now)
+
+        var interval = DateComponents()
+        interval.hour = 1
+
+        let stepType = HKQuantityType(.stepCount)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: .strictEndDate)
+
+        return await withCheckedContinuation { continuation in
+            let query = HKStatisticsCollectionQuery(
+                quantityType: stepType,
+                quantitySamplePredicate: predicate,
+                options: .cumulativeSum,
+                anchorDate: startOfDay,
+                intervalComponents: interval
+            )
+
+            query.initialResultsHandler = { _, res, err in
+                var resultDict: [String: String] = [:] // ✅ Define inside closure
+
+                if let statsCollection = res {
+                    statsCollection.enumerateStatistics(from: startOfDay, to: now) { stat, _ in
+                        if let sum = stat.sumQuantity() {
+                            let steps = sum.doubleValue(for: .count())
+                            let hour = Calendar.current.dateComponents([.hour], from: stat.startDate).hour!
+                            resultDict[String(hour)] = String(Int(steps))
+                        }
+                    }
+                }
+
+                continuation.resume(returning: resultDict)
+            }
+
+            self.healthStore.execute(query)
+        }
+    }
+
 }

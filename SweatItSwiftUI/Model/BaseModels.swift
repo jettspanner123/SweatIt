@@ -52,6 +52,8 @@ struct Workout_t: Identifiable, Codable, Hashable {
         }
         return totalTime
     }
+    
+    var timing: Date = .now
 }
 
 struct Challenge_t: Identifiable, Codable, Hashable {
