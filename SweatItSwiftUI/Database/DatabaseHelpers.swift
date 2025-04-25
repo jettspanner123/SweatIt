@@ -444,6 +444,10 @@ class POST {
         
     }
     
+    public func autoUpdateCurrentDayEvents(_ dailyEvent: DailyEvents_t) async throws -> Void {
+        
+    }
+    
 }
 
 class UPDATE {

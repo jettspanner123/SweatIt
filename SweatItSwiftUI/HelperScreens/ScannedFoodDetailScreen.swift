@@ -92,7 +92,7 @@ struct ScannedFoodDetailScreen: View {
                         .font(.system(size: 13 , weight: .medium, design: .rounded))
                         .transition(.blurReplace)
                 }
-               
+                
             }
             .frame(width: BOTTOM_BUTTON_WIDTH, height: BOTTOM_BUTTON_HEIGHT)
             .background(ApplicationLinearGradient.redGradient)
@@ -100,12 +100,16 @@ struct ScannedFoodDetailScreen: View {
             .offset(y: BOTTOM_BUTTON_OFFSET)
             .zIndex(9999)
             .ignoresSafeArea()
-            .onTapGesture {
+            .onTapWithVibration {
                 withAnimation {
                     self.isSaveButtonClicked = true
                 }
                 if let food = self.scannedFoodItem, let foodItem = self.foodItem {
-                        self.appStates.dailyEvents.mealsHad.append(.init(mealName: food.foodName, mealType: food.mealType, foodItems: [foodItem]))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.25) {
+                        withAnimation {
+                            self.appStates.dailyEvents.mealsHad.append(.init(mealName: food.foodName, mealType: food.mealType, foodItems: [foodItem]))
+                        }
+                    }
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -134,10 +138,10 @@ struct ScannedFoodDetailScreen: View {
                         AsyncImage(url: URL(string: food.foodImage)) { phase in
                             switch phase {
                             case .empty:
-//                                Image(systemName: "photo.badge.exclamationmark.fill")
-//                                    .resizable()
-//                                    .frame(width: 80, height: 60)
-//                                    .foregroundStyle(.white.opacity(0.25))
+                                //                                Image(systemName: "photo.badge.exclamationmark.fill")
+                                //                                    .resizable()
+                                //                                    .frame(width: 80, height: 60)
+                                //                                    .foregroundStyle(.white.opacity(0.25))
                                 ProgressView()
                                     .tint(.white)
                             case .success(let image):
@@ -164,7 +168,7 @@ struct ScannedFoodDetailScreen: View {
                         .stroke(.white.opacity(0.08))
                 }
                 .background(.darkBG.opacity(0.54), in: defaultShape)
-               
+                
                 if let food = self.foodItem, let searchedFood = self.scannedFoodItem {
                     SecondaryHeading(title: food.foodName)
                         .padding(.top)
@@ -182,7 +186,7 @@ struct ScannedFoodDetailScreen: View {
                         MacroStyleCardMaxWidth(text: String(format: "%.fg Carbs 🍞", searchedFood.carbsPerGram * self.foodQuantity))
                         MacroStyleCardMaxWidth(text: String(format: "%.fg Fats 🌽", searchedFood.fatsPerGram * self.foodQuantity))
                         MacroStyleCardMaxWidth(text: String(format: "%.fg kCal 🥦", searchedFood.caloriesPerGram * self.foodQuantity))
-
+                        
                     }
                     
                     
@@ -209,7 +213,7 @@ struct ScannedFoodDetailScreen: View {
                         CustomPrecisionStepper(value: self.$foodQuantity)
                         
                         SimpleButton(content: {
-                           Text("Set To Default")
+                            Text("Set To Default")
                                 .font(.system(size: 13, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white)
                         }, backgroundLinearGradient: ApplicationLinearGradient.blueGradientInverted , some: {
@@ -217,7 +221,7 @@ struct ScannedFoodDetailScreen: View {
                                 self.foodQuantity = self.foodItem!.foodQuantity
                             }
                         })
-                            
+                        
                     }
                     .padding(15)
                     .background(.darkBG.opacity(0.54))
@@ -228,7 +232,7 @@ struct ScannedFoodDetailScreen: View {
                     .clipShape(defaultShape)
                 }
                 
-                    
+                
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)

@@ -18,6 +18,9 @@ struct ProfileScreen: View {
     @State var showAddFriendScreen: Bool = false
     @State var showLeaderboardScreen: Bool = false
     
+//    @State var allUsers: Array<User_t> = User.current.users
+    @State var allUsers: Array<User_t> = User.current.allUsers.sorted(by: { $0.dailyPoints > $1.dailyPoints })
+    
     var body: some View {
         ScrollContentView {
             
@@ -32,7 +35,7 @@ struct ProfileScreen: View {
                 }
                 .frame(width: 100, height: 100)
                 .background(ApplicationLinearGradient.blueGradient, in: RoundedRectangle(cornerRadius: 12))
-//                .clipShape(RoundedRectangle(cornerRadius: 8))
+                //                .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 // MARK: User profile
                 
@@ -109,7 +112,7 @@ struct ProfileScreen: View {
             // MARK: Settins
             
             CustomList {
-               
+                
                 // MARK: User details settings
                 NavigationLink(destination: UserDetailsPage()) {
                     CustomListNavigationButton(image: "person.fill", name: "User Details")
@@ -143,63 +146,26 @@ struct ProfileScreen: View {
             
             
             
-//             MARK: Steps graph card
-            HStack {
-                
-                VStack {
-                    
-                    // MARK: Heading
-                    Text("Avg Step Count")
-                        .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
-                        .foregroundStyle(.white)
-                        .takeMaxWidthLeading()
-                    
-                    Text("(this month)")
-                        .font(.system(size: 12, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .takeMaxWidthLeading()
-                        
-                    
-                    Spacer()
-                    // MARK: Step count
-                    Text("\(13900)")
-                        .font(.custom(ApplicationFonts.oswaldSemiBold, size: 40))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .takeMaxWidthLeading()
-                        .offset(x: -3, y: 5)
-                    
-                    
-                    Text("steps")
-                        .font(.system(size: 12, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .takeMaxWidthLeading()
-                    
-                    
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                
-                
-                HStack {
-                    
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
-                
-            }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .frame(height: 200, alignment: .topLeading)
-            .padding()
-            .background(ApplicationLinearGradient.blueGradient)
-            .clipShape(defaultShape)
+            //             MARK: Steps graph card
+            AvgStepsThisWeekGraph()
             
             
-           
+            
             
             
             HeadingWithLink(titleHeading: "Top Performers", action: {
                 self.showLeaderboardScreen = true
             })
-                .padding(.top, 20)
+            .padding(.top, 20)
+            
+            ForEach(self.allUsers.prefix(3).indices, id: \.self) { index in
+                let user = self.allUsers[index]
+                
+                let background = index == 0 ? ApplicationLinearGradient.redGradient : index == 1 ? ApplicationLinearGradient.thanosGradient : ApplicationLinearGradient.blueGradient
+                UserLeaderBoardCard(user: user, background: background, position: index)
+            }
+            
+            
             
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
@@ -216,30 +182,5 @@ struct ProfileScreen: View {
 }
 
 
-struct CustomListNavigationButton: View {
-    
-    var image: String
-    var name: String
-    
-    var body: some View {
-        HStack(spacing: 15) {
-            Image(systemName: self.image)
-                .resizable()
-                .frame(width: 20, height: 20)
-                .foregroundStyle(.white.opacity(0.5))
-            
-            Text(self.name)
-                .font(.system(size: 15, weight: .regular, design: .rounded))
-                .foregroundStyle(.white.opacity(0.5))
-            
-            Spacer()
-            
-            Image(systemName: "chevron.right")
-                .scaleEffect(0.75)
-                .foregroundStyle(.white.opacity(0.5))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 20)
-        .padding(.vertical, 3)
-    }
-}
+
+

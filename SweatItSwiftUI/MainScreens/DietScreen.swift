@@ -33,17 +33,31 @@ struct DietScreen: View {
         return totalCaloriesConsumed
     }
     
+    var caloricPercentage: Double {
+        let something = self.caloriesConsumed / self.appStates.dailyNeeds.dailyCalories
+        if something > 1 { return 1}
+        return something
+    }
+    
     var caloriesBurned: Double {
         return self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.caloriesBurned }
+    }
+    
+    func loadingBarTextOffset(proxySize: CGSize) -> Double {
+        let totalCharacters = String(self.caloriesConsumed).count
+        print(totalCharacters)
+        if self.caloricPercentage < 0.1 {
+            return 15
+        }
+        let toReturn = (proxySize.width * self.caloricPercentage) + (totalCharacters == 4 ? -70 : totalCharacters == 3 ? -75 : -80)
+        return abs(toReturn)
     }
     
     
     
     var body: some View {
         ScrollContentView {
-            
-            
-            
+           
             HStack {
                 
                 // MARK: Scan food button
@@ -96,12 +110,11 @@ struct DietScreen: View {
                         GeometryReader { textProxy in
                             HStack {
                                 
-                                let caloriesConsumed = 20
-                                let totalCharacters = String(caloriesConsumed).count
-                                Text(String(caloriesConsumed))
+                                
+                                Text(String(format: "%.f kCl", self.caloriesConsumed))
                                     .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
                                     .foregroundStyle(.white)
-                                    .offset(x: (proxySize.width * 0.5) + (totalCharacters == 4 ? -60 : totalCharacters == 3 ? -45 : -35))
+                                    .offset(x: self.loadingBarTextOffset(proxySize: proxySize))
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                             .zIndex(11)
@@ -114,7 +127,8 @@ struct DietScreen: View {
                         // MARK: Goal calories to have
                         
                         HStack {
-                           Text("1800 kCal")
+                            let dailyCaloriesIntake: Double = self.appStates.dailyNeeds.dailyCalories
+                            Text(String(format: "%.f kCal", dailyCaloriesIntake))
                                 .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
                                 .foregroundStyle(.white.opacity(0.25))
                         }
@@ -126,24 +140,21 @@ struct DietScreen: View {
                         
                         // MARK: Actual loading bar
                         HStack {
-                            GeometryReader { loadingBarReader in
-                                HStack {
-                                    
-                                }
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .background(.blue)
-                                .phaseAnimator([], content: { content, phase in
-                                    
-                                }, animation: { phase in
-                                    
-                                })
-                                
-                                
-                            }
                         }
                         .frame(maxHeight: .infinity)
-                        .frame(width: proxySize.width * 0.5)
+                        .frame(width: proxySize.width * self.caloricPercentage)
                         .background(ApplicationLinearGradient.greenGradient)
+                        
+                        
+                        
+                        // MARK: Marker if completed diet for today
+                        if self.caloriesConsumed >= self.appStates.dailyNeeds.dailyCalories {
+                            HStack {
+                                Image(systemName: "checkmark.seal.fill")
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                        
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 45)
@@ -174,10 +185,38 @@ struct DietScreen: View {
             SecondaryHeading(title: "Calories Intake", secondaryText: "( As per \(ApplicationHelper.formatDateToHumanReadable(date: .now)) )")
                 .padding(.top, 20)
            
+            
+            
+            
+            
+            
+            // MARK: IF not food items yet
             if self.appStates.dailyEvents.mealsHad.isEmpty {
-                
+                VStack {
+                    VStack {
+                        Image(systemName: "fork.knife")
+                            .resizable()
+                            .frame(width: 50, height: 65)
+                            .foregroundStyle(.white.opacity(0.25))
+                        
+                        Text("No Food Consumed Yet!")
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.25))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.vertical, 35)
+                    
+                }
+                .applicationDropDownButton()
             }
             
+            
+            
+            
+            
+            
+            
+            // MARK: List of food items
             VStack(spacing: 0) {
                 
                 ForEach(self.foodItemList.indices, id: \.self) { index in

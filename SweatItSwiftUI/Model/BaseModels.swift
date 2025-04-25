@@ -249,7 +249,10 @@ struct ExtraInfo_t {
 
 struct DailyNeeds_t {
     var dailyCalories: Double {
-        return Double(2500)
+        let weight = User.current.currentUser.currentWeight * 10
+        let height = User.current.currentUser.currentHeight * 6.25
+        let age = 25 * 5
+        return weight + height - Double(age) + 5
     }
     var dailyProtien: Double {
        return Double(User.current.currentUser.currentWeight * 1.5)

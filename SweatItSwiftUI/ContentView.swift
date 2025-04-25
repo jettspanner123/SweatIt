@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
     
     @State var showNotificationCenter: Bool = false
     

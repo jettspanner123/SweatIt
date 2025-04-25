@@ -10,7 +10,6 @@ import SwiftUI
 struct LeaderboardScreen: View {
     
     @State var users: Array<User_t> = User.current.allUsers.sorted(by: { $0.dailyPoints > $1.dailyPoints })
-    @State var requests: Array<FriendRequest_t> = []
     var body: some View {
         ScreenBuilder {
             
@@ -37,12 +36,7 @@ struct LeaderboardScreen: View {
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
         }
-        .onAppear {
-            Task {
-                self.requests = try await ApplicationEndpoints.get.getAllRequests()
-                print(self.requests)
-            }
-        }
+        
     }
 }
 
@@ -75,10 +69,10 @@ struct UserLeaderBoardCard: View {
                 Image(systemName: self.isRequested ? "checkmark" : "person.fill")
                     .foregroundStyle(.white)
             }
-            .frame(width: 70, height: 70)
+            .frame(width: 40, height: 40)
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(.white.opacity(0.18))
+                    .stroke(.white.opacity(0.08))
             }
             .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
             
@@ -102,9 +96,10 @@ struct UserLeaderBoardCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(height: 60)
         .overlay {
             RoundedRectangle(cornerRadius: 12)
-                .stroke(.white.opacity(0.18))
+                .stroke(.white.opacity(0.08))
         }
         .background(self.background, in: RoundedRectangle(cornerRadius: 12))
         .overlay(alignment: .trailing) {
@@ -120,19 +115,9 @@ struct UserLeaderBoardCard: View {
             }
             .background(.white.opacity(0.08), in: Capsule())
             .padding(.horizontal)
-            .onTapWithScaleVibrate {
-                Task {
-                    try await self.handleRequest()
-                }
-            }
             
         }
-        .onAppear {
-            Task {
-                try await self.alreadyRequested()
-                print(self.isRequested)
-            }
-        }
+        
     }
 }
 
