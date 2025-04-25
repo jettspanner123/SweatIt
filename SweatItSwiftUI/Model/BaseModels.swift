@@ -66,7 +66,8 @@ struct Challenge_t: Identifiable, Codable, Hashable {
     var duration: Date
 }
 
-struct Activity_t {
+struct Activity_t: Identifiable {
+    
     var id: String = UUID().uuidString
     var activityName: Extras.ActivityType
     var activityDescription: Any

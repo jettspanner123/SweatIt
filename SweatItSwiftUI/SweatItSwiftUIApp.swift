@@ -51,7 +51,24 @@ class ApplicationStates: ObservableObject {
     
     @Published var textTransitionState: Int = 0
     
-    @Published var dailyEvents: DailyEvents_t = .init()
+    @Published var dailyActivities: Array<Activity_t> = []
+    
+    @Published var dailyEvents: DailyEvents_t = .init() {
+        didSet {
+            for workout in self.dailyEvents.workoutsDone {
+                if !self.dailyActivities.contains(where: { $0.id == workout.id }) {
+                    self.dailyActivities.append(.init(id: workout.id, activityName: .workoutCompleted, activityDescription: workout))
+                }
+            }
+            
+            for meal in self.dailyEvents.mealsHad {
+                if !self.dailyActivities.contains(where: { $0.id == meal.id }) {
+                    self.dailyActivities.append(.init(id: meal.id, activityName: .mealEaten, activityDescription: meal))
+                }
+            }
+            
+        }
+    }
     @Published var dailyNeeds: DailyNeeds_t = .init()
     
     

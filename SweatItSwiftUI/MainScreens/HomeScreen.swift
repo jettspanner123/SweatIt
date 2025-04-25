@@ -15,9 +15,11 @@ struct HomeScreen: View {
     @Binding var showAddAgendaPage: Bool
     
     @Binding var AgendaToday: Array<Agenda_t> 
-    @State var RescentActivities: Array<Activity_t> = Activity.current.exampleActivityList
+    var RescentActivities: Array<Activity_t> {
+        return self.appStates.dailyActivities
+    }
     
-    @State var showAllActivitiesPage: Bool = false
+    @State var showAllActivitiesPage: Bool = true
     
     @State var currentDayStepCount: Int = .zero
     
@@ -88,6 +90,9 @@ struct HomeScreen: View {
                         Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
                     }
                 }
+                
+                
+                
                 
                 
                 
@@ -255,6 +260,30 @@ struct HomeScreen: View {
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             
+            // MARK: If the activity list is empty
+            
+            if self.RescentActivities.isEmpty {
+                VStack {
+                    VStack {
+                        Image(systemName: "figure.run")
+                            .resizable()
+                            .frame(width: 50, height: 70)
+                            .foregroundStyle(.white.opacity(0.25))
+                        
+                        Text("No Activities Performed Yet!")
+                            .font(.system(size: 15, weight: .regular, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.25))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.vertical, 30)
+                }
+                .applicationDropDownButton()
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            }
+            
+            
+            
+            // MARK: If the the activity list is not empty
             VStack(spacing: 5) {
                 ForEach(self.RescentActivities, id: \.id) { activity in
                     NavigationLink(destination: ActivityDetailsScreen(activity: activity)) {
@@ -279,7 +308,7 @@ struct HomeScreen: View {
             CaloriesBurnedGraphPage()
         })
         .navigationDestination(isPresented: self.$showAllActivitiesPage, destination: {
-            ActivityScreen()
+            ActivityScreen(currentDayStepCount: self.currentDayStepCount)
         })
     }
 }

@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showNotificationCenter: Bool = false
     
@@ -150,8 +150,8 @@ struct ContentView: View {
                 
                 if self.currentPage_t == .home {
                     HomeScreen(showAddAgendaPage: self.$showAddAgendaPage, AgendaToday: self.$AgendaToday)
-                        .offset(y: self.showNotificationCenter || self.showAddAgendaPage ? -50 : 0)
-                        .blur(radius: self.showNotificationCenter || self.showAddAgendaPage ? 10 : 0)
+                        .offset(y: self.showNotificationCenter || self.showAddAgendaPage || self.appStates.showCameraScreen ? -50 : 0)
+                        .blur(radius: self.showNotificationCenter || self.showAddAgendaPage || self.appStates.showCameraScreen ? 10 : 0)
                         .transition(.blurReplace)
                 } else if self.currentPage_t == .workout {
                     WorkoutScreen()
