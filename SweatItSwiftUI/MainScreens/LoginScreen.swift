@@ -18,18 +18,16 @@ struct LoginScreen: View {
     
     
     @State var loginStateObject: LogInUserDataStore = .init(username: "", password: "", confirmPassword: "", emailIfForgot: "")
+    @State var currentSelectedRegistrationType: RegistrationTypes = .SignIn
+    
+    
     @State var hasUserFogotTheirPassword: Bool = false
     
     @State var isSubmitButtonClicked: Bool = false
     @State var isStartButtonClicked: Bool = false
     
-    @State var currentSelectedRegistrationType: RegistrationTypes = .SignUp
     @State var emptyFieldsError: Bool = false
     @State var invalidCredentials: Bool = false
-    
-    var signUpScreenData: Array<(String, String)> = [
-        ("", ""),
-    ]
     
     
     func performLogin() async throws -> Void {

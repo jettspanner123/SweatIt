@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .diet
     
     @State var showNotificationCenter: Bool = false
     
@@ -132,11 +132,9 @@ struct ContentView: View {
                         .zIndex(9999)
                 }
                 
-                if self.appStates.showCameraScreen {
-                    FoodScannerScreen()
-                        .transition(.offset(y: UIScreen.main.bounds.height))
-                        .zIndex(.infinity)
-                }
+                FoodScannerScreen()
+                    .zIndex(.infinity)
+                    .offset(y: self.appStates.showCameraScreen ? 0 : UIScreen.main.bounds.height)
                 
                 PageHeader(pageHeaderTitle: self.currentPage_t == .home ? "Home" : self.currentPage_t == .workout ? "Workout" : self.currentPage_t == .coach ? "Coach" : self.currentPage_t == .diet ? "Diet" : "Profile", notificationAction: {
                     withAnimation(.smooth) {
@@ -194,6 +192,9 @@ struct ContentView: View {
                 withAnimation {
                     self.appStates.showScanFoodErrorDialogBox = true
                 }
+                return
+            } else if scannedFoodDetails.isEmpty {
+                print("Emptied out 'self.appStates.scannedFoodDetail' variables because no food item was found")
                 return
             } else {
                 print("Found something")

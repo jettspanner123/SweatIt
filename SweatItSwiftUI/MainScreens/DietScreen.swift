@@ -84,18 +84,86 @@ struct DietScreen: View {
                 .padding(.top, 20)
             
             HStack {
-                
-                InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.caloriesBurned), secondaryText: "", textColor: .white, wantInformationView: true) {
+                GeometryReader { geometryProx in
                     
+                    let proxySize = geometryProx.size
+                    ZStack(alignment: .leading) {
+                        
+                        
+                        
+                        
+                        // MARK: Total Caores Had today
+                        GeometryReader { textProxy in
+                            HStack {
+                                
+                                let caloriesConsumed = 20
+                                let totalCharacters = String(caloriesConsumed).count
+                                Text(String(caloriesConsumed))
+                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                                    .foregroundStyle(.white)
+                                    .offset(x: (proxySize.width * 0.5) + (totalCharacters == 4 ? -60 : totalCharacters == 3 ? -45 : -35))
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .zIndex(11)
+                        }
+                        .frame(height: 45)
+                        .zIndex(11)
+                        
+                        
+                        
+                        // MARK: Goal calories to have
+                        
+                        HStack {
+                           Text("1800 kCal")
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
+                                .foregroundStyle(.white.opacity(0.25))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                        .padding(.horizontal)
+                        
+                        
+                        
+                        
+                        // MARK: Actual loading bar
+                        HStack {
+                            GeometryReader { loadingBarReader in
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(.blue)
+                                .phaseAnimator([], content: { content, phase in
+                                    
+                                }, animation: { phase in
+                                    
+                                })
+                                
+                                
+                            }
+                        }
+                        .frame(maxHeight: .infinity)
+                        .frame(width: proxySize.width * 0.5)
+                        .background(ApplicationLinearGradient.greenGradient)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(height: 45)
+                    .background(.darkBG.opacity(0.54), in: .rect(cornerRadius: 12))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.white.opacity(0.08))
+                    }
                 }
-                .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                 
-                InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", self.caloriesConsumed), secondaryText: "", textColor: .white, wantInformationView: true) {
-                    
-                }
-                .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
             }
             .frame(maxWidth: .infinity)
+            .frame(height: 45)
+            
+            
+            
+            
+            
+            
+            
             
             
             // MARK: Protein, Carbs and Fats here.
