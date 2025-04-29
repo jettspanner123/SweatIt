@@ -1,36 +1,42 @@
-//
-//  DynamicLoadingScreen.swift
-//  SweatItSwiftUI
-//
-//  Created by Uddeshya Singh on 24/04/25.
-//
-
 import SwiftUI
 
 struct DynamicLoadingScreen: View {
+    @Binding var showSplashScreen: Bool
+    
+    @State var scaleX: CGFloat = .zero
+    @State var isDataLoading: Bool = false
+    @StateObject var applicationHelperStateObject = ApplicationHelper()
+    
+    
     var body: some View {
-        ScreenBuilder {
-            ZStack(alignment: .bottom) {
-                
-                HStack {
-                    Text("Loading")
-                        .font(.system(size: 15, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                
-//                VStack {
-//                    
-//                }
-//                .frame(maxWidth: .infinity)
-//                .frame(height: 100)
-//                .background(ApplicationLinearGradient.redGradient)
+        VStack {
+            Image(ApplicationImages.dumbbellSVG)
+                .resizable()
+                .frame(width: 100, height: 75)
+            
+            if self.applicationHelperStateObject.isDataLoading {
+                ProgressView()
+                    .tint(.white)
+                    .transition(.blurReplace.combined(with: .scale))
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(ApplicationLinearGradient.redGradient)
+        .onChange(of: self.applicationHelperStateObject.isDataLoading) {
+            if !self.applicationHelperStateObject.isDataLoading {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation(.snappy(duration: 1.25).delay(1)) {
+                        self.showSplashScreen = false
+                    }
+                }
+            }
+        }
+        .onAppear {
+            Task {
+                try await self.applicationHelperStateObject.loadEveryImportantData()
+            }
         }
     }
 }
 
-#Preview {
-    DynamicLoadingScreen()
-}

@@ -38,6 +38,11 @@ struct ActivityScreen: View {
     }
     
     
+    var workoutTiming: Double {
+        return Double(self.appStates.dailyEvents.workoutsDone.reduce(0) { $0 + $1.timeTaken })
+    }
+    
+    
     var body: some View {
         ScreenBuilder {
             AccentPageHeader(pageHeaderTitle: "Activities")
@@ -74,7 +79,7 @@ struct ActivityScreen: View {
                     
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "Water", title: "Water", text: "500 ml", secondaryText: "", textColor: .white, wantInformationView: true) {
+                    InformationCard(image: "Water", title: "Water", text: String(format: "%.f ml", self.appStates.dailyEvents.waterIntakeForTheDay), secondaryText: "", textColor: .white, wantInformationView: true) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
@@ -90,14 +95,14 @@ struct ActivityScreen: View {
                 
                 // MARK: Workout done and calories consumed
                 HStack {
-                    InformationCard(image: "Dumbbell", title: "Workout", text: "> 1 Hr", secondaryText: "", textColor: .appBloodRedDark, wantInformationView: true) {
+                    InformationCard(image: "Dumbbell", title: "Workout", text: ApplicationHelper.formatSeconds(seconds: Int(self.workoutTiming)), secondaryText: "", textColor: .appBloodRedDark, wantInformationView: true) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.whiteGradient))
                     
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "FireLogo", title: "Consumed", text: "1900 kCal", secondaryText: "", textColor: .white, wantInformationView: true) {
+                    InformationCard(image: "FireLogo", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: true) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.greenGradient))
@@ -123,65 +128,52 @@ struct ActivityScreen: View {
                 
                 // MARK: Step counter
                 
-                VStack {
-                    Text("Step Counter")
-                        .font(.system(size: 20, weight: .regular, design: .rounded))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    ZStack {
-                        Circle()
-                            .trim(from: 0.15, to: 0.85)
-                            .stroke(LinearGradient(colors: [Color.appGreenDark, Color.appGreenLight], startPoint: .trailing, endPoint: .leading), style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                            .rotationEffect(.degrees(90))
-                            .opacity(0.25)
-                            .padding(25)
-                            .zIndex(1)
-                        
-                        Circle()
-                            .trim(from: 0.15, to: 0.7)
-                            .stroke(LinearGradient(colors: [Color.appGreenDark, Color.appGreenLight], startPoint: .trailing, endPoint: .leading), style: StrokeStyle(lineWidth: 30, lineCap: .round, lineJoin: .round))
-                            .rotationEffect(.degrees(90))
-                            .padding(25)
-                            .zIndex(1)
-                        
-                        Image("Walking")
-                            .scaleEffect(0.75)
-                        
-                        Text("\(self.weeklyData.last!.stepsTaken)")
-                            .font(.custom(ApplicationFonts.oswaldRegular, size: 28))
-                            .foregroundStyle(ApplicationLinearGradient.greenGradient)
-                            .offset(y: 75)
-                        
+                CustomProgressBar(goalValue: Double(self.appStates.dailyNeeds.dailySteps), currentValue: Double(self.currentDayStepCount), siUnit: "Steps", loadingBarBackground: ApplicationLinearGradient.blueGradientInverted, background: .appBlueDark.opacity(0.54))
+                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                
+               
+
+                
+                
+                SecondaryHeading(title: "All Activities")
+                    .padding(.top, 25)
+                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                
+                
+                // MARK: If the activity list ie empty
+                if self.appStates.dailyActivities.isEmpty {
+                    VStack {
+                        VStack {
+                            Image(systemName: "figure.run")
+                                .resizable()
+                                .frame(width: 50, height: 70)
+                                .foregroundStyle(.white.opacity(0.25))
+                            
+                            Text("No Activities Performed Yet!")
+                                .font(.system(size: 15, weight: .regular, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.25))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.vertical, 30)
+                    }
+                    .applicationDropDownButton()
+                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                }
+                
+                
+                
+                
+                
+                // MARK: If the activity list is not empty
+                VStack(spacing: 5) {
+                    ForEach(self.appStates.dailyActivities, id: \.id) { activity in
+                        NavigationLink(destination: ActivityDetailsScreen(activity: activity)) {
+                            ActivityViewCard(activity: activity)
+                        }
                     }
                     
-                    Text("Calories Burned")
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.5))
-                        .takeMaxWidthLeading()
-                        .padding(.top)
-                    
-                    let caloriesBurned: Double = ApplicationHelper.estimatedCaloriesBurned(steps: self.weeklyData.last!.stepsTaken, weightInKg: Double(75))
-                    
-                    Text(String(format: "%.f", caloriesBurned))
-                        .font(.custom(ApplicationFonts.oswaldRegular, size: 25))
-                        .foregroundStyle(ApplicationLinearGradient.redGradient)
-                        .takeMaxWidthLeading()
-                    
-                    
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 300, alignment: .topLeading)
-                .padding(20)
-                .background(.darkBG.opacity(0.54))
-                .overlay {
-                    defaultShape
-                        .stroke(.white.opacity(0.18))
-                }
-                .clipShape(defaultShape)
-                .padding(.top, 10)
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-                
             }
         }
         

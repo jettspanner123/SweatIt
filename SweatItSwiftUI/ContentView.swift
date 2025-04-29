@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
     
     @State var showNotificationCenter: Bool = false
     
@@ -33,6 +33,8 @@ struct ContentView: View {
     @State var showAddAgendaPage: Bool = false
     
     @State var showScannedFoodDetailScreen: Bool = false
+    
+    @State var showSplashScreen: Bool = true
     
     
     
@@ -55,6 +57,10 @@ struct ContentView: View {
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
                 
+                if self.showSplashScreen {
+                    DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
+                        .zIndex(.infinity)
+                }
                 
                 
                 if self.appStates.showScanFoodErrorDialogBox {
@@ -217,6 +223,15 @@ struct ContentViewPreviewProvider: PreviewProvider {
         ContentView()
             .environmentObject(self.appStates)
             .environmentObject(self.healthManager)
+    }
+    
+}
+
+struct ScaleAndBlurTransition: Transition {
+    func body(content: Content, phase: TransitionPhase) -> some View {
+        content
+            .offset(y: phase.isIdentity ? 0 : -UIScreen.main.bounds.height - 40)
+            .blur(radius: phase.isIdentity ? 0 : 15)
     }
     
 }

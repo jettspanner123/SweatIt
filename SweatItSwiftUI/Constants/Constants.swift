@@ -91,7 +91,9 @@ enum Constants: String {
     case id, fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel
 }
 
-class ApplicationHelper {
+class ApplicationHelper: ObservableObject {
+    
+    @Published var isDataLoading: Bool = true
     
     class MotionManager: ObservableObject {
         private let motionManager = CMMotionManager()
@@ -108,6 +110,13 @@ class ApplicationHelper {
             }
         }
         
+    }
+    
+    
+    public func loadEveryImportantData() async throws -> Void {
+        withAnimation(.smooth.delay(3)) {
+            self.isDataLoading = false
+        }
     }
     
     public static func getTimeString(from date: Date) -> String {
@@ -241,10 +250,10 @@ class ApplicationHelper {
     public static func formatSeconds(seconds: Int) -> String {
         if seconds < 3600 {
             let minutes = Double(seconds) / 60
-            return String(format: "%.0f MIN", minutes)
+            return String(format: "%.0f Min", minutes)
         } else {
             let hours = Double(seconds) / 3600
-            return String(format: "%.1f HR", hours)
+            return String(format: "%.1f Hr", hours)
         }
     }
     
@@ -391,6 +400,10 @@ class ApplicationImages {
     // MARK: Something else
     public static let smile: String = "smile"
     public static let reverseSmile: String = "reverse_smile"
+    
+    
+    // MARK: SVGs
+    public static let dumbbellSVG: String = "dumbbellSVG"
 
 }
 

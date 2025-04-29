@@ -19,7 +19,7 @@ struct HomeScreen: View {
         return self.appStates.dailyActivities
     }
     
-    @State var showAllActivitiesPage: Bool = true
+    @State var showAllActivitiesPage: Bool = false
     
     @State var currentDayStepCount: Int = .zero
     
@@ -44,6 +44,8 @@ struct HomeScreen: View {
         
         return totalCaloriesConsumed
     }
+    
+    
     
     
     @State var showCaloriesStatsScreen: Bool = false
@@ -90,12 +92,7 @@ struct HomeScreen: View {
                         Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
                     }
                 }
-                
-                
-                
-                
-                
-                
+               
                 
                 
                 
@@ -168,25 +165,6 @@ struct HomeScreen: View {
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             
-            // MARK: Create agenda button
-            
-            HStack {
-                Text("Create Agenda")
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.95))
-                    .frame(maxWidth: .infinity)
-                
-                
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 40)
-            .background(ApplicationLinearGradient.redGradient.opacity(0.85), in: RoundedRectangle(cornerRadius: 8))
-            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-            .onTapGesture {
-                withAnimation {
-                    self.showAddAgendaPage = true
-                }
-            }
             
             
             
@@ -285,7 +263,8 @@ struct HomeScreen: View {
             
             // MARK: If the the activity list is not empty
             VStack(spacing: 5) {
-                ForEach(self.RescentActivities, id: \.id) { activity in
+                ForEach(self.RescentActivities.prefix(3).indices, id: \.self) { index in
+                    let activity = self.RescentActivities[index]
                     NavigationLink(destination: ActivityDetailsScreen(activity: activity)) {
                         ActivityViewCard(activity: activity)
                     }

@@ -20,7 +20,7 @@ struct DietScreen: View {
             }
         }
         return allFoods
-            
+        
     }
     
     var caloriesConsumed: Double {
@@ -57,7 +57,7 @@ struct DietScreen: View {
     
     var body: some View {
         ScrollContentView {
-           
+            
             HStack {
                 
                 // MARK: Scan food button
@@ -184,7 +184,7 @@ struct DietScreen: View {
             
             SecondaryHeading(title: "Calories Intake", secondaryText: "( As per \(ApplicationHelper.formatDateToHumanReadable(date: .now)) )")
                 .padding(.top, 20)
-           
+            
             
             
             
@@ -249,3 +249,107 @@ struct DietScreen: View {
     }
 }
 
+
+struct CustomProgressBar: View {
+    
+    @EnvironmentObject var appStates: ApplicationStates
+    
+    var goalValue: Double
+    var currentValue: Double
+    var siUnit: String
+    var loadingBarBackground: LinearGradient
+    var background: Color
+    
+    var percentage: Double {
+        let something = self.currentValue / self.goalValue
+        if something > 1 { return 1 }
+        return something
+    }
+    
+    
+    func loadingBarTextOffset(proxySize: CGSize) -> Double {
+        let totalCharacters = String(self.currentValue).count
+        if self.percentage < 0.1 {
+            return 15
+        }
+        let toReturn = (proxySize.width * self.percentage) - 60
+        return abs(toReturn)
+    }
+    
+    var body: some View {
+        HStack {
+            GeometryReader { geometryProx in
+                
+                let proxySize = geometryProx.size
+                ZStack(alignment: .leading) {
+                    
+                    
+                    
+                    
+                    // MARK: Total Caores Had today
+                    GeometryReader { textProxy in
+                        HStack {
+                            
+                            
+                            Text(String(format: "%.f", self.currentValue))
+                                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                                .foregroundStyle(.white)
+                                .offset(x: self.loadingBarTextOffset(proxySize: proxySize))
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                        .zIndex(11)
+                    }
+                    .frame(height: 45)
+                    .zIndex(11)
+                    
+                    
+                    
+                    // MARK: Goal calories to have
+                    
+                    HStack {
+                        Text(String(format: "%.f \(self.siUnit)", self.goalValue))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
+                            .foregroundStyle(.white.opacity(0.25))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    .padding(.horizontal)
+                    
+                    
+                    
+                    
+                    // MARK: Actual loading bar
+                    HStack {
+                    }
+                    .frame(maxHeight: .infinity)
+                    .frame(width: proxySize.width * self.percentage)
+                    .background(self.loadingBarBackground)
+                    
+                    
+                    
+                    // MARK: Marker if completed diet for today
+                    if self.currentValue >= self.goalValue {
+                        HStack {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundStyle(.white)
+                        }
+                    }
+                    
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(height: 45)
+                .background(self.background)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.white.opacity(0.08))
+                }
+                
+                
+                
+            }
+            
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 45)
+    }
+}
