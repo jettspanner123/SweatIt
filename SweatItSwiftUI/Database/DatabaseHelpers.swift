@@ -3,8 +3,9 @@ import Firebase
 import SwiftUI
 import MessageUI
 
+
 enum ErrorType: String, Codable {
-    case wentWrong = "Something went wrong! 😅", serverBusy = "Ther server is busy at the given moment. 🥲", cannotParseUser = "Cannot get user from database. 🥺", userNotFound = "User not found. 🥺", authenticationError = "Server could not authenticate. ❌", invalidArguments = "Incorrect Email or Password."
+    case wentWrong = "Something went wrong! 😅", serverBusy = "Ther server is busy at the given moment. 🥲", cannotParseUser = "Cannot get user from database. 🥺", userNotFound = "User not found. 🥺", authenticationError = "Server could not authenticate. ❌", invalidArguments = "Incorrect Email or Password.", dataNotLoaded = "Data could not be loaded."
 }
 
 enum DatabaseLoadingState: String, Codable {
@@ -304,9 +305,52 @@ class GET {
         return requests
    }
     
+    public func getCurrentDayCurrentUserDailyEvents() async throws  -> DailyEvents_t {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            for document in snapshot.documents {
+                let documentId = document.documentID
+                let date_t = documentId.split(separator: "~")[1]
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                dateFormatter.timeZone = TimeZone(identifier: "Asia/Kolkata")
+                
+                
+                // MARK: If date if found for today
+                if let fetchedDate = dateFormatter.date(from: String(date_t)) {
+                    if Calendar.current.isDate(fetchedDate, inSameDayAs: .now) {
+                        let fetchedDailyEvents: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                        return fetchedDailyEvents
+                    } else {
+                        GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+                    }
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .wentWrong)
+        }
+        
+        return .init()
+    }
+    
     
     
 }
+
+
+
+
+
+
+
+
+// MARK: Post method store
 
 class PostMethodStore {
     public static let current = PostMethodStore()
@@ -367,6 +411,11 @@ class PostMethodStore {
     
 }
 
+
+
+
+
+// MARK: Post method
 class POST {
     
     func sendOTPTo(email: String) async throws -> Void {
@@ -400,6 +449,30 @@ class POST {
                 try await user_reference_on_database.setData(User.current.currentUser.getDictionary())
                 return
             }
+        }
+    }
+    
+    func autoUpdateCurrentUserDailyEvents(for dailyEvents: DailyEvents_t) async throws -> Void {
+        if User.current.currentUser.id.isEmpty { return }
+        
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        do {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.timeZone = TimeZone(identifier: "Asia/Kolkata") // Or local if needed
+            
+            let dateString = dateFormatter.string(from: Date())
+           
+            let snapshot: DocumentReference = ApplicationDatabase.getDatabase(for: .dailyEvents).document("\(User.current.currentUser.id)~\(dateString)")
+            try snapshot.setData(from: dailyEvents)
+            
+        } catch {
+            print("Some error occurred while fetching data!")
         }
     }
     
@@ -441,10 +514,6 @@ class POST {
             PostMethodStore.current.toggleErrorState(with: .wentWrong)
             ApplicationSounds.current.successful()
         }
-        
-    }
-    
-    public func autoUpdateCurrentDayEvents(_ dailyEvent: DailyEvents_t) async throws -> Void {
         
     }
     

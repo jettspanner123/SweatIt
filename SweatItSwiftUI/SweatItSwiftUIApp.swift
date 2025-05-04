@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import Firebase
+import FirebaseFirestore
 import TipKit
 
 class ApplicationStates: ObservableObject {
@@ -59,6 +60,7 @@ class ApplicationStates: ObservableObject {
                 if !self.dailyActivities.contains(where: { $0.id == workout.id }) {
                     self.dailyActivities.append(.init(id: workout.id, activityName: .workoutCompleted, activityDescription: workout))
                 }
+                
             }
             
             for meal in self.dailyEvents.mealsHad {
@@ -67,13 +69,14 @@ class ApplicationStates: ObservableObject {
                 }
             }
             
+            
+            Task {
+                try await ApplicationEndpoints.post.autoUpdateCurrentUserDailyEvents(for: self.dailyEvents)
+            }
         }
     }
     @Published var dailyNeeds: DailyNeeds_t = .init()
-    
-    
-    
-    
+    @Published var isDataLoading: Bool = true
     
     public func showError() -> Void {
         withAnimation {

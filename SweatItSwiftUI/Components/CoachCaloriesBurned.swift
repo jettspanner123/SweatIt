@@ -26,9 +26,9 @@ struct CoachCaloriesBurned: View {
     //        return toRet
     //    }
     
-    var avgCaloriesBurned: Int { return self.weeklyData.reduce(0) { $0 + $1.caloriesBurnedForTheDay } / self.weeklyData.count }
+    var avgCaloriesBurned: Int { return self.weeklyData.reduce(0) { $0 + Int($1.caloriesBurnedForTheDay) } / self.weeklyData.count }
     var avgWaterConsumed: Int { return self.weeklyData.reduce(0) { $0 + $1.waterIntakeForTheDay } / self.weeklyData.count}
-    var avgCaloriesIngested: Int { return self.weeklyData.reduce(0) { $0 + $1.caloriesIngestedForTheDay } / self.weeklyData.count}
+    var avgCaloriesIngested: Int { return self.weeklyData.reduce(0) { $0 + Int($1.caloriesIngestedForTheDay) } / self.weeklyData.count}
     var avgWorkoutTiming: Int { return self.weeklyData.reduce(0) { $0 + $1.workoutTimingForTheDay } / self.weeklyData.count}
     
     var totalProteinIntake: Double {

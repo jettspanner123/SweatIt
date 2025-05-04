@@ -28,6 +28,17 @@ struct Exercise_t: Identifiable, Codable, Hashable {
     var perRepCaloriesBurned: Double
     var difficulty: Extras.Difficulty
     var image: String = ""
+    
+    
+    func toDictionary() -> Dictionary<String, Any> {
+        var dictionary: Dictionary<String, Any> = ["id": self.id, "exerciseName": self.exerciseName, "exerciseDescription": self.exerciseDescription, "isNonActiveExercise": self.isNonActiveExercise, "sets": self.sets, "reps": self.reps, "perRepCaloriesBurned": self.perRepCaloriesBurned, "difficulty": self.difficulty.rawValue]
+        var temp: Array<String> = []
+        for muscle in self.targettedMuscles {
+            temp.append(muscle.rawValue)
+        }
+        dictionary["targettedMuscles"] = temp
+        return dictionary
+    }
 }
 
 struct Workout_t: Identifiable, Codable, Hashable {
@@ -38,6 +49,7 @@ struct Workout_t: Identifiable, Codable, Hashable {
     var workoutImage: String
     var workoutDifficulty: Extras.Difficulty = .easy
     var exercises: Array<Exercise_t>
+    var timing: Date = .now
     var caloriesBurned: Double {
         var totalCalories: Double = 0
         for exercise in self.exercises {
@@ -53,7 +65,16 @@ struct Workout_t: Identifiable, Codable, Hashable {
         return totalTime
     }
     
-    var timing: Date = .now
+    func getDictionary() -> Dictionary<String, Any> {
+        let isoDateFormatter = ISO8601DateFormatter()
+        var dictionary: Dictionary<String, Any> = ["id": self.id, "workoutName": self.workoutName, "workoutDescription": self.workoutDescription, "workoutCategory": self.workoutCategory.rawValue, "workoutImage": self.workoutImage, "workoutDifficulty": self.workoutDifficulty.rawValue, "timing": isoDateFormatter.string(from: self.timing)]
+        var temp: Array<Dictionary<String, Any>> = []
+        for exercise in self.exercises {
+            temp.append(exercise.toDictionary())
+        }
+        dictionary["exercises"] = temp
+        return dictionary
+    }
 }
 
 struct Challenge_t: Identifiable, Codable, Hashable {
@@ -87,6 +108,15 @@ struct Food_t: Identifiable, Codable, Hashable {
     var carbs: Double
     var fats: Double
     var recommendation: Extras.RecommendationType? = nil
+    
+    
+    func toDictionary() -> Dictionary<String, Any> {
+        let isoDateFormatter = ISO8601DateFormatter()
+        if let rec = self.recommendation {
+            return ["id": self.id, "timeOfHaving": self.timeOfHaving, "foodName": self.foodName, "foodDescription": self.foodDescription, "foodQuantity": self.foodQuantity, "calories": self.calories, "foodImage": self.foodImage, "foodType": self.foodType.rawValue, "protein": self.protein, "carbs": self.carbs, "fats": self.fats, "recommendation": rec.rawValue]
+        }
+        return ["id": self.id, "timeOfHaving": self.timeOfHaving, "foodName": self.foodName, "foodDescription": self.foodDescription, "foodQuantity": self.foodQuantity, "calories": self.calories, "foodImage": self.foodImage, "foodType": self.foodType.rawValue, "protein": self.protein, "carbs": self.carbs, "fats": self.fats, "recommendation": "null"]
+    }
 }
 
 
@@ -95,6 +125,8 @@ struct Meal_t: Identifiable, Codable, Hashable {
     var mealName: String
     var mealType: Extras.MealType
     var foodItems: Array<Food_t>
+    var mealTime: Date = .now
+    
     var totalCalories: Double {
         var finalCalories: Double = .zero
         
@@ -128,19 +160,50 @@ struct Meal_t: Identifiable, Codable, Hashable {
         }
         return finalFats
     }
-    var mealTime: Date = .now
+    
+    func toDictionary() -> Dictionary<String, Any> {
+        let isoDateFormatter = ISO8601DateFormatter()
+        var diction: Dictionary<String, Any> = ["id": self.id, "mealName": self.mealName, "mealType": self.mealType.rawValue, "mealTime": isoDateFormatter.string(from: self.mealTime)]
+        var temp: Array<Dictionary<String, Any>> = []
+        for food in self.foodItems {
+            temp.append(food.toDictionary())
+        }
+        diction["foodItems"] = temp
+        return diction
+    }
 }
 
 struct DailyEvents_t: Identifiable, Codable, Hashable  {
     var id: String = UUID().uuidString
     var date: Date = .now
-    var caloriesBurnedForTheDay: Int = .zero
-    var caloriesIngestedForTheDay: Int = .zero
+    var caloriesBurnedForTheDay: Double = .zero
+    var caloriesIngestedForTheDay: Double = .zero
     var waterIntakeForTheDay: Int = .zero
     var workoutTimingForTheDay: Int = .zero
     var mealsHad: Array<Meal_t> = []
     var workoutsDone: Array<Workout_t> = []
     var stepsTaken: Int = .zero
+    
+    func getDictionary() -> Dictionary<String, Any> {
+        let isoDateFormatter = ISO8601DateFormatter()
+        var dictionary: Dictionary<String, Any> = [Constants.id.rawValue: self.id, Constants.date.rawValue: isoDateFormatter.string(from: self.date), Constants.caloriesBurnedForTheDay.rawValue: self.caloriesBurnedForTheDay, Constants.caloriesIngestedForTheDay.rawValue: self.caloriesIngestedForTheDay, Constants.waterIntakeForTheDay.rawValue: self.waterIntakeForTheDay, Constants.workoutTimingForTheDay.rawValue: self.workoutTimingForTheDay, Constants.stepsTaken.rawValue: self.stepsTaken]
+        var meals: Array<Dictionary<String, Any>> = []
+        var workouts: Array<Dictionary<String, Any>> = []
+        
+        
+        
+        for meal in self.mealsHad {
+            meals.append(meal.toDictionary())
+        }
+        
+        for workout in self.workoutsDone {
+            workouts.append(workout.getDictionary())
+        }
+        
+        dictionary[Constants.workoutsDone.rawValue] =  workouts
+        dictionary[Constants.mealsHad.rawValue] =  meals
+        return dictionary
+    }
 }
 
 struct User_t: Identifiable, Codable, Hashable {

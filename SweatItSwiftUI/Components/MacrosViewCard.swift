@@ -75,15 +75,6 @@ struct MacrosViewCard: View {
                     .frame(width: geometry.size.width * self.protienProgressDecimal)
                     .background(ApplicationLinearGradient.greenGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay {
-                        HStack {
-                            Text(String(format: "%.fg", self.protienConsumed))
-                                .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.horizontal, 15)
-                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 40)
@@ -91,6 +82,11 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
+                        
+                        Text(String(format: "%.fg", self.protienConsumed))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
+                            .foregroundStyle(.white)
+                        Spacer()
                         Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyProtien))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))
@@ -124,15 +120,6 @@ struct MacrosViewCard: View {
                     .frame(width: geometry.size.width * self.carbsProgressDecimal)
                     .background(ApplicationLinearGradient.brownGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay {
-                        HStack {
-                            Text(String(format: "%.fg", self.carbsConsumed))
-                                .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.horizontal, 15)
-                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 40)
@@ -140,6 +127,10 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
+                        Text(String(format: "%.fg", self.carbsConsumed))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
+                            .foregroundStyle(.white)
+                        Spacer()
                         Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyCarbs))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))
@@ -174,15 +165,6 @@ struct MacrosViewCard: View {
                     .frame(width: geometry.size.width * self.fatsProgressDecimal)
                     .background(ApplicationLinearGradient.goldenGradient)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay {
-                        HStack {
-                            Text(String(format: "%.fg", self.fatsConsumed))
-                                .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .padding(.horizontal, 15)
-                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .frame(height: 40)
@@ -190,6 +172,13 @@ struct MacrosViewCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay {
                     HStack {
+                        
+                        Text(String(format: "%.fg", self.fatsConsumed))
+                            .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
+                            .foregroundStyle(.white)
+                        
+                        Spacer()
+                        
                         Text(String(format: "%.fg", self.appStates.dailyNeeds.dailyFats))
                             .font(.custom(ApplicationFonts.oswaldRegular, size: 18))
                             .foregroundStyle(.white.opacity(0.5))

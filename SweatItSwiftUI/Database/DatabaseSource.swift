@@ -13,7 +13,7 @@ internal class FirestoreDatabaseSingleton {
 class ApplicationDatabase {
     
     enum Colleciton: String {
-        case user, exercises, extraInfo, friendRequest
+        case user, exercises, extraInfo, friendRequest, dailyEvents, dailyActivity
     }
     
     

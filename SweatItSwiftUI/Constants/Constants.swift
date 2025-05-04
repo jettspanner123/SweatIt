@@ -88,7 +88,7 @@ class ApplicationLinearGradient {
 
 
 enum Constants: String {
-    case id, fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel
+    case id, fullName, username, emailId, password, currentWeight, currentHeight, gender, bodyType, level, goal, dailyPoints, fitnessLevel, caloriesBurnedForTheDay, date, caloriesIngestedForTheDay, waterIntakeForTheDay, workoutTimingForTheDay, mealsHad, workoutsDone, stepsTaken
 }
 
 class ApplicationHelper: ObservableObject {

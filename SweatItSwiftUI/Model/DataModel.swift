@@ -469,7 +469,7 @@ class Activity {
 class User {
     public static var current = User()
     
-    @Published var currentUser: User_t = .init(fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17) {
+    @Published var currentUser: User_t = .init(id: "helloworld@uddeshya", fullName: "Uddeshya Singh", username: "Jettspanner123", emailId: "uddeshyasingh12bsci@gmail.com", password: "Saahil123s", currentWeight: 89, currentHeight: 184, gender: .male, bodyType: .skinnyFat, level: .intermediate, goal: .beFit, dailyPoints: 382, fitnessLevel: 17) {
         didSet {
 //            print(currentUser)
             Task {

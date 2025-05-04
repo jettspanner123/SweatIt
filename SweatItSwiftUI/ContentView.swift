@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .profile
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showNotificationCenter: Bool = false
     
@@ -57,7 +57,7 @@ struct ContentView: View {
 //                        .transition(ScaleBlurOffsetTransition())
 //                }
                 
-                if self.showSplashScreen {
+                if self.appStates.isDataLoading {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
                         .zIndex(.infinity)
                 }

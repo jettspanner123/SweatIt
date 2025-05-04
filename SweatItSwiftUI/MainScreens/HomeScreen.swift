@@ -274,6 +274,15 @@ struct HomeScreen: View {
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
         }
+        .onChange(of: self.currentDayStepCount) {
+            self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount
+        }
+        .onChange(of: self.consumedCalories) {
+            self.appStates.dailyEvents.caloriesIngestedForTheDay = self.consumedCalories
+        }
+        .onChange(of: self.burnedCalores) {
+            self.appStates.dailyEvents.caloriesBurnedForTheDay = self.burnedCalores
+        }
         .onAppear {
             Task {
                 self.currentDayStepCount = await self.healthManager.getStepsToday()

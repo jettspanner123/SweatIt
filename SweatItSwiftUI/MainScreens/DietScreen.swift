@@ -246,6 +246,9 @@ struct DietScreen: View {
             
         }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .onChange(of: self.caloriesConsumed) {
+            self.appStates.dailyEvents.caloriesIngestedForTheDay = self.caloriesConsumed
+        }
     }
 }
 

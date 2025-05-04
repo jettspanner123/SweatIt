@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DynamicLoadingScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     @Binding var showSplashScreen: Bool
     
     @State var scaleX: CGFloat = .zero
@@ -14,7 +15,7 @@ struct DynamicLoadingScreen: View {
                 .resizable()
                 .frame(width: 100, height: 75)
             
-            if self.applicationHelperStateObject.isDataLoading {
+            if self.appStates.isDataLoading {
                 ProgressView()
                     .tint(.white)
                     .transition(.blurReplace.combined(with: .scale))
@@ -23,18 +24,36 @@ struct DynamicLoadingScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ApplicationLinearGradient.redGradient)
-        .onChange(of: self.applicationHelperStateObject.isDataLoading) {
-            if !self.applicationHelperStateObject.isDataLoading {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    withAnimation(.snappy(duration: 1.25).delay(1)) {
-                        self.showSplashScreen = false
+        .onAppear {
+            
+            enum CombinedItem: Hashable {
+                case workout(Workout_t)
+                case meal(Meal_t)
+            }
+            
+            Task {
+                self.appStates.dailyEvents = try await ApplicationEndpoints.get.getCurrentDayCurrentUserDailyEvents()
+                
+                let mealArray = self.appStates.dailyEvents.mealsHad.map { CombinedItem.meal($0) }
+                let workoutArray = self.appStates.dailyEvents.workoutsDone.map { CombinedItem.workout($0) }
+                
+                let bothMealAndWorkoutCombined = Array(Set(mealArray + workoutArray).shuffled().prefix(3))
+                var finalActivityArray: Array<Activity_t> = []
+                
+                for item in bothMealAndWorkoutCombined {
+                    switch item {
+                    case .meal(let meal):
+                        finalActivityArray.append(.init(activityName: .mealEaten, activityDescription: meal))
+                    case .workout(let workout):
+                        finalActivityArray.append(.init(activityName: .workoutCompleted, activityDescription: workout))
                     }
                 }
-            }
-        }
-        .onAppear {
-            Task {
-                try await self.applicationHelperStateObject.loadEveryImportantData()
+                
+                self.appStates.dailyActivities = finalActivityArray
+                
+                withAnimation {
+                    self.appStates.isDataLoading = false
+                }
             }
         }
     }

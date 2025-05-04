@@ -14,7 +14,7 @@ struct ProfileScreen: View {
         return self.user.fullName.split(separator: " ").map { String($0.first!) }.joined()
     }
     
-    @State var showPastStatisticsScreen: Bool = true
+    @State var showPastStatisticsScreen: Bool = false
     @State var showAddFriendScreen: Bool = false
     @State var showLeaderboardScreen: Bool = false
     
