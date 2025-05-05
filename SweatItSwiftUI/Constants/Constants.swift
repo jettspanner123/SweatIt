@@ -59,6 +59,7 @@ class ApplicationLinearGradient {
     public static let whiteSameGradientWithOpacityPoint8 = LinearGradient(gradient: Gradient(colors: [.white.opacity(0.08), .white.opacity(0.08)]), startPoint: .top, endPoint: .bottom)
     public static let whiteGradientInverted = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
     public static let silverGradient = LinearGradient(gradient: Gradient(colors: [ .white, .gray ]), startPoint: .top, endPoint: .bottom)
+    public static let redPinkGradient = LinearGradient(gradient: Gradient(colors: [ .appPinkLight, .appBloodRedLight ]), startPoint: .top, endPoint: .bottom)
     
     public static var allGradients: [LinearGradient] {
         return [

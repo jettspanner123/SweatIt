@@ -99,7 +99,7 @@ struct ChooseWorkoutScreen: View {
             .offset(y: BOTTOM_BUTTON_OFFSET)
             .zIndex(9999)
             .ignoresSafeArea()
-            .onTapGesture {
+            .onTapWithVibration {
                 withAnimation {
                     self.isSubmitButtonClicked = true
                     
@@ -227,8 +227,7 @@ struct ChooseWorkoutScreen: View {
         }
         .sensoryFeedback(.increase, trigger: self.totalExercises)
         .navigationDestination(isPresented: self.$showActiveWorkoutScreen, destination: {
-            
-            ActiveWorkoutScreen(workout: self.generateWorkout())
+            ActiveWorkoutScreen(workout: self.generateWorkout(), isDirected: true)
         })
     }
 }

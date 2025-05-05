@@ -306,6 +306,7 @@ class GET {
    }
     
     public func getCurrentDayCurrentUserDailyEvents() async throws  -> DailyEvents_t {
+        var finalReturn: DailyEvents_t = .init()
         GetMethodStore.current.startLoading()
         
         defer {
@@ -326,6 +327,7 @@ class GET {
                 if let fetchedDate = dateFormatter.date(from: String(date_t)) {
                     if Calendar.current.isDate(fetchedDate, inSameDayAs: .now) {
                         let fetchedDailyEvents: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                        finalReturn = fetchedDailyEvents
                         return fetchedDailyEvents
                     } else {
                         GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
@@ -336,7 +338,7 @@ class GET {
             GetMethodStore.current.toggleErrorState(with: .wentWrong)
         }
         
-        return .init()
+        return finalReturn
     }
     
     
@@ -515,6 +517,21 @@ class POST {
             ApplicationSounds.current.successful()
         }
         
+    }
+    
+    public func addCustomWorkout(forUserId: String, workout: Workout_t) async throws -> Void {
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        do {
+            let snapshot: DocumentReference = ApplicationDatabase.getDatabase(for: .userCustomWorkouts).document("\(User.current.currentUser.id)~\(workout.id)")
+            try snapshot.setData(from: workout)
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
     }
     
 }

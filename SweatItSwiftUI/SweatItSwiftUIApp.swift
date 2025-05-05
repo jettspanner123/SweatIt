@@ -31,11 +31,7 @@ class ApplicationStates: ObservableObject {
     @Published var showFullNameNotValid: Bool = false
     
     
-    @Published var workoutStatus: WorkoutState = .none {
-        didSet {
-            print("Application State Workout State Updated", workoutStatus.rawValue)
-        }
-    }
+    @Published var workoutStatus: WorkoutState = .none
     
     @Published var currentSelectedFood: Food_t? = nil
     @Published var showFoodDetails: Bool = false
@@ -70,11 +66,9 @@ class ApplicationStates: ObservableObject {
             }
             
             
-            Task {
-                try await ApplicationEndpoints.post.autoUpdateCurrentUserDailyEvents(for: self.dailyEvents)
-            }
         }
     }
+    
     @Published var dailyNeeds: DailyNeeds_t = .init()
     @Published var isDataLoading: Bool = true
     

@@ -210,6 +210,16 @@ struct ContentView: View {
         .onChange(of: self.appStates.showScannedFoodDetailScreen) {
             self.showScannedFoodDetailScreen = self.appStates.showScannedFoodDetailScreen
         }
+        .onChange(of: self.appStates.dailyEvents.mealsHad) {
+            Task {
+                try await ApplicationEndpoints.post.autoUpdateCurrentUserDailyEvents(for: self.appStates.dailyEvents)
+            }
+        }
+        .onChange(of: self.appStates.dailyEvents.workoutsDone) {
+            Task {
+                try await ApplicationEndpoints.post.autoUpdateCurrentUserDailyEvents(for: self.appStates.dailyEvents)
+            }
+        }
         
     }
 }
