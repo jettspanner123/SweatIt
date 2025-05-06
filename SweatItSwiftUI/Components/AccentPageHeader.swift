@@ -17,18 +17,19 @@ struct AccentPageHeader: View {
             ZStack {
                 Image(systemName: "chevron.left")
                     .foregroundStyle(.white)
+                    .scaleEffect(0.9)
                     .padding(20)
                     .background(.darkBG.opacity(0.001))
                     .onTapGesture {
                         self.dismiss()
                     }
-                    .offset(x: -160, y: 10)
+                    .offset(x: -160, y: 15)
 
                 Text(pageHeaderTitle)
-                    .font(.system(size: 25, weight: .light, design: .rounded))
+                    .font(.system(size: 23, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
-                    .offset(y: 10)
-                
+                    .offset(y: 15)
+
             }
             .offset(y: 25)
         }
@@ -41,7 +42,7 @@ struct AccentPageHeader: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .offset(y: -70)
+        .offset(y: -85)
         .zIndex(100)
         
     }
@@ -64,10 +65,10 @@ struct AccentPageHeader_WithFavButton: View {
                     .onTapGesture {
                         self.dismiss()
                     }
-                    .offset(x: -160, y: 10)
+                    .offset(x: -160, y: 15)
 
                 Text(pageHeaderTitle)
-                    .font(.system(size: 25, weight: .light, design: .rounded))
+                    .font(.system(size: 23, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
                     .offset(y: 10)
                 
@@ -88,7 +89,7 @@ struct AccentPageHeader_WithFavButton: View {
                             try await ApplicationEndpoints.post.addCustomWorkout(forUserId: User.current.currentUser.id, workout: self.workout)
                         }
                     }
-                    .offset(x: 155, y: 10)
+                    .offset(x: 155, y: 15)
                 
             }
             .offset(y: 25)
@@ -102,7 +103,7 @@ struct AccentPageHeader_WithFavButton: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .offset(y: -70)
+        .offset(y: -85)
         .zIndex(100)
         
     }
@@ -125,12 +126,12 @@ struct AccentPageHeader_NoAction: View {
                     .onTapGesture {
                         self.action()
                     }
-                    .offset(x: -160, y: 10)
+                    .offset(x: -160, y: 15)
 
                 Text(pageHeaderTitle)
-                    .font(.system(size: 25, weight: .light, design: .rounded))
+                    .font(.system(size: 23, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
-                    .offset(y: 10)
+                    .offset(y: 15)
                 
             }
             .offset(y: 25)
@@ -144,7 +145,7 @@ struct AccentPageHeader_NoAction: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .offset(y: -70)
+        .offset(y: -85)
         .zIndex(100)
         
     }

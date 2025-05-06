@@ -1,5 +1,6 @@
 import Foundation
 import Firebase
+import Cloudinary
 
 
 internal class FirestoreDatabaseSingleton {
@@ -40,6 +41,23 @@ class ApplicationDatabase {
         
         let user: User_t = .init(id: id, fullName: fullName, username: username, emailId: emailId, password: password, currentWeight: currentWeight, currentHeight: currentHeight, gender: gender, bodyType: bodyType, level: level, goal: goal, dailyPoints: dailyPoints, fitnessLevel: fitnessLevel)
         return user
+    }
+}
+
+internal class CloudinarySingleton {
+    init() {
+        self.cloudinaryConfig = .init(cloudName: "dqa9dgdso")
+        self.cloudinary = .init(configuration: self.cloudinaryConfig)
+    }
+    public static let current = CloudinarySingleton()
+    let cloudinaryConfig: CLDConfiguration!
+    let cloudinary: CLDCloudinary!
+}
+
+
+class CloudinaryImageDB {
+    public static func setImage(forUserId: String, withImage: Data) -> Void {
+        
     }
 }
 

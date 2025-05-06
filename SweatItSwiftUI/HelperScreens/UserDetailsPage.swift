@@ -116,12 +116,12 @@ struct UserDetailsPageHeader: View {
                     .onTapGesture {
                         self.dismiss()
                     }
-                    .offset(x: -160, y: 10)
+                    .offset(x: -160, y: 15)
                 
                 Text("User Details")
-                    .font(.system(size: 25, weight: .light, design: .rounded))
+                    .font(.system(size: 23, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
-                    .offset(y: 10)
+                    .offset(y: 15)
                 
                 Image(systemName: "square.and.pencil")
                     .foregroundStyle(.white)
@@ -130,7 +130,7 @@ struct UserDetailsPageHeader: View {
                     .onTapGesture {
                         self.showEditUserDetailsPage = true
                     }
-                    .offset(x: 160, y: 10)
+                    .offset(x: 160, y: 15)
                 
             }
             .offset(y: 25)
@@ -144,7 +144,7 @@ struct UserDetailsPageHeader: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .offset(y: -70)
+        .offset(y: -85)
         .zIndex(100)
         .navigationDestination(isPresented: self.$showEditUserDetailsPage, destination: {
             UserDetailsEditScreen()

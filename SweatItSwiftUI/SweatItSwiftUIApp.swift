@@ -10,6 +10,7 @@ import SwiftData
 import Firebase
 import FirebaseFirestore
 import TipKit
+import Cloudinary
 
 class ApplicationStates: ObservableObject {
     
@@ -88,8 +89,20 @@ class ApplicationStates: ObservableObject {
 @main
 struct SweatItSwiftUIApp: App {
     
+    
+    // MARK: Cloudinary Cloud name = dqa9dgdso
+    // MARK: Cloudinary api key = 631378849124139
+    // MARK: Cloudinary api secret key = hNXebQFT7y2oCYrmgHAIU8WpOjs
+    
     init() {
         FirebaseApp.configure()
+        
+        let cloudinaryCloudName: String = "dqa9dgdso"
+        let cloudinaryApiKey: String = "631378849124139"
+        let cloudinaryApiSecret: String = "hNXebQFT7y2oCYrmgHAIU8WpOjs"
+
+        let cloudinaryConfigure = CLDConfiguration(cloudName: cloudinaryCloudName, apiKey: cloudinaryApiKey, apiSecret: cloudinaryApiSecret)
+        let cloudinary = CLDCloudinary(configuration: cloudinaryConfigure)
         
         try? Tips.resetDatastore()
         try? Tips.configure()

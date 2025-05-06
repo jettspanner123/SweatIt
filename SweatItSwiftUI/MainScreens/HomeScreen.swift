@@ -52,7 +52,7 @@ struct HomeScreen: View {
     @State var showCaloriesGainedStatsScreen: Bool = false
     
     
-    
+    @StateObject var postMethodStoreStateObject = PostMethodStore()
     var body: some View {
         ScrollContentView {
             
@@ -272,7 +272,6 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-            
         }
         .onChange(of: self.currentDayStepCount) {
             self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount
@@ -306,7 +305,5 @@ struct InformationCardTip: Tip {
     var title: Text {
         Text("Tap and hold the card to see extra details.")
     }
-    
-    
 }
 

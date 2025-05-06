@@ -343,7 +343,7 @@ class ApplicationHelper: ObservableObject {
 }
 
 class ApplicationPadding {
-    public static let mainScreenVerticalPadding: Double = 90
+    public static let mainScreenVerticalPadding: Double = 75
     public static let mainScreenHorizontalPadding: Double = 15
 }
 

@@ -21,7 +21,7 @@ struct PageHeader: View {
         HStack {
             
             Text(pageHeaderTitle)
-                .font(.custom("Oswald-Regular", size: 40))
+                .font(.custom("Oswald-Regular", size: 32))
                 .foregroundStyle(.white)
                 .offset(x: 24, y: 25)
             
@@ -70,6 +70,11 @@ struct PageHeader: View {
                         self.isRotating = true
                     }
                 }
+                .onDisappear {
+                    withAnimation(.linear(duration: 500).repeatForever()) {
+                        self.isRotating = false
+                    }
+                }
                 .transition(.offset(x: 300))
             }
             
@@ -81,10 +86,20 @@ struct PageHeader: View {
                         .rotationEffect(.degrees(self.isRotating ? 9999 : 0))
                 }
                 .offset(x: -24, y: 30)
+                .onAppear {
+                    withAnimation(.linear(duration: 500).repeatForever()) {
+                        self.isRotating = true
+                    }
+                }
+                .onDisappear {
+                    withAnimation(.linear(duration: 500).repeatForever()) {
+                        self.isRotating = false
+                    }
+                }
                 .transition(.offset(x: 300))
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 137)
+        .frame(maxWidth: .infinity, maxHeight: 127)
         .background(AppBackgroundBlur(radius: 50, opaque: true))
         .background(.darkBG.opacity(0.60))
         .overlay {
@@ -92,9 +107,8 @@ struct PageHeader: View {
                 .stroke(.white.opacity(0.18))
         }
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .offset(y: -70)
+        .offset(y: -75)
         .zIndex(100)
-        
     }
 }
 

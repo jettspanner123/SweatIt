@@ -354,13 +354,8 @@ class GET {
 
 // MARK: Post method store
 
-class PostMethodStore {
+class PostMethodStore: ObservableObject {
     public static let current = PostMethodStore()
-    private init() {
-        
-    }
-    
-    
     
     
     @Published var isDatabaseLoading: Bool = false {
@@ -373,6 +368,7 @@ class PostMethodStore {
     
     @Published var isError: Bool = false
     @Published var errorMessage: ErrorType = .wentWrong
+    @Published var testError: Bool = false
     
     public func toggleErrorState(with message: ErrorType) -> Void {
         

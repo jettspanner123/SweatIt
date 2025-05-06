@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		078984062DCA7A3500C428D8 /* Cloudinary in Frameworks */ = {isa = PBXBuildFile; productRef = 078984052DCA7A3500C428D8 /* Cloudinary */; };
 		07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */; };
 		07BE4BF22DA4689B00E2748F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF12DA4689B00E2748F /* FirebaseAnalytics */; };
 		07BE4BF42DA4689B00E2748F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 07BE4BF32DA4689B00E2748F /* FirebaseAuth */; };
@@ -52,6 +53,7 @@
 				07C0E3EF2D8C467F00B2D6FA /* SwiftUITrackableScrollView in Frameworks */,
 				07AA9C982D93F14900E05A2B /* GoogleGenerativeAI in Frameworks */,
 				07BE4BF22DA4689B00E2748F /* FirebaseAnalytics in Frameworks */,
+				078984062DCA7A3500C428D8 /* Cloudinary in Frameworks */,
 				07BE4BFA2DA4689B00E2748F /* FirebaseStorage in Frameworks */,
 				07BE4BF42DA4689B00E2748F /* FirebaseAuth in Frameworks */,
 				07BE4BF82DA4689B00E2748F /* FirebaseFirestore in Frameworks */,
@@ -105,6 +107,7 @@
 				07BE4BF72DA4689B00E2748F /* FirebaseFirestore */,
 				07BE4BF92DA4689B00E2748F /* FirebaseStorage */,
 				07BE4BFB2DA4689B00E2748F /* FirebaseVertexAI */,
+				078984052DCA7A3500C428D8 /* Cloudinary */,
 			);
 			productName = SweatItSwiftUI;
 			productReference = 07EBA5682D7D7DC000C76E40 /* SweatItSwiftUI.app */;
@@ -138,6 +141,7 @@
 				07C0E3ED2D8C467F00B2D6FA /* XCRemoteSwiftPackageReference "trackable-scroll-view" */,
 				07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 				07BE4BF02DA4689B00E2748F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				078984042DCA7A3500C428D8 /* XCRemoteSwiftPackageReference "cloudinary_ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 07EBA5692D7D7DC000C76E40 /* Products */;
@@ -389,6 +393,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		078984042DCA7A3500C428D8 /* XCRemoteSwiftPackageReference "cloudinary_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cloudinary/cloudinary_ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 		07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/generative-ai-swift";
@@ -416,6 +428,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		078984052DCA7A3500C428D8 /* Cloudinary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 078984042DCA7A3500C428D8 /* XCRemoteSwiftPackageReference "cloudinary_ios" */;
+			productName = Cloudinary;
+		};
 		07AA9C972D93F14900E05A2B /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 07AA9C962D93F14900E05A2B /* XCRemoteSwiftPackageReference "generative-ai-swift" */;

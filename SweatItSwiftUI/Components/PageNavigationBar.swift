@@ -32,7 +32,7 @@ struct PageNavigationBar: View {
             VStack(spacing: 7) {
                 Image("Home")
                     .resizable()
-                    .frame(width: 53.5, height: 40)
+                    .frame(width: 48.5, height: 35)
                 
                 Text("Home")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -54,7 +54,7 @@ struct PageNavigationBar: View {
             VStack(spacing: 7) {
                 Image("Workout")
                     .resizable()
-                    .frame(width: 58.25, height: 40)
+                    .frame(width: 53.25, height: 35)
                 
                 Text("Workout")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -75,7 +75,7 @@ struct PageNavigationBar: View {
             VStack(spacing: 7) {
                 Image("Training")
                     .resizable()
-                    .frame(width: 53.5, height: 40)
+                    .frame(width: 48.5, height: 35)
                 
                 Text("Coach")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -97,7 +97,7 @@ struct PageNavigationBar: View {
             VStack(spacing: 7) {
                 Image("DietPageIcon")
                     .resizable()
-                    .frame(width: 60.56, height: 40)
+                    .frame(width: 55.56, height: 35)
                 
                 Text("Diet")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -118,7 +118,7 @@ struct PageNavigationBar: View {
             VStack(spacing: 7) {
                 Image("User")
                     .resizable()
-                    .frame(width: 53.5, height: 40)
+                    .frame(width: 48.5, height: 35)
                 
                 Text("Profile")
                     .font(.system(size: 10, weight: .regular, design: .rounded))
@@ -135,9 +135,9 @@ struct PageNavigationBar: View {
             
             Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: 118, alignment: .top)
-        .padding(.horizontal, 10)
-        .padding(.top, 20)
+        .frame(maxWidth: .infinity, maxHeight: 200, alignment: .top)
+        .padding(.horizontal, 15)
+        .padding(.top, 19)
         .background(AppBackgroundBlur(radius: 100, opaque: true))
         .background(Color("DarkBG").opacity(0.76))
         .overlay {

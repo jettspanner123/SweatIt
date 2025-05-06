@@ -21,7 +21,8 @@ struct ScrollContentView<Content: View>: View {
                 self.content
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, ApplicationPadding.mainScreenVerticalPadding)
+            .padding(.top, ApplicationPadding.mainScreenVerticalPadding)
+            .padding(.bottom, ApplicationPadding.mainScreenVerticalPadding + 20)
         }
     }
 }

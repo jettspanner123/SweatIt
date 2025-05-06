@@ -33,6 +33,7 @@ struct PrimaryNavigationButton: View {
             .padding(.vertical, 15)
         }
         .frame(maxWidth: .infinity)
+        .frame(height: 55)
         .padding(.leading, self.leadingPadding)
         .padding(.trailing, self.trailingPadding)
         
