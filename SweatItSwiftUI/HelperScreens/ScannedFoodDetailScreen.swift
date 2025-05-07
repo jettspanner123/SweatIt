@@ -55,7 +55,14 @@ struct ScannedFoodDetailScreen: View {
     
     @State var foodItem: Optional<Food_t> = nil
     @State var scannedFoodItem: Optional<ScannedFood_t> = nil
-    @State var foodQuantity: Double = .zero
+    @State var foodQuantity: Double = .zero {
+        didSet {
+            if self.foodItem != nil {
+                self.foodItem?.foodQuantity = self.foodQuantity
+                print(self.foodItem ?? "Nothing")
+            }
+        }
+    }
     
     @State var isSaveButtonClicked: Bool = false
     @State var showErrorState: Bool = false
@@ -112,12 +119,12 @@ struct ScannedFoodDetailScreen: View {
                     }
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {
                         self.appStates.showScannedFoodDetailScreen = false
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                         ApplicationSounds.current.completed()
                         withAnimation {
                             self.isSaveButtonClicked = false
@@ -138,10 +145,6 @@ struct ScannedFoodDetailScreen: View {
                         AsyncImage(url: URL(string: food.foodImage)) { phase in
                             switch phase {
                             case .empty:
-                                //                                Image(systemName: "photo.badge.exclamationmark.fill")
-                                //                                    .resizable()
-                                //                                    .frame(width: 80, height: 60)
-                                //                                    .foregroundStyle(.white.opacity(0.25))
                                 ProgressView()
                                     .tint(.white)
                             case .success(let image):

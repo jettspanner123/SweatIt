@@ -73,6 +73,21 @@ class ApplicationStates: ObservableObject {
     @Published var dailyNeeds: DailyNeeds_t = .init()
     @Published var isDataLoading: Bool = true
     
+    @Published var loadingFoodImage: Bool = false
+    @Published var imageLoadingError: Bool = false
+    
+    public func toggleImageErrorState() -> Void {
+        withAnimation {
+            self.imageLoadingError = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            withAnimation {
+                self.imageLoadingError = false
+            }
+        }
+    }
+    
     public func showError() -> Void {
         withAnimation {
             self.isError = true

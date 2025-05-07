@@ -1,6 +1,7 @@
 import Foundation
 import Firebase
 import Cloudinary
+import SwiftUI
 
 
 internal class FirestoreDatabaseSingleton {
@@ -46,18 +47,74 @@ class ApplicationDatabase {
 
 internal class CloudinarySingleton {
     init() {
-        self.cloudinaryConfig = .init(cloudName: "dqa9dgdso")
+        self.cloudinaryConfig = .init(cloudName: "dqa9dgdso", apiKey: "631378849124139")
         self.cloudinary = .init(configuration: self.cloudinaryConfig)
+        self.param = .init()
+        self.param.setUploadPreset("ud_bhai_image_upload_preset")
     }
+    
     public static let current = CloudinarySingleton()
     let cloudinaryConfig: CLDConfiguration!
     let cloudinary: CLDCloudinary!
+    let param: CLDUploadRequestParams
+}
+
+
+class CloudinaryImageMethodStore: ObservableObject {
+    @Published var errorUploadingImage: Bool = false
+    @Published var isLoading: Bool = false
+    
+    
+    func toggleErrorUploadingImage() -> Void {
+        withAnimation {
+            self.errorUploadingImage = true
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            withAnimation {
+                self.errorUploadingImage = false
+            }
+        }
+    }
 }
 
 
 class CloudinaryImageDB {
-    public static func setImage(forUserId: String, withImage: Data) -> Void {
+    
+    @StateObject var cloudinaryImageMethodStoreStateObject: CloudinaryImageMethodStore = .init()
+
+    public func setImage(forUserId: String, withImage: Data, andModel: CloudinaryImageMethodStore) async throws -> String {
+        await MainActor.run {
+            withAnimation {
+                andModel.isLoading = true
+            }
+        }
+
+        defer {
+            Task { @MainActor in
+                withAnimation {
+                    andModel.isLoading = false
+                }
+            }
+        }
         
+        return try await withCheckedThrowingContinuation { continuation in
+            CloudinarySingleton.current.cloudinary.createUploader().upload(
+                data: withImage,
+                uploadPreset: "ud_bhai_image_upload_preset", completionHandler:  { result, error in
+                    if let err = error {
+                        Task { @MainActor in
+                            self.cloudinaryImageMethodStoreStateObject.toggleErrorUploadingImage()
+                        }
+                        continuation.resume(throwing: err)
+                    } else if let re = result, let imageUploadUrl = re.url {
+                        print("Image uploaded successfylly at: \(imageUploadUrl)")
+                        continuation.resume(returning: imageUploadUrl)
+                    } else {
+                        let unknownError = NSError(domain: "CloudinaryUpload", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error occurred"])
+                        continuation.resume(throwing: unknownError)
+                    }
+                })
+        }
     }
 }
-

@@ -53,6 +53,9 @@ struct HomeScreen: View {
     
     
     @StateObject var postMethodStoreStateObject = PostMethodStore()
+    @State var cloudinaryImageUploader = CloudinaryImageDB()
+    
+    @StateObject var cloudinaryMethodStoreStateObject = CloudinaryImageMethodStore()
     var body: some View {
         ScrollContentView {
             
@@ -272,6 +275,22 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            
+            
+            
+            
+            Button("Click to upload image shit") {
+                if let data = UIImage(named: "bjuice"), let imageData = data.jpegData(compressionQuality: 0.8) {
+                    Task {
+                        try await self.cloudinaryImageUploader.setImage(forUserId: "helloworld", withImage: imageData, andModel: self.cloudinaryMethodStoreStateObject)
+                    }
+                }
+            }
+            
+            if self.cloudinaryMethodStoreStateObject.isLoading {
+                ProgressView()
+                    .tint(.white)
+            }
         }
         .onChange(of: self.currentDayStepCount) {
             self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount
