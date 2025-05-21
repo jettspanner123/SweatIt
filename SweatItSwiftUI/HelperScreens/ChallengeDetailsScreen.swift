@@ -18,13 +18,10 @@ struct ChallengeDetailsScreen: View {
         VStack {
             HStack {
                 
-                // MARK: Contentst title
+                // MARK: Content title
                 Text(self.challenge.challengeName)
                     .font(.system(size: 25, weight: .light, design: .rounded))
                     .foregroundStyle(.white)
-                
-                
-                
             }
             .frame(maxWidth: .infinity)
             // MARK: Close button

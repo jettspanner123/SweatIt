@@ -341,6 +341,23 @@ class GET {
         return finalReturn
     }
     
+    public func getWeeklyCalories(forUserId: String) async throws -> Array<Double> {
+        var finalReturn: Array<Double> = []
+        
+        do {
+            let snapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                print("Test thing: ", currentDailyEvent)
+                finalReturn.append(currentDailyEvent.caloriesBurnedForTheDay)
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        return finalReturn
+    }
+    
     
     
 }
