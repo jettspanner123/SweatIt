@@ -190,9 +190,7 @@ struct ContentView: View {
         }
         .sensoryFeedback(.impact, trigger: self.currentPage_t)
         .onChange(of: self.appStates.scannedFoodDetail) {
-            print(self.appStates.scannedFoodDetail, self.appStates.scannedFoodDetail.count, type(of: self.appStates.scannedFoodDetail))
             let scannedFoodDetails = self.cleanResponse(jsonString: self.appStates.scannedFoodDetail)
-            print(scannedFoodDetails)
             if scannedFoodDetails == "null" {
                 print("Found nothing")
                 withAnimation {

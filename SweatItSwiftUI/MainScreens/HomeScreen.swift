@@ -92,7 +92,7 @@ struct HomeScreen: View {
                     }
                     
                     ForEach(self.appStates.dailyEvents.workoutsDone, id: \.id) { workout in
-                        Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
+                        Text("\(workout.workoutName): (\(String(format: "%.f kCal", workout.caloriesBurned)))")
                     }
                 }
                

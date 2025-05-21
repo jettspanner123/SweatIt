@@ -309,7 +309,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take photos.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow access to enjoy certain features of application.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses your health data to track your steps.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app updates your health data.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "We need access to your motion data to track steps.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select food photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -323,7 +324,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = swiftui.sweatit.application;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.sweatit.application.buildONe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -347,7 +348,8 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take photos.";
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "Please allow access to enjoy certain features of application.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app uses your health data to track your steps.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This app updates your health data.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "We need access to your motion data to track steps.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to select food photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -361,7 +363,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = swiftui.sweatit.application;
+				PRODUCT_BUNDLE_IDENTIFIER = swiftui.sweatit.application.buildONe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

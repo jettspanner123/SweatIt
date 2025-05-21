@@ -87,7 +87,7 @@ struct ChallengeDetailsScreen: View {
             
             Spacer()
             
-            BottomBluredButton(text: "Start Challenge", background: ApplicationLinearGradient.redGradient)
+            BottomBluredButton(disabledText: "Comming Soon")
                 .offset(y: 30)
             
         }
@@ -130,20 +130,31 @@ struct ChallengeDetailsScreen: View {
 
 
 struct BottomBluredButton: View {
-    var text: String
-    var background: LinearGradient
+    var text: String = ""
+    var background: LinearGradient = ApplicationLinearGradient.redGradient
+    var disabledText: String = ""
     
     
     var action: () -> Void = {}
     
     var body: some View {
         HStack {
-            Text(self.text)
-                .font(.system(size: 15, weight: .medium, design: .rounded))
-                .foregroundStyle(.white)
+            if self.disabledText.isEmpty {
+                Text(self.text)
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+            } else {
+                
+                Image(systemName: "lock.fill")
+                    .foregroundStyle(.white)
+                
+                Text(self.disabledText)
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+            }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 55)
+        .frame(height: 40)
         .background(self.background)
         .clipShape(defaultShape)
         .onTapGesture {
@@ -152,3 +163,10 @@ struct BottomBluredButton: View {
     }
 }
 
+#Preview {
+    VStack {
+        BottomBluredButton(background: ApplicationLinearGradient.redGradient, disabledText: "Comming Soon")
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(.blue)
+}

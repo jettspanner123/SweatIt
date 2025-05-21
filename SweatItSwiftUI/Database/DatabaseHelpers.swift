@@ -523,8 +523,8 @@ class POST {
         }
         
         do {
-            let snapshot: DocumentReference = ApplicationDatabase.getDatabase(for: .userCustomWorkouts).document("\(User.current.currentUser.id)~\(workout.id)")
-            try snapshot.setData(from: workout)
+            let customWorkoutDatabaseReference = ApplicationDatabase.getDatabase(for: .userCustomWorkouts).document("\(User.current.currentUser.id)~\(workout.id)")
+            try customWorkoutDatabaseReference.setData(from: workout)
         } catch {
             PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }

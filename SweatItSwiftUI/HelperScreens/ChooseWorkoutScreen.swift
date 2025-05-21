@@ -37,6 +37,19 @@ struct ChooseWorkoutScreen: View {
     @State var isSubmitButtonClicked: Bool = false
     @State var showActiveWorkoutScreen: Bool = false
     
+    
+    func getRandomExercise(forMuscle: Extras.Muscle) -> Exercise_t {
+        let filtered_exercises = Exercise.current.allExercises.filter { $0.targettedMuscles.contains(forMuscle)}
+        var randomExercise: Optional<Exercise_t> = nil
+        
+        while randomExercise == nil {
+            if let randomeElement = filtered_exercises.randomElement() {
+                randomExercise = randomeElement
+            }
+        }
+        return randomExercise!
+    }
+    
     func generateWorkout() -> Workout_t {
         var musclesCovered: String = ""
         
@@ -50,17 +63,8 @@ struct ChooseWorkoutScreen: View {
         
         for (key, value) in self.currentSelectedMuscles {
             for _ in 0...value {
-                let filtered_exercises = allExercises.filter { $0.targettedMuscles.contains(key) }
-                var randomExercise = filtered_exercises.randomElement()!
-                
-                if exercises.contains(randomExercise) {
-                    randomExercise = filtered_exercises.randomElement()!
-                    exercises.insert(randomExercise)
-                } else {
-                    exercises.insert(randomExercise)
-                }
-                
-                
+                let randomExercise: Exercise_t = self.getRandomExercise(forMuscle: key)
+                exercises.insert(randomExercise)
             }
         }
         

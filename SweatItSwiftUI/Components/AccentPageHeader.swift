@@ -79,12 +79,11 @@ struct AccentPageHeader_WithFavButton: View {
                     .padding(20)
                     .background(.darkBG.opacity(0.001))
                     .onTapWithScaleVibrate {
+                        print("Favourite BUtton Clicked")
                         ApplicationSounds.current.playBubble()
-                        
                         withAnimation {
                             self.isFavourite = true
                         }
-                        
                         Task {
                             try await ApplicationEndpoints.post.addCustomWorkout(forUserId: User.current.currentUser.id, workout: self.workout)
                         }

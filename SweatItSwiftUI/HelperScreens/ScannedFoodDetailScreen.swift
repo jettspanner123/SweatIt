@@ -44,7 +44,7 @@ struct ScannedFoodDetailScreen: View {
     
     func cleanResponse(jsonString: String) -> String {
         if jsonString.hasPrefix("```json") {
-            let index = jsonString.index(jsonString.startIndex, offsetBy: 8) // 5 chars to skip "json:"
+            let index = jsonString.index(jsonString.startIndex, offsetBy: 8) 
             let toIndex = jsonString.index(jsonString.endIndex, offsetBy: -5)
             return String(jsonString[index...toIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -139,8 +139,6 @@ struct ScannedFoodDetailScreen: View {
             
             ScrollContentView {
                 VStack {
-                    
-                    
                     if let food = self.foodItem {
                         AsyncImage(url: URL(string: food.foodImage)) { phase in
                             switch phase {
