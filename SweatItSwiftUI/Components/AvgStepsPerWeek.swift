@@ -22,7 +22,17 @@ struct AvgStepsPerWeek: View {
     
     @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
     
-    var avgStepsTaken: Int { return self.weeklyData.reduce(0) { $0 + $1.stepsTaken } / self.weeklyData.count}
+    
+    @State var weeklyStepsTaken: Dictionary<Date, Int> = [:]
+    
+    var avgStepsTaken: Int {
+        if self.weeklyStepsTaken.isEmpty {
+            return 0
+        } else {
+            return self.weeklyStepsTaken.reduce(0) { $0 + $1.value } / self.weeklyStepsTaken.count
+        }
+    }
+
     var body: some View {
         VStack {
             HStack(alignment: .bottom, spacing: 5) {
@@ -33,9 +43,11 @@ struct AvgStepsPerWeek: View {
                 
                 Spacer()
                 
-                Text("\(self.avgStepsTaken) / 15,000")
+                Text("\(self.avgStepsTaken) / 12,000")
                     .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
                     .foregroundStyle(.white.opacity(0.75))
+                    .contentTransition(.numericText(value: Double(self.avgStepsTaken)))
+                    .animation(.snappy, value: self.avgStepsTaken)
                 
                 
             }
@@ -87,6 +99,11 @@ struct AvgStepsPerWeek: View {
         .frame(maxWidth: .infinity, minHeight: 250, alignment: .topLeading)
         .padding()
         .background(ApplicationLinearGradient.blueGradient, in: defaultShape)
+        .onAppear {
+            Task {
+                self.weeklyStepsTaken = try await ApplicationEndpoints.get.getWeeklySteps(forUserId: User.current.currentUser.id)
+            }
+        }
     }
 }
 

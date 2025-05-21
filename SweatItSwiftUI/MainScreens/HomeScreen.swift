@@ -16,6 +16,7 @@ struct HomeScreen: View {
     
     @Binding var AgendaToday: Array<Agenda_t> 
     var RescentActivities: Array<Activity_t> {
+        print(self.appStates.dailyActivities)
         return self.appStates.dailyActivities
     }
     
@@ -275,22 +276,8 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+           
             
-            
-            
-            
-            Button("Click to upload image shit") {
-                if let data = UIImage(named: "bjuice"), let imageData = data.jpegData(compressionQuality: 0.8) {
-                    Task {
-                        try await self.cloudinaryImageUploader.setImage(forUserId: "helloworld", withImage: imageData, andModel: self.cloudinaryMethodStoreStateObject)
-                    }
-                }
-            }
-            
-            if self.cloudinaryMethodStoreStateObject.isLoading {
-                ProgressView()
-                    .tint(.white)
-            }
         }
         .onChange(of: self.currentDayStepCount) {
             self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount

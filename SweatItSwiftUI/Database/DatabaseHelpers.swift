@@ -341,20 +341,163 @@ class GET {
         return finalReturn
     }
     
-    public func getWeeklyCalories(forUserId: String) async throws -> Array<Double> {
-        var finalReturn: Array<Double> = []
+    public func getWeeklyCalories(forUserId: String) async throws -> Dictionary<Date, Double> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        var finalReturn: Dictionary<Date, Double> = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
         
         do {
             let snapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
             
             for document in snapshot.documents {
                 let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
-                print("Test thing: ", currentDailyEvent)
-                finalReturn.append(currentDailyEvent.caloriesBurnedForTheDay)
+                let documentId = document.documentID.split(separator: "~").last!
+                print("Document id: ", documentId)
+                if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
+                    finalReturn[unwrappedDate] = currentDailyEvent.caloriesBurnedForTheDay
+                }
             }
         } catch {
             GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }
+        return finalReturn
+    }
+    
+    public func getWeeklySteps(forUserId: String) async throws -> Dictionary<Date, Int> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        var finalReturn: Dictionary<Date, Int> = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                let documentId = document.documentID.split(separator: "~").last!
+                if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
+                    finalReturn[unwrappedDate] = currentDailyEvent.stepsTaken
+                }
+            }
+            
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
+    
+    public func getWeeklyWaterIntake(forUserId: String) async throws -> Dictionary<Date, Int> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        var finalReturn: Dictionary<Date, Int> = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                let documentId = document.documentID.split(separator: "~").last!
+                if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
+                    finalReturn[unwrappedDate] = currentDailyEvent.waterIntakeForTheDay
+                }
+            }
+            
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
+    
+    public func getWeeklyWorkoutTimings(forUserId: String) async throws -> Dictionary<Date, Double> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        var finalReturn: Dictionary<Date, Double> = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                let documentId = document.documentID.split(separator: "~").last!
+                if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
+                    finalReturn[unwrappedDate] = Double(currentDailyEvent.workoutTimingForTheDay)
+                }
+            }
+            
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
+    
+    public func getWeeklyMacroNutritions(forUserId: String) async throws -> Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        var finalReturn: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                let documentId = document.documentID.split(separator: "~").last!
+                if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
+                    var protien: Double = .zero, carbs: Double = .zero, fats: Double = .zero
+                    
+                    for meal in currentDailyEvent.mealsHad {
+                        for foodItem in meal.foodItems {
+                            protien += foodItem.protein
+                            carbs += foodItem.carbs
+                            fats += foodItem.fats
+                        }
+                    }
+                    
+                    finalReturn[unwrappedDate] = (protien, carbs, fats, currentDailyEvent.caloriesIngestedForTheDay)
+                }
+            }
+            
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
         return finalReturn
     }
     

@@ -18,6 +18,8 @@ struct CoachScreen: View {
     @State var currentSelectedMuscle: Extras.Muscle = .bicep
     @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
     
+    
+    
     var body: some View {
         ScrollContentView {
             
@@ -79,14 +81,10 @@ struct CoachScreen: View {
                 }
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
-           
+            
             
         }
-        .onAppear {
-            Task {
-                print(try await ApplicationEndpoints.get.getWeeklyCalories(forUserId: User.current.currentUser.id))
-            }
-        }
+        
     }
 }
 
