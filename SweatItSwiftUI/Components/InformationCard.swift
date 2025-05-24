@@ -73,13 +73,15 @@ struct InformationCard: View {
         .padding(10)
         .coordinateSpace(name: "InformationCardCoordinateSpace")
         .overlay(alignment: .topTrailing) {
-            Image(systemName: "info.circle")
-                .foregroundStyle(.white.opacity(0.5))
-                .padding()
-                .onTapWithScale {
-//                    print("Hello world")
-                    self.content()
-                }
+            if self.wantInformationView {
+                Image(systemName: "info.circle")
+                    .foregroundStyle(.white.opacity(0.5))
+                    .padding()
+                    
+            }
+        }
+        .onTapGesture {
+            self.content()
         }
         
     }

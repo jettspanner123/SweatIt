@@ -149,5 +149,6 @@ struct PageNavigationBar: View {
             view
                 .offset(y: phase.bounds(of: .named("MainScreenCoordinateSpace"))!.maxY - (70))
         }
+        .ignoresSafeArea(.keyboard)
     }
 }

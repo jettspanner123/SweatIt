@@ -329,17 +329,33 @@ struct CoachCaloriesBurned: View {
         .contextMenu {
             if self.cardType == .caloriesBurned {
                 Text("Calories Burned 🔥")
-                ForEach(self.weeklyCaloriesBurned.sorted(by: >), id: \.key) { key, value in
+                ForEach(self.weeklyCaloriesBurned.sorted(by: <), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
+                    
                     let day = Calendar.current.weekdaySymbols[dayIndex]
                     Text("\(day): [\(String(format: "%.f kCal", value))]")
                 }
             } else if self.cardType == .waterIntake {
-                
+                Text("Water Intake 💧")
+                ForEach(self.weeklyWaterIntake.sorted(by: <), id: \.key) { key, value in
+                    let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
+                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    Text("\(day): [\(String(format: "%.f mL", value))]")
+                }
             } else if self.cardType == .workoutTime {
-                
+                Text("Workout Timing 💪")
+                ForEach(self.weeklyWorkoutTiming.sorted(by: <), id: \.key) { key, value in
+                    let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
+                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    Text("\(day): [\(String(format: "%.f mins", value))]")
+                }
             } else {
                 Text("Calories Ingested 🥦")
+                ForEach(self.weeklyCaloriesBurned.sorted(by: <), id: \.key) { key, value in
+                    let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
+                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    Text("\(day): [\(String(format: "%.f kCal", value))]")
+                }
             }
             
         }

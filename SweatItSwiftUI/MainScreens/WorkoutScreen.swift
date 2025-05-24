@@ -11,9 +11,14 @@ struct WorkoutScreen: View {
     
     @State var searchText: String = ""
     
+    @State var userCustomWorkouts: Array<Workout_t> = []
     @State var workouts: Array<Workout_t> = Workout.current.exampleWorkoutList
-    var filteredWorkouts: Array<Workout_t> {
-        Workout.current.exampleWorkoutList.filter { $0.workoutName.lowercased().starts(with: self.searchText.lowercased()) }
+    
+    var filteredWorkouts: [Workout_t] {
+        let allWorkouts = workouts + userCustomWorkouts
+        return allWorkouts.filter {
+            $0.workoutName.lowercased().starts(with: self.searchText.lowercased())
+        }
     }
     
     var filteredExercises: Array<Exercise_t> {
@@ -22,6 +27,7 @@ struct WorkoutScreen: View {
     
     @State var exerciseOfTheDay: Array<Exercise_t> = [Exercise.current.allExercises.randomElement()!, Exercise.current.allExercises.randomElement()!]
     @State var showAllWorkoutsPage: Bool = false
+    
     
     
     var body: some View {
@@ -138,9 +144,19 @@ struct WorkoutScreen: View {
             }
             
         }
+        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+            geometry.contentOffset.y
+        } action: {oldValue,newValue in
+            ApplicationHelper.dismissKeyboard()
+        }
         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+        .onAppear {
+                Task {
+                    self.userCustomWorkouts = try await ApplicationEndpoints.get.getCustomWorkouts(forUserId: User.current.currentUser.id)
+                }
+            }
         .navigationDestination(isPresented: self.$showAllWorkoutsPage, destination: {
-            AllWorkoutsPage()
+            AllWorkoutsPage(userCustomWorkouts: self.$userCustomWorkouts)
         })
     }
 }

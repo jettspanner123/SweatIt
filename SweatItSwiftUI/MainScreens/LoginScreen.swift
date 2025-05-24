@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LoginScreen: View {
     
+    @EnvironmentObject var appStates: ApplicationStates
+    
     enum RegistrationTypes: String, CaseIterable {
         case SignIn = "Sign In", SignUp = "Sign Up"
     }
@@ -53,6 +55,7 @@ struct LoginScreen: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.performLoginAnimationHelper()
+                UserDefaults.standard.set(true, forKey: LocalStorageKeys.userLoggedInState.rawValue)
             }
             return
         }

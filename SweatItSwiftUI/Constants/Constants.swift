@@ -6,6 +6,11 @@ import HealthKit
 
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
+enum LocalStorageKeys: String {
+    case userLoggedInState
+}
+
+
 class ApplicationConstants: ObservableObject {
     
     struct SignupStateObject {
@@ -41,6 +46,8 @@ class ApplicationLinearGradient {
     public static let lavaGradient = LinearGradient(gradient: Gradient(colors: [.appLavaTwo, .appLavaOne]), startPoint: .top, endPoint: .bottom)
     public static let orangeGradient = LinearGradient(gradient: Gradient(colors: [.appOrangeLight, .appOrangeDark]), startPoint: .top, endPoint: .bottom)
     public static let greenGradient = LinearGradient(gradient: Gradient(colors: [.appGreenLight, .appGreenDark]), startPoint: .top, endPoint: .bottom)
+    public static let greenGradientInverted = LinearGradient(gradient: Gradient(colors: [.appGreenDark, .appGreenLight]), startPoint: .top, endPoint: .bottom)
+    public static let greenSameGradient = LinearGradient(gradient: Gradient(colors: [.appGreenLight]), startPoint: .top, endPoint: .bottom)
     public static let blueGradient = LinearGradient(gradient: Gradient(colors: [.appBlueDark, .appBlueLight]), startPoint: .top, endPoint: .bottom)
     public static let blueGradientInverted = LinearGradient(gradient: Gradient(colors: [.appBlueLight, .appBlueDark]), startPoint: .top, endPoint: .bottom)
     public static let thanosGradient = LinearGradient(gradient: Gradient(colors: [.appThanosLight, .appThanosDark]), startPoint: .top, endPoint: .bottom)

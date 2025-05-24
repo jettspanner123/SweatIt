@@ -57,18 +57,61 @@ struct HomeScreen: View {
     @State var cloudinaryImageUploader = CloudinaryImageDB()
     
     @StateObject var cloudinaryMethodStoreStateObject = CloudinaryImageMethodStore()
+    
+    
+    
+    var atleastOneWorkoutCompleted: Bool {
+        return self.appStates.dailyEvents.workoutsDone.count > 0
+    }
+    var atleastBreakFastTaken: Bool {
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for foodItem in meal.foodItems {
+                let timeInHours = Calendar.current.dateComponents([.hour], from: foodItem.timeOfHaving).hour!
+                print(timeInHours, "For food item", foodItem.foodName, "Is breakfst")
+                if (0...12).contains(timeInHours) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    var atleastLunchTaken: Bool {
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for foodItem in meal.foodItems {
+                let timeInHours = Calendar.current.dateComponents([.hour], from: foodItem.timeOfHaving).hour!
+                print(timeInHours, "For food item", foodItem.foodName, "Is lunch")
+                if (12...18).contains(timeInHours) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    var atleastDinnerTaken: Bool {
+        for meal in self.appStates.dailyEvents.mealsHad {
+            for foodItem in meal.foodItems {
+                let timeInHours = Calendar.current.dateComponents([.hour], from: foodItem.timeOfHaving).hour!
+                print(timeInHours, "For food item", foodItem.foodName, "Is dinner")
+                if (18...24).contains(timeInHours) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    var atleastStepsCompleted: Bool {
+        return self.appStates.dailyEvents.stepsTaken >= 15000 ? true : false
+    }
     var body: some View {
         ScrollContentView {
             
             // MARK: Steps Taken card
-            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: true, value: Double(self.currentDayStepCount)) {
-                print("Hello world")
-            }
-            .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
-            .contextMenu {
-                
-            }
-            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: false, value: Double(self.currentDayStepCount)) {}
+                .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             
             // MARK: Calories burned and gained
@@ -145,16 +188,20 @@ struct HomeScreen: View {
                     .frame(height: 200)
                 }
                 
-                ForEach(self.AgendaToday.indices, id: \.self) { index in
-                    CheckBoxWithText(text: self.AgendaToday[index].title, checked: self.$AgendaToday[index].isDone)
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 15)
+                
+                CheckBoxWithText(text: "Complete A Workout Today", checked: self.atleastOneWorkoutCompleted)
+                
+                CustomDivider()
+                
+                CheckBoxWithText(text: "Have A Neutricious Breakfast", checked: self.atleastBreakFastTaken)
+                CustomDivider()
+
+                CheckBoxWithText(text: "Have A Filling Lunch", checked: self.atleastLunchTaken)
+                CustomDivider()
+
+                CheckBoxWithText(text: "Have A Delicious Dinner", checked: self.atleastDinnerTaken)
+
                     
-                    
-                    if index != self.AgendaToday.count - 1 {
-                        CustomDivider()
-                    }
-                }
                 
                 
                 

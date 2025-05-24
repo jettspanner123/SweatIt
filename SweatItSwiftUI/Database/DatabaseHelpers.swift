@@ -501,6 +501,29 @@ class GET {
         return finalReturn
     }
     
+    public func getCustomWorkouts(forUserId: String) async throws -> Array<Workout_t> {
+        var finalReturn: Array<Workout_t> = []
+        print("---------------From Getting Custom Workouts---------------")
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .userCustomWorkouts).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                let docData = try document.data(as: Workout_t.self)
+                
+                print(userId, User.current.currentUser.id)
+                
+                if userId == User.current.currentUser.id {
+                    finalReturn.append(docData)
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
+    
     
     
 }

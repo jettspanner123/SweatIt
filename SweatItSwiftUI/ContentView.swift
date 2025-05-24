@@ -38,6 +38,7 @@ struct ContentView: View {
     
     
     
+    
     @State var AgendaToday: Array<Agenda_t> = Agenda.current.exampleAgendaList
     func cleanResponse(jsonString: String) -> String {
         if jsonString.hasPrefix("```json") {
@@ -51,11 +52,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-//                if !self.isUserLoggedIn {
-//                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-//                        .zIndex(99999)
-//                        .transition(ScaleBlurOffsetTransition())
-//                }
+                if !self.isUserLoggedIn {
+                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                        .zIndex(99999)
+                        .transition(ScaleBlurOffsetTransition())
+                }
                 
                 if self.appStates.isDataLoading {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)

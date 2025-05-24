@@ -12,6 +12,9 @@ struct AllWorkoutsPage: View {
     @State var searchText: String = ""
     
     let workouts: Array<Workout_t> = Workout.current.exampleWorkoutList
+    
+    @Binding var userCustomWorkouts: Array<Workout_t>
+    @StateObject var postMethodStore = PostMethodStore()
     var body: some View {
         NavigationStack {
             ScreenBuilder {
@@ -30,16 +33,27 @@ struct AllWorkoutsPage: View {
                                 WorkoutCard(image: workout.workoutImage, name: workout.workoutName, difficulty: workout.workoutDifficulty, sideOffset: 50)
                             }
                         }
+                        
+                        SecondaryHeading(title: "Custom Workouts")
+                            .padding(.top, 25)
+                        
+                        if self.postMethodStore.isDatabaseLoading {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            ForEach(self.userCustomWorkouts, id: \.id) { workout in
+                                NavigationLink(destination: ActiveWorkoutScreen(workout: workout)) {
+                                    WorkoutCard(image: workout.workoutImage, name: workout.workoutImage, difficulty: workout.workoutDifficulty, sideOffset: 50)
+                                }
+                            }
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     
                 }
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
+            
         }
     }
-}
-
-#Preview {
-    AllWorkoutsPage()
 }

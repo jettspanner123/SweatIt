@@ -9,11 +9,20 @@ import SwiftUI
 struct CheckBoxWithText: View {
     
     var text: String
-    @Binding var checked: Bool
+    var checked: Bool
+    var isTop: Bool = false
+    var isBottom: Bool = false
+    
+    func getBackground() -> LinearGradient {
+        if self.checked {
+         return ApplicationLinearGradient.greenSameGradient
+        }
+        return ApplicationLinearGradient.clearGradient
+    }
     
     var body: some View {
         HStack {
-            Image(self.checked ? "Checkbox" : "UCheckbox")
+            Image(systemName: self.checked ? "checkmark.square.fill" : "square")
                 .resizable()
                 .frame(width: 20, height: 20)
             
@@ -23,13 +32,8 @@ struct CheckBoxWithText: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 15)
-        .background(.white.opacity(0.001))
-        .onTapGesture {
-            withAnimation {
-                self.checked.toggle()
-            }
-            ApplicationHelper.impactOccured(style: .heavy)
-        }
+        .padding(15)
+        .background(self.getBackground())
     }
 }
 

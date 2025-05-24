@@ -43,8 +43,14 @@ struct ActiveWorkoutScreen: View {
             //                    .zIndex(.infinity)
             //            } else {
             
-            AccentPageHeader_WithFavButton(pageHeaderTitle: self.workout.workoutName, workout: self.workout)
-                .blur(radius: self.showTransitionScreen ? 10 : 0)
+            
+            
+            if self.isDirected {
+                AccentPageHeader_WithFavButton(pageHeaderTitle: self.workout.workoutName, workout: self.workout)
+                    .blur(radius: self.showTransitionScreen ? 10 : 0)
+            } else {
+                AccentPageHeader(pageHeaderTitle: self.workout.workoutName)
+            }
             
             
             if self.appState.workoutStatus == .ended {

@@ -215,6 +215,16 @@ extension View {
     
 }
 
+extension ScrollView {
+    func enableScrollToDismissKeyboard() -> some View {
+        return self.onScrollGeometryChange(for: CGFloat.self) { geometry in
+            geometry.contentOffset.y
+        } action: { oldValue, newValue in
+            ApplicationHelper.dismissKeyboard()
+        }
+    }
+}
+
 struct MacroStyleCardMaxWidth: View {
     
     var text: String = ""
