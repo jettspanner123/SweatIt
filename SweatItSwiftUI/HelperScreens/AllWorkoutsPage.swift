@@ -37,20 +37,29 @@ struct AllWorkoutsPage: View {
                         SecondaryHeading(title: "Custom Workouts")
                             .padding(.top, 25)
                         
-                        if self.postMethodStore.isDatabaseLoading {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            ForEach(self.userCustomWorkouts, id: \.id) { workout in
-                                NavigationLink(destination: ActiveWorkoutScreen(workout: workout)) {
-                                    WorkoutCard(image: workout.workoutImage, name: workout.workoutImage, difficulty: workout.workoutDifficulty, sideOffset: 50)
-                                }
+                        if self.userCustomWorkouts.isEmpty {
+                            Image(systemName: "tray.fill")
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .foregroundStyle(.white.opacity(0.25))
+                                .padding(.top, 25)
+                            
+                            Text("No Custom Workout")
+                                .font(.system(size: 15, weight: .regular, design: .rounded))
+                                .foregroundStyle(.white.opacity(0.25))
+                                .padding(.top, 5)
+                        }
+                        
+                        ForEach(self.userCustomWorkouts, id: \.id) { workout in
+                            NavigationLink(destination: ActiveWorkoutScreen(workout: workout)) {
+                                WorkoutCard(image: workout.workoutImage, name: workout.workoutImage, difficulty: workout.workoutDifficulty, sideOffset: 50)
                             }
                         }
                     }
                     .frame(maxWidth: .infinity)
                     
                 }
+                .scrollDismissesKeyboard(.immediately)
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
             

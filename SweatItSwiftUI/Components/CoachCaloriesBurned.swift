@@ -366,8 +366,12 @@ struct CoachCaloriesBurned: View {
                 self.weeklyWaterIntake = try await ApplicationEndpoints.get.getWeeklyWaterIntake(forUserId: User.current.currentUser.id)
                 self.weeklyWorkoutTiming = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
                 self.weeklyMacroNutrients = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
-                
+                print("Weekly Calories Burned: \(self.weeklyCaloriesBurned)")
+                print("Weekly Water Intake: \(self.weeklyWaterIntake)")
+                print("Weekly Workout Timing: \(self.weeklyWorkoutTiming)")
+                print("Weekly Calories Ingested: \(self.weeklyMacroNutrients)")
             }
+            
         }
     }
 }

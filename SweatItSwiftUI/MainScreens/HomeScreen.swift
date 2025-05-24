@@ -335,6 +335,22 @@ struct HomeScreen: View {
         .onChange(of: self.burnedCalores) {
             self.appStates.dailyEvents.caloriesBurnedForTheDay = self.burnedCalores
         }
+        .onChange(of: self.burnedCalores) {
+            Task {
+                try await ApplicationEndpoints.post.setCaloriesBurnedForTheDay(forUserId: User.current.currentUser.id, withCalories: self.burnedCalores)
+            }
+        }
+        .onChange(of: self.appStates.dailyEvents.workoutsDone) {
+            print("When the shit is encountered............brr.rrrrrrrr")
+            Task {
+                var workoutTiming_t: Double = .zero
+                for workout in self.appStates.dailyEvents.workoutsDone {
+                    workoutTiming_t += workout.timeTaken
+                }
+                
+                try await ApplicationEndpoints.post.setWorkoutTimingsForTheDay(forUserId: User.current.currentUser.id, workoutTiming: workoutTiming_t)
+            }
+        }
         .onAppear {
             Task {
                 self.currentDayStepCount = await self.healthManager.getStepsToday()

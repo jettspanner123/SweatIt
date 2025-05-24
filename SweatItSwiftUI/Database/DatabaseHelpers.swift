@@ -511,7 +511,6 @@ class GET {
                 let userId: String = String(document.documentID.split(separator: "~").first!)
                 let docData = try document.data(as: Workout_t.self)
                 
-                print(userId, User.current.currentUser.id)
                 
                 if userId == User.current.currentUser.id {
                     finalReturn.append(docData)
@@ -708,6 +707,31 @@ class POST {
         do {
             let customWorkoutDatabaseReference = ApplicationDatabase.getDatabase(for: .userCustomWorkouts).document("\(User.current.currentUser.id)~\(workout.id)")
             try customWorkoutDatabaseReference.setData(from: workout)
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+    }
+    
+    public func setCaloriesBurnedForTheDay(forUserId: String, withCalories: Double) async throws -> Void {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        do {
+            let documentRef: DocumentReference = ApplicationDatabase.getDatabase(for: .dailyEvents).document("\(forUserId)~\(dateFormatter.string(from: Date()))")
+            try await documentRef.updateData(["caloriesBurnedForTheDay": withCalories])
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+    }
+    
+    public func setWorkoutTimingsForTheDay(forUserId: String, workoutTiming: Double) async throws -> Void {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        print("Workout array is changed brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+        
+        do {
+            let documentRef: DocumentReference = ApplicationDatabase.getDatabase(for: .dailyEvents).document("\(forUserId)~\(dateFormatter.string(from: Date()))")
+            try await documentRef.updateData(["workoutTimingForTheDay": workoutTiming])
         } catch {
             PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }
