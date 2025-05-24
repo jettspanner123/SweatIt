@@ -11,6 +11,8 @@ struct LoginScreen: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
+    @Binding var isUserLoggedIn: Bool
+    
     enum RegistrationTypes: String, CaseIterable {
         case SignIn = "Sign In", SignUp = "Sign Up"
     }
@@ -55,7 +57,10 @@ struct LoginScreen: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.performLoginAnimationHelper()
-                UserDefaults.standard.set(true, forKey: LocalStorageKeys.userLoggedInState.rawValue)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    self.isUserLoggedIn = true
+                    ApplicationHelper.setCurrentUserToUserDefaults(user: user_t)
+                }
             }
             return
         }
@@ -159,6 +164,20 @@ struct LoginScreen: View {
                 let allUsers: Array<User_t> = try await ApplicationEndpoints.get.fetchAllUsersFromDatabase()
                 User.current.setUsers(allUsers)
             }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation {
+                    self.currentSelectedRegistrationType = .SignUp
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                withAnimation {
+                    self.currentSelectedRegistrationType = .SignIn
+                }
+            }
+            
+            
         }
     }
     
@@ -635,12 +654,6 @@ struct LoginScreen: View {
 }
 
 
-
-
-
-#Preview {
-    LoginScreen(showLoginScreen: .constant(false), showIsland: .constant(false))
-}
 
 
 

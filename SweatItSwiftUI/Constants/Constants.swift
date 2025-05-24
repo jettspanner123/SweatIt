@@ -7,7 +7,7 @@ import HealthKit
 let defaultShape = RoundedRectangle(cornerRadius: 17)
 
 enum LocalStorageKeys: String {
-    case userLoggedInState
+    case userLoggedInState, currentUser
 }
 
 
@@ -118,6 +118,24 @@ class ApplicationHelper: ObservableObject {
             }
         }
         
+    }
+    
+    
+    public static func setCurrentUserToUserDefaults(user: User_t) -> Void {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(user) {
+            UserDefaults.standard.set(encoded, forKey: LocalStorageKeys.currentUser.rawValue)
+        }
+    }
+    
+    public static func getCurrentUserFromUserDefaults() -> User_t? {
+        if let savedUserData = UserDefaults.standard.data(forKey: LocalStorageKeys.currentUser.rawValue) {
+            let decoder = JSONDecoder()
+            if let loadedUser = try? decoder.decode(User_t.self, from: savedUserData) {
+                return loadedUser
+            }
+        }
+        return nil
     }
     
     

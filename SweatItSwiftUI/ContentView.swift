@@ -25,7 +25,7 @@ struct ContentView: View {
     
     @State var showNotificationCenter: Bool = false
     
-    @AppStorage("isUserLoggedIn") var isUserLoggedIn: Bool = true
+    @AppStorage("isUserLoggedIn") var isUserLoggedIn: Bool = false
     @State var currentUser: User_t = User.current.currentUser
     
     @State var showIsland: Bool = false
@@ -52,8 +52,8 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                if !self.isUserLoggedIn {
-                    LoginScreen(showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                if self.isUserLoggedIn == false {
+                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
                         .zIndex(99999)
                         .transition(ScaleBlurOffsetTransition())
                 }
@@ -182,11 +182,6 @@ struct ContentView: View {
             .coordinateSpace(name: "MainScreenCoordinateSpace")
             .navigationDestination(isPresented: self.$showScannedFoodDetailScreen) {
                 ScannedFoodDetailScreen()
-            }
-        }
-        .onAppear {
-            withAnimation {
-                self.isUserLoggedIn = false
             }
         }
         .sensoryFeedback(.impact, trigger: self.currentPage_t)

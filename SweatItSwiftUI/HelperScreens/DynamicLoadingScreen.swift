@@ -54,6 +54,10 @@ struct DynamicLoadingScreen: View {
                 withAnimation {
                     self.appStates.isDataLoading = false
                 }
+                
+                if let user_t = ApplicationHelper.getCurrentUserFromUserDefaults() {
+                    User.current.setCurrentUser(user_t)
+                }
             }
         }
     }
