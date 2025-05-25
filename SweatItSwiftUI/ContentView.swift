@@ -58,7 +58,7 @@ struct ContentView: View {
                         .transition(ScaleBlurOffsetTransition())
                 }
                 
-                if self.appStates.isDataLoading {
+                if self.appStates.isDataLoading && self.isUserLoggedIn {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
                         .zIndex(.infinity)
                 }

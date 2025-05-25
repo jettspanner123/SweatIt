@@ -27,38 +27,7 @@ struct CoachCaloriesBurned: View {
     //    }
     
     
-    var totalProteinIntake: Double {
-        var protein: Double = .zero
-        
-        for day in self.weeklyData {
-            for meal in day.mealsHad {
-                protein += meal.totalProtein
-            }
-        }
-        return protein / Double(self.weeklyData.count)
-    }
     
-    var totalCarbIntake: Double {
-        var carb: Double = .zero
-        
-        for day in self.weeklyData {
-            for meal in day.mealsHad {
-                carb += meal.totalCarbs
-            }
-        }
-        return carb / Double(self.weeklyData.count)
-    }
-    
-    var totalFatIntake: Double {
-        var fats: Double = .zero
-        
-        for day in self.weeklyData {
-            for meal in day.mealsHad {
-                fats += meal.totalFats
-            }
-        }
-        return fats / Double(self.weeklyData.count)
-    }
     
     
     func getReducedValue(_ value: Double, maxValue: Double = 1000) -> Double {
@@ -74,6 +43,33 @@ struct CoachCaloriesBurned: View {
     @State var weeklyWaterIntake: Dictionary<Date, Int> = [:]
     @State var weeklyWorkoutTiming: Dictionary<Date, Double> = [:]
     @State var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
+    
+    var totalProteinIntake: Double {
+        var protein_t: Double = .zero
+        
+        for (protien, _, _, _) in weeklyMacroNutrients.values {
+            protein_t += protien
+        }
+        return protein_t
+    }
+    
+    var totalCarbIntake: Double {
+        var carb: Double = .zero
+       
+        for (_, carbs, _, _) in self.weeklyMacroNutrients.values {
+            carb += carbs
+        }
+        return carb / Double(self.weeklyMacroNutrients.count)
+    }
+    
+    var totalFatIntake: Double {
+        var fats: Double = .zero
+        
+        for (_, _, fat, _) in self.weeklyMacroNutrients.values {
+            fats += fat
+        }
+        return fats / Double(self.weeklyMacroNutrients.count)
+    }
     
     var avgCaloriesBurned: Double {
         if self.weeklyCaloriesBurned.isEmpty {
@@ -140,32 +136,149 @@ struct CoachCaloriesBurned: View {
                     let readerSize = $0.size
                     
                     HStack(alignment: .bottom) {
-                        ForEach(self.weeklyData, id: \.id) { daily in
+                        
+                        
+                        ForEach(self.weeklyCaloriesBurned.sorted(by: >), id: \.key) { key, value in
+                            if value == 0 {
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                            } else {
+                                
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                                .overlay(alignment: .bottom) {
+                                    HStack {
+                                        
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: self.getReducedValue(Double(value)) * readerSize.height)
+                                    .background(self.textColor)
+                                    .clipShape(Capsule())
+                                }
+                                
+                            }
+                        }
+                        
+                        let missingCount = max(0, 7 - self.weeklyCaloriesBurned.count)
+                        ForEach(0..<missingCount, id: \.self) { _ in
                             HStack {
                                 
                             }
                             .frame(maxWidth: .infinity)
-                            .frame(height: self.getReducedValue(Double(daily.caloriesBurnedForTheDay)) * readerSize.height)
-                            .background(self.textColor.opacity(self.getReducedValue(Double(daily.caloriesBurnedForTheDay)) - 0.1))
+                            .frame(height: readerSize.height)
+                            .background(self.textColor.opacity(0.1))
                             .clipShape(Capsule())
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 }
             } else if self.cardType == .waterIntake {
+                GeometryReader {
+                    
+                    let readerSize = $0.size
+                    
+                    HStack(alignment: .bottom) {
+                        
+                        
+                        ForEach(self.weeklyWaterIntake.sorted(by: >), id: \.key) { key, value in
+                            if value == 0 {
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                            } else {
+                                
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                                .overlay(alignment: .bottom) {
+                                    HStack {
+                                        
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: self.getReducedValue(Double(value)) * readerSize.height)
+                                    .background(self.textColor)
+                                    .clipShape(Capsule())
+                                }
+                                
+                            }
+                        }
+                        
+                        let missingCount = max(0, 7 - self.weeklyWaterIntake.count)
+                        ForEach(0..<missingCount, id: \.self) { _ in
+                            HStack {
+                                
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: readerSize.height)
+                            .background(self.textColor.opacity(0.1))
+                            .clipShape(Capsule())
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                }
             } else if self.cardType == .workoutTime {
                 GeometryReader {
                     
                     let readerSize = $0.size
                     
                     HStack(alignment: .bottom) {
-                        ForEach(self.weeklyData, id: \.id) { daily in
+                        ForEach(self.weeklyWorkoutTiming.sorted(by: >), id: \.key) { key, value in
+                            if value == 0 {
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                            } else {
+                                
+                                HStack {
+                                    
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: readerSize.height)
+                                .background(self.textColor.opacity(0.1))
+                                .clipShape(Capsule())
+                                .overlay(alignment: .bottom) {
+                                    HStack {
+                                        
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: self.getReducedValue(Double(value)) * readerSize.height)
+                                    .background(self.textColor)
+                                    .clipShape(Capsule())
+                                }
+                                
+                            }
+                        }
+                        
+                        let missingCount = max(0, 7 - self.weeklyWorkoutTiming.count)
+                        ForEach(0..<missingCount, id: \.self) { _ in
                             HStack {
                                 
                             }
                             .frame(maxWidth: .infinity)
-                            .frame(height: self.getReducedValue(Double(daily.workoutTimingForTheDay), maxValue: 100) * readerSize.height)
-                            .background(self.textColor.opacity(self.getReducedValue(Double(daily.workoutTimingForTheDay), maxValue: 100) - 0.1))
+                            .frame(height: readerSize.height)
+                            .background(self.textColor.opacity(0.1))
                             .clipShape(Capsule())
                         }
                     }
@@ -332,28 +445,28 @@ struct CoachCaloriesBurned: View {
                 ForEach(self.weeklyCaloriesBurned.sorted(by: <), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
                     
-                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    let day = Calendar.current.weekdaySymbols[dayIndex - 1]
                     Text("\(day): [\(String(format: "%.f kCal", value))]")
                 }
             } else if self.cardType == .waterIntake {
                 Text("Water Intake 💧")
                 ForEach(self.weeklyWaterIntake.sorted(by: <), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
-                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    let day = Calendar.current.weekdaySymbols[dayIndex - 1]
                     Text("\(day): [\(String(format: "%.f mL", value))]")
                 }
             } else if self.cardType == .workoutTime {
                 Text("Workout Timing 💪")
                 ForEach(self.weeklyWorkoutTiming.sorted(by: <), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
-                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    let day = Calendar.current.weekdaySymbols[dayIndex - 1]
                     Text("\(day): [\(String(format: "%.f mins", value))]")
                 }
             } else {
                 Text("Calories Ingested 🥦")
                 ForEach(self.weeklyCaloriesBurned.sorted(by: <), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
-                    let day = Calendar.current.weekdaySymbols[dayIndex]
+                    let day = Calendar.current.weekdaySymbols[dayIndex - 1]
                     Text("\(day): [\(String(format: "%.f kCal", value))]")
                 }
             }

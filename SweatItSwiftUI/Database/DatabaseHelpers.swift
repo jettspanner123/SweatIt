@@ -450,7 +450,11 @@ class GET {
                 let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
                 let documentId = document.documentID.split(separator: "~").last!
                 if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
-                    finalReturn[unwrappedDate] = Double(currentDailyEvent.workoutTimingForTheDay)
+                    var workoutTiming: Double = .zero
+                    for workout in currentDailyEvent.workoutsDone {
+                        workoutTiming += workout.timeTaken
+                    }
+                    finalReturn[unwrappedDate] = workoutTiming
                 }
             }
             
