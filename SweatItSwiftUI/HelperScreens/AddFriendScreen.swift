@@ -96,6 +96,17 @@ struct AddFriendScreen: View {
                             VStack {
                                 SectionHeader(text: "All Friends")
                                     .padding(.top, 25)
+                                
+                                Image(systemName: "tray.fill")
+                                    .resizable()
+                                    .frame(width: 65, height: 50)
+                                    .foregroundStyle(.white.opacity(0.5))
+                                    .padding(.top, 25)
+                                
+                                
+                                Text("No Friends Yet!")
+                                    .font(.system(size: 15, weight: .regular, design: .rounded))
+                                    .foregroundStyle(.white.opacity(0.5))
                             }
                             .transition(.offset(y: UIScreen.main.bounds.height))
 

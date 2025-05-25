@@ -123,10 +123,6 @@ struct PastStatisticsScreen: View {
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
                     
-                    Button("Click Me ") {
-                        print(self.appStates.weeklyDailyEvents.keys)
-                    }
-                    
                     // MARK: Food and meals
                     if currentSelectedDayData.mealsHad.count > 3 {
                         SecondaryHeading(title: "Food & Meals")
