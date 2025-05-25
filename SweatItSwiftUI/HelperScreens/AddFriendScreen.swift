@@ -140,10 +140,6 @@ struct AddFriendScreen: View {
                 
             }
             
-            Task {
-                print("All Requests")
-                print(try await ApplicationEndpoints.get.getAllRequests())
-            }
         }
     }
 }

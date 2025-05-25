@@ -121,10 +121,27 @@ class ApplicationHelper: ObservableObject {
     }
     
     
+    public static func debugHeading(for str: String) -> Void {
+        print("--------------------\(str)--------------------")
+    }
+    
+    public static func isDateInCurrentWeek(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        guard let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: Date())?.start else {
+            return false
+        }
+        guard let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
+            return false
+        }
+
+        return date >= startOfWeek && date <= endOfWeek
+    }
+    
     public static func setCurrentUserToUserDefaults(user: User_t) -> Void {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(user) {
             UserDefaults.standard.set(encoded, forKey: LocalStorageKeys.currentUser.rawValue)
+            print("User encoded to localstore")
         }
     }
     
@@ -132,6 +149,7 @@ class ApplicationHelper: ObservableObject {
         if let savedUserData = UserDefaults.standard.data(forKey: LocalStorageKeys.currentUser.rawValue) {
             let decoder = JSONDecoder()
             if let loadedUser = try? decoder.decode(User_t.self, from: savedUserData) {
+                print("User decoded from localstore")
                 return loadedUser
             }
         }

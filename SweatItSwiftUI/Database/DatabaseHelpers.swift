@@ -18,11 +18,7 @@ class GetMethodStore: ObservableObject {
         
     }
     
-    @Published var isDatabaseLoading: Bool = false {
-        didSet {
-            print(self.isDatabaseLoading)
-        }
-    }
+    @Published var isDatabaseLoading: Bool = false 
     @Published var databaseState: DatabaseLoadingState = .loaded
     
     
@@ -103,8 +99,6 @@ class GET {
             let tempUser: User_t = .init(id: id,fullName: fullName, username: username, emailId: emailId, password: password, currentWeight: currentWeight, currentHeight: currentHeight, gender: gender, bodyType: bodyType, level: level, goal: goal, dailyPoints: dailyPoints, fitnessLevel: fitnessLevel)
             userArray.append(tempUser)
         }
-        
-//        print(userArray)
         
         return userArray
     }
@@ -360,7 +354,6 @@ class GET {
             for document in snapshot.documents {
                 let currentDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
                 let documentId = document.documentID.split(separator: "~").last!
-                print("Document id: ", documentId)
                 if let unwrappedDate = dateFormatter.date(from: String(documentId)) {
                     finalReturn[unwrappedDate] = currentDailyEvent.caloriesBurnedForTheDay
                 }
@@ -507,7 +500,6 @@ class GET {
     
     public func getCustomWorkouts(forUserId: String) async throws -> Array<Workout_t> {
         var finalReturn: Array<Workout_t> = []
-        print("---------------From Getting Custom Workouts---------------")
         do {
             let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .userCustomWorkouts).getDocuments(source: .server)
             
@@ -525,6 +517,40 @@ class GET {
         }
         
         return finalReturn
+    }
+    
+    public func getWeeklyExerciseList(forUserId: String) async throws -> Array<Exercise_t> {
+        var finalReturn: Array<Exercise_t> = []
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                print(forUserId, userId)
+
+                if forUserId == userId {
+                    
+                    if let unwrappedDate = dateFormatter.date(from: String(document.documentID.split(separator: "~").last!)) {
+                        if ApplicationHelper.isDateInCurrentWeek(unwrappedDate) {
+                            let currentDayDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                            for workout in currentDayDailyEvent.workoutsDone {
+                                for exercise in workout.exercises {
+                                    finalReturn.append(exercise)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+        
     }
     
     
@@ -656,7 +682,7 @@ class POST {
             try snapshot.setData(from: dailyEvents)
             
         } catch {
-            print("Some error occurred while fetching data!")
+            PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }
     }
     
@@ -730,8 +756,6 @@ class POST {
     public func setWorkoutTimingsForTheDay(forUserId: String, workoutTiming: Double) async throws -> Void {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        print("Workout array is changed brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
         
         do {
             let documentRef: DocumentReference = ApplicationDatabase.getDatabase(for: .dailyEvents).document("\(forUserId)~\(dateFormatter.string(from: Date()))")

@@ -16,7 +16,7 @@ struct CoachScreen: View {
     }
     
     @State var currentSelectedMuscle: Extras.Muscle = .bicep
-    @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
+    @State var weeklyExericseList: Array<Exercise_t> = []
     
     
     
@@ -30,15 +30,23 @@ struct CoachScreen: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    CoachCaloriesBurned(cardType: .caloriesBurned, title: "Cal. Burned", trailingImage: "FireLogo", background: ApplicationLinearGradient.orangeGradient)
-                    CoachCaloriesBurned(cardType: .waterIntake, title: "Water Intake", trailingImage: "Water", background: ApplicationLinearGradient.blueGradient)
-                    CoachCaloriesBurned(cardType: .workoutTime, title: "Workout", trailingImage: "Workout", background: ApplicationLinearGradient.whiteGradient, textColor: .appBloodRedDark)
-                    CoachCaloriesBurned(cardType: .caloriesIngested, title: "Cal. Ingested", trailingImage: "Food", background: ApplicationLinearGradient.greenGradient)
+                    CoachAttributesCard(cardType: .caloriesBurned, title: "Cal. Burned", trailingImage: "FireLogo", background: ApplicationLinearGradient.orangeGradient)
+                    CoachAttributesCard(cardType: .waterIntake, title: "Water Intake", trailingImage: "Water", background: ApplicationLinearGradient.blueGradient)
+                    CoachAttributesCard(cardType: .workoutTime, title: "Workout", trailingImage: "Dumbbell", background: ApplicationLinearGradient.whiteGradient, textColor: .appBloodRedDark)
+                    CoachAttributesCard(cardType: .caloriesIngested, title: "Cal. Ingested", trailingImage: "Food", background: ApplicationLinearGradient.greenGradient)
                 }
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                 
             }
+            .onAppear {
+                ApplicationHelper.debugHeading(for: "Coach Screen")
+                Task {
+                    self.weeklyExericseList = try await ApplicationEndpoints.get.getWeeklyExerciseList(forUserId: User.current.currentUser.id)
+                    print("WeeklyExerciseLIst: ", self.weeklyExericseList)
+                }
+            }
             
+
             
             
             
@@ -82,9 +90,27 @@ struct CoachScreen: View {
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
             
+            if self.weeklyExericseList.filter({ $0.targettedMuscles.contains(self.currentSelectedMuscle) }).isEmpty {
+                Image(systemName: "tray.fill")
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .foregroundStyle(.white.opacity(0.5))
+                    .padding(.top, 25)
+                
+                Text("No Exercise Done For This Muscles")
+                    .font(.system(size: 15, weight: .regular, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
             
+            VStack {
+                ForEach(self.weeklyExericseList.filter { $0.targettedMuscles.contains(self.currentSelectedMuscle)} , id: \.id) { exericse in
+                    ExerciseViewCard(exercise: exericse)
+                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                        .transition(.offset(y: 500))
+                }
+            }
+            .padding(.top)
         }
-        
     }
 }
 

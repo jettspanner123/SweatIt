@@ -45,7 +45,6 @@ struct CaloriesBurnedGraphPage: View {
             index += 1
         }
         
-        print(self.stepsTakenEachHour)
     }
     var body: some View {
         ScreenBuilder {

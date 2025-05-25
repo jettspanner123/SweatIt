@@ -37,6 +37,8 @@ struct LoginScreen: View {
     func performLogin() async throws -> Void {
         self.isSubmitButtonClicked = true
         
+        print("Hello worled the submit button is clickced")
+        
         
         if self.loginStateObject.username.isEmpty || self.loginStateObject.password.isEmpty {
             withAnimation {
@@ -532,7 +534,6 @@ struct LoginScreen: View {
                             .foregroundStyle(.white)
                     }
                 }, backgroundLinearGradient: ApplicationLinearGradient.redGradient) {
-                    
                     ApplicationHelper.dismissKeyboard()
                     Task {
                         try await self.performLogin()

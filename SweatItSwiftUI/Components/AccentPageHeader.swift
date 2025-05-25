@@ -79,7 +79,6 @@ struct AccentPageHeader_WithFavButton: View {
                     .padding(20)
                     .background(.darkBG.opacity(0.001))
                     .onTapWithScaleVibrate {
-                        print("Favourite BUtton Clicked")
                         ApplicationSounds.current.playBubble()
                         withAnimation {
                             self.isFavourite = true

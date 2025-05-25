@@ -56,7 +56,27 @@ struct DynamicLoadingScreen: View {
                 }
                 
                 if let user_t = ApplicationHelper.getCurrentUserFromUserDefaults() {
-                    User.current.setCurrentUser(user_t)
+                    User.current.currentUser = user_t
+                    print("Found Userid in localstoreage")
+                    print("After change user id: ", User.current.currentUser.id)
+                }
+            }
+            
+            Task {
+                do {
+                    let calories = try await ApplicationEndpoints.get.getWeeklyCalories(forUserId: User.current.currentUser.id)
+                    let water = try await ApplicationEndpoints.get.getWeeklyWaterIntake(forUserId: User.current.currentUser.id)
+                    let workout = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
+                    let macros = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
+                    
+                    withAnimation {
+                        self.appStates.weeklyCaloriesBurned = calories
+                        self.appStates.weeklyWaterIntake = water
+                        self.appStates.weeklyWorkoutTiming = workout
+                        self.appStates.weeklyMacroNutrients = macros
+                    }
+                } catch {
+                    print("Error fetching weekly stats: \(error)")
                 }
             }
         }

@@ -99,6 +99,11 @@ class ApplicationStates: ObservableObject {
             }
         }
     }
+    
+    @Published var weeklyCaloriesBurned: Dictionary<Date, Double> = [:]
+    @Published var weeklyWaterIntake: Dictionary<Date, Int> = [:]
+    @Published var weeklyWorkoutTiming: Dictionary<Date, Double> = [:]
+    @Published var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
 }
 
 @main

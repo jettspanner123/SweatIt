@@ -68,7 +68,6 @@ struct AddUserCard: View {
                 .frame(width: 60, height: 35)
                 .background(ApplicationLinearGradient.redGradient, in: Capsule())
                 .onTapWithScaleVibrate {
-                    print("Add friend")
                 }
                 
                 Image(systemName: "chevron.right")

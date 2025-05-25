@@ -187,7 +187,6 @@ struct FoodScannerScreen: View {
                 let response = try await model.generateContent(prompt, resizedImage)
                 responseText = response.text ?? "No response received."
                 self.appStates.scannedFoodDetail = response.text ?? "No response received."
-                print(responseText)
             } catch {
                 responseText = "Error: \(error.localizedDescription)"
             }

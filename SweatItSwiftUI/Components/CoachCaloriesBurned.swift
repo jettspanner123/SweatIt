@@ -8,7 +8,9 @@
 import SwiftUI
 
 
-struct CoachCaloriesBurned: View {
+struct CoachAttributesCard: View {
+    
+    @EnvironmentObject var appStates: ApplicationStates
     
     var cardType: CoachScreen.CardType
     
@@ -16,19 +18,6 @@ struct CoachCaloriesBurned: View {
     var trailingImage: String
     var background: LinearGradient
     var textColor: Color = .white
-    @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
-    
-    //    var avgCaloriesBurned: Int {
-    //        var toRet: Int = .zero
-    //        for calories in self.weeklyData {
-    //            toRet += calories.caloriesBurnedForTheDay
-    //        }
-    //        return toRet
-    //    }
-    
-    
-    
-    
     
     func getReducedValue(_ value: Double, maxValue: Double = 1000) -> Double {
         return min(max(value / maxValue, 0), 1)
@@ -39,10 +28,18 @@ struct CoachCaloriesBurned: View {
         return value / total
     }
     
-    @State var weeklyCaloriesBurned: Dictionary<Date, Double> = [:]
-    @State var weeklyWaterIntake: Dictionary<Date, Int> = [:]
-    @State var weeklyWorkoutTiming: Dictionary<Date, Double> = [:]
-    @State var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
+    var weeklyCaloriesBurned: Dictionary<Date, Double> {
+        return self.appStates.weeklyCaloriesBurned
+    }
+    var weeklyWaterIntake: Dictionary<Date, Int> {
+        return self.appStates.weeklyWaterIntake
+    }
+    var weeklyWorkoutTiming: Dictionary<Date, Double> {
+        return self.appStates.weeklyWorkoutTiming
+    }
+    var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> {
+        return self.appStates.weeklyMacroNutrients
+    }
     
     var totalProteinIntake: Double {
         var protein_t: Double = .zero
@@ -55,7 +52,7 @@ struct CoachCaloriesBurned: View {
     
     var totalCarbIntake: Double {
         var carb: Double = .zero
-       
+        
         for (_, carbs, _, _) in self.weeklyMacroNutrients.values {
             carb += carbs
         }
@@ -307,8 +304,16 @@ struct CoachCaloriesBurned: View {
                                     HStack {
                                         
                                     }
-                                    .frame(width: self.calculatePercentage(value: self.totalProteinIntake, total: loadingBar.width) * loadingBar.width, height: 12)
-                                    .background(.white.opacity(0.75), in: Capsule())
+                                    .frame(width: loadingBar.width, height: 12)
+                                    .background(.white.opacity(0.1), in: Capsule())
+                                    .overlay(alignment: .leading) {
+                                        HStack {
+                                            
+                                        }
+                                        .frame(width: self.calculatePercentage(value: self.totalProteinIntake, total: loadingBar.width) * loadingBar.width, height: 12)
+                                        .background(.white.opacity(0.75), in: Capsule())
+                                    }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
@@ -346,8 +351,16 @@ struct CoachCaloriesBurned: View {
                                     HStack {
                                         
                                     }
-                                    .frame(width: width, height: 12)
-                                    .background(.white.opacity(0.75), in: Capsule())
+                                    .frame(width: loadingBar.width, height: 12)
+                                    .background(.white.opacity(0.1), in: Capsule())
+                                    .overlay(alignment: .leading) {
+                                        HStack {
+                                            
+                                        }
+                                        .frame(width: width, height: 12)
+                                        .background(.white.opacity(0.75), in: Capsule())
+                                    }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
@@ -379,12 +392,22 @@ struct CoachCaloriesBurned: View {
                                 
                                 let loadingBar = $0.size
                                 
+                                
                                 HStack {
+                                    
                                     HStack {
                                         
                                     }
-                                    .frame(width: self.calculatePercentage(value: self.totalFatIntake, total: loadingBar.width) * loadingBar.width, height: 12)
-                                    .background(.white.opacity(0.75), in: Capsule())
+                                    .frame(width: loadingBar.width, height: 12)
+                                    .background(.white.opacity(0.1), in: Capsule())
+                                    .overlay(alignment: .leading) {
+                                        HStack {
+                                            
+                                        }
+                                        .frame(width: self.calculatePercentage(value: self.totalFatIntake, total: loadingBar.width) * loadingBar.width, height: 12)
+                                        .background(.white.opacity(0.75), in: Capsule())
+                                    }
+                                    
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
@@ -472,19 +495,24 @@ struct CoachCaloriesBurned: View {
             }
             
         }
-        .onAppear {
-            print("Coach Screen----------------------")
+        .onChange(of: self.appStates.dailyEvents) {
             Task {
-                self.weeklyCaloriesBurned = try await ApplicationEndpoints.get.getWeeklyCalories(forUserId: User.current.currentUser.id)
-                self.weeklyWaterIntake = try await ApplicationEndpoints.get.getWeeklyWaterIntake(forUserId: User.current.currentUser.id)
-                self.weeklyWorkoutTiming = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
-                self.weeklyMacroNutrients = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
-                print("Weekly Calories Burned: \(self.weeklyCaloriesBurned)")
-                print("Weekly Water Intake: \(self.weeklyWaterIntake)")
-                print("Weekly Workout Timing: \(self.weeklyWorkoutTiming)")
-                print("Weekly Calories Ingested: \(self.weeklyMacroNutrients)")
+                do {
+                    let calories = try await ApplicationEndpoints.get.getWeeklyCalories(forUserId: User.current.currentUser.id)
+                    let water = try await ApplicationEndpoints.get.getWeeklyWaterIntake(forUserId: User.current.currentUser.id)
+                    let workout = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
+                    let macros = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
+                    
+                    withAnimation {
+                        self.appStates.weeklyCaloriesBurned = calories
+                        self.appStates.weeklyWaterIntake = water
+                        self.appStates.weeklyWorkoutTiming = workout
+                        self.appStates.weeklyMacroNutrients = macros
+                    }
+                } catch {
+                    print("Error fetching weekly stats: \(error)")
+                }
             }
-            
         }
     }
 }
