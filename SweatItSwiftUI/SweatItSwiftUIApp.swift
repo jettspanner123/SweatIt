@@ -104,6 +104,7 @@ class ApplicationStates: ObservableObject {
     @Published var weeklyWaterIntake: Dictionary<Date, Int> = [:]
     @Published var weeklyWorkoutTiming: Dictionary<Date, Double> = [:]
     @Published var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
+    @Published var weeklyDailyEvents: Dictionary<Date, DailyEvents_t> = [:]
 }
 
 @main

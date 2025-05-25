@@ -11,6 +11,8 @@ let ONE_DAY: Int = 86400
 
 struct PastStatisticsScreen: View {
     
+    @EnvironmentObject var appStates: ApplicationStates
+    
     var datesToShow: Array<Date> = (0...6).reversed().map { Date().addingTimeInterval(TimeInterval(ONE_DAY * -$0))}
     @State var weeklyEvents: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
    
@@ -20,8 +22,8 @@ struct PastStatisticsScreen: View {
     @State var showFoodDetails: Bool = false
     
     var currentSelectedDayData: DailyEvents_t? {
-        for day in self.weeklyEvents where ApplicationHelper.formatDateToHumanReadableWithoutTime(date: day.date) == self.currentSelectedDate {
-            return day
+        for day in self.appStates.weeklyDailyEvents where ApplicationHelper.formatDateToHumanReadableWithoutTime(date: day.key) == self.currentSelectedDate {
+            return day.value
         }
         return nil
     }
@@ -53,6 +55,9 @@ struct PastStatisticsScreen: View {
                 
                 
                 ScrollViewReader { scrollProxy in
+                    
+                    
+                    // MARK: THis is the horizontal scrol date picker
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             
@@ -60,36 +65,8 @@ struct PastStatisticsScreen: View {
                                 .frame(width: 10)
                                 .frame(maxHeight: .infinity)
                             
-                            ForEach(self.datesToShow, id: \.timeIntervalSince1970) { date in
-                                VStack {
-                                    Text(ApplicationHelper.getDay(from: date).prefix(1))
-                                        .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
-                                        .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
-                                        .frame(maxWidth: .infinity)
-                                    
-                                    Spacer()
-                                    
-                                    Text(String(ApplicationHelper.getDate(from: date)))
-                                        .font(.system(size: 20, weight: .light, design: .rounded))
-                                        .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
-                                        .frame(maxWidth: .infinity)
-                                    
-                                    Spacer()
-                                    
-                                }
-                                .frame(width: 60, height: 70, alignment: .topLeading)
-                                .padding(.vertical, 8)
-                                .background(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? ApplicationLinearGradient.whiteGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
-                                .overlay {
-                                    defaultShape
-                                        .stroke(.white.opacity(0.18))
-                                }
-                                .clipShape(defaultShape)
-                                .onTapGesture {
-                                    withAnimation {
-                                        self.currentSelectedDate = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date)
-                                    }
-                                }
+                            ForEach(self.appStates.weeklyDailyEvents.sorted(by: { $0.key > $1.key }), id: \.value) { key, value in
+                                DateShowCard(date: key, currentSelectedDate: self.$currentSelectedDate)
                             }
                             
                             Divider()
@@ -108,6 +85,7 @@ struct PastStatisticsScreen: View {
                 }
                 
                 
+                
                 // MARK: Activities on that day
                 SecondaryHeading(title: "Activities")
                     .padding(.top, 25)
@@ -120,14 +98,14 @@ struct PastStatisticsScreen: View {
                     // MARK: Calores burned and ingested
                     HStack {
                        
-                        InformationCard(image: "FireLogo", title: "Burned", text: "\(currentSelectedDayData.caloriesBurnedForTheDay) kCal", secondaryText: "", textColor: .white, wantInformationView: false, content: {
+                        InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", currentSelectedDayData.caloriesBurnedForTheDay), secondaryText: "", textColor: .white, wantInformationView: false, content: {
                             
                         })
                         .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                         .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesBurnedForTheDay)))
 
                         
-                        InformationCard(image: "Food", title: "Consumed", text: "\(currentSelectedDayData.caloriesIngestedForTheDay) kCal", secondaryText: "", textColor: .white, wantInformationView: false, content: {})
+                        InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", currentSelectedDayData.caloriesIngestedForTheDay), secondaryText: "", textColor: .white, wantInformationView: false, content: {})
                             .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                             .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesIngestedForTheDay)))
 
@@ -139,21 +117,28 @@ struct PastStatisticsScreen: View {
                     
                     
                     // MARK: Steps taken
-                    InformationCard(image: "Boot", title: "Steps Taken", text: "\(currentSelectedDayData.stepsTaken) / 15000", secondaryText: "", textColor: .white, wantInformationView: false, content: {})
+                    InformationCard(image: "Boot", title: "Steps Taken", text: "\(currentSelectedDayData.stepsTaken) / \(self.appStates.dailyNeeds.dailySteps)", secondaryText: "", textColor: .white, wantInformationView: false, content: {})
                         .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
                         .contentTransition(.numericText(value: Double(currentSelectedDayData.stepsTaken)))
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
                     
+                    Button("Click Me ") {
+                        print(self.appStates.weeklyDailyEvents.keys)
+                    }
                     
                     // MARK: Food and meals
-                    HeadingWithLink(titleHeading: "Food & Meals", action: {
-                        self.showAllFoodAndMeals = true
-                    })
-                    .padding(.top, 25)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    if currentSelectedDayData.mealsHad.count > 3 {
+                        SecondaryHeading(title: "Food & Meals")
+                    } else {
+                        HeadingWithLink(titleHeading: "Food & Meals", action: {
+                            self.showAllFoodAndMeals = true
+                        })
+                        .padding(.top, 25)
+                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    }
                     
-                    ForEach(currentSelectedDayData.mealsHad, id: \.id) { meal in
+                    ForEach(currentSelectedDayData.mealsHad.prefix(3), id: \.id) { meal in
                         ForEach(meal.foodItems.prefix(1), id: \.id) { food in
                             FoodViewCard(food: food)
                                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
@@ -211,6 +196,45 @@ struct PastStatisticsScreen: View {
         .navigationDestination(isPresented: self.$showAllFoodAndMeals, destination: {
             ShowAllFoodAndMealsScreen(date: self.$currentSelectedDate)
         })
+    }
+}
+
+
+
+struct DateShowCard: View {
+    
+    var date: Date
+    @Binding var currentSelectedDate: String
+    var body: some View {
+        VStack {
+            Text(ApplicationHelper.getDay(from: date).prefix(1))
+                .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
+                .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
+                .frame(maxWidth: .infinity)
+            
+            Spacer()
+            
+            Text(String(ApplicationHelper.getDate(from: date)))
+                .font(.system(size: 20, weight: .light, design: .rounded))
+                .foregroundStyle(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? .black : .white.opacity(0.5))
+                .frame(maxWidth: .infinity)
+            
+            Spacer()
+            
+        }
+        .frame(width: 60, height: 70, alignment: .topLeading)
+        .padding(.vertical, 8)
+        .background(self.currentSelectedDate == ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date) ? ApplicationLinearGradient.whiteGradientInverted : ApplicationLinearGradient.darkBGSameGradientWithOpacityHalf)
+        .overlay {
+            defaultShape
+                .stroke(.white.opacity(0.18))
+        }
+        .clipShape(defaultShape)
+        .onTapGesture {
+            withAnimation {
+                self.currentSelectedDate = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: date)
+            }
+        }
     }
 }
 

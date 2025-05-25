@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ShowAllFoodAndMealsScreen: View {
     
+    @EnvironmentObject var appStates: ApplicationStates
+    
     @Binding var date: String
     
     @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
@@ -16,8 +18,8 @@ struct ShowAllFoodAndMealsScreen: View {
     @State var showFoodDetails: Bool = false
     
     var currentSelectedData: DailyEvents_t? {
-        for data in weeklyData where ApplicationHelper.formatDateToHumanReadableWithoutTime(date: data.date) == date {
-            return data
+        for data in self.appStates.weeklyDailyEvents where ApplicationHelper.formatDateToHumanReadableWithoutTime(date: data.key) == date {
+            return data.value
         }
         return nil
         

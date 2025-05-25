@@ -93,11 +93,11 @@ struct CoachScreen: View {
             if self.weeklyExericseList.filter({ $0.targettedMuscles.contains(self.currentSelectedMuscle) }).isEmpty {
                 Image(systemName: "tray.fill")
                     .resizable()
-                    .frame(width: 50, height: 50)
+                    .frame(width: 65, height: 50)
                     .foregroundStyle(.white.opacity(0.5))
                     .padding(.top, 25)
                 
-                Text("No Exercise Done For This Muscles")
+                Text("No Exercise For \(self.currentSelectedMuscle)")
                     .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundStyle(.white.opacity(0.5))
             }

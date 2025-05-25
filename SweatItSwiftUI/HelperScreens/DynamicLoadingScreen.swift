@@ -68,12 +68,14 @@ struct DynamicLoadingScreen: View {
                     let water = try await ApplicationEndpoints.get.getWeeklyWaterIntake(forUserId: User.current.currentUser.id)
                     let workout = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
                     let macros = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
+                    let dailyEvents = try await ApplicationEndpoints.get.getWeeklyDailyEvents(forUserId: User.current.currentUser.id)
                     
                     withAnimation {
                         self.appStates.weeklyCaloriesBurned = calories
                         self.appStates.weeklyWaterIntake = water
                         self.appStates.weeklyWorkoutTiming = workout
                         self.appStates.weeklyMacroNutrients = macros
+                        self.appStates.weeklyDailyEvents = dailyEvents
                     }
                 } catch {
                     print("Error fetching weekly stats: \(error)")

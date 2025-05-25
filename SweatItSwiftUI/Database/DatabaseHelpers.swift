@@ -530,7 +530,7 @@ class GET {
             for document in snapshot.documents {
                 let userId: String = String(document.documentID.split(separator: "~").first!)
                 print(forUserId, userId)
-
+                
                 if forUserId == userId {
                     
                     if let unwrappedDate = dateFormatter.date(from: String(document.documentID.split(separator: "~").last!)) {
@@ -548,13 +548,36 @@ class GET {
         } catch {
             GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }
-        
         return finalReturn
-        
     }
     
-    
-    
+    public func getWeeklyDailyEvents(forUserId: String) async throws -> Dictionary<Date, DailyEvents_t> {
+        var finalReturn: Dictionary<Date, DailyEvents_t> = [:]
+        let DateFormatter = DateFormatter()
+        DateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                
+                if userId == forUserId {
+                    if let unwrappedDate = DateFormatter.date(from: String(document.documentID.split(separator: "~").last!)) {
+                        if ApplicationHelper.isDateInCurrentWeek(unwrappedDate) {
+                            let currentDayDailyEvent: DailyEvents_t = try document.data(as: DailyEvents_t.self)
+                            finalReturn[unwrappedDate] = currentDayDailyEvent
+                        }
+                    }
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
 }
 
 
