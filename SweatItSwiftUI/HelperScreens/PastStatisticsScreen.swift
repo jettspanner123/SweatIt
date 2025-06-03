@@ -126,14 +126,22 @@ struct PastStatisticsScreen: View {
                     
                     
                     // MARK: Food and meals
-                    if currentSelectedDayData.mealsHad.count > 3 {
+                    
+                    if currentSelectedDayData.mealsHad.isEmpty {
+                        
                         SecondaryHeading(title: "Food & Meals")
+                            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                            .padding(.top, 25)
                     } else {
                         HeadingWithLink(titleHeading: "Food & Meals", action: {
                             self.showAllFoodAndMeals = true
                         })
                         .padding(.top, 25)
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    }
+                    
+                    if currentSelectedDayData.mealsHad.isEmpty {
+                        NotFoundView(text: "No Meals Logged")
                     }
                     
                     ForEach(currentSelectedDayData.mealsHad.prefix(3), id: \.id) { meal in

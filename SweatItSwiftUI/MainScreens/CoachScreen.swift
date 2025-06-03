@@ -108,6 +108,8 @@ struct CoachScreen: View {
                 }
             }
             .padding(.top)
+            
+            SecondaryHeading(title: "AI Food Questionnare")
         }
     }
 }

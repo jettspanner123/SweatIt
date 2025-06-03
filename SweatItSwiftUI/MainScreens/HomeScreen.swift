@@ -16,8 +16,13 @@ struct HomeScreen: View {
     
     @Binding var AgendaToday: Array<Agenda_t> 
     var RescentActivities: Array<Activity_t> {
-        print(self.appStates.dailyActivities)
-        return self.appStates.dailyActivities
+        var seen: [Activity_t] = []
+        for activity in self.appStates.dailyActivities {
+            if !seen.contains(where: { $0.activityName == activity.activityName }) {
+                seen.append(activity)
+            }
+        }
+        return seen
     }
     
     @State var showAllActivitiesPage: Bool = false

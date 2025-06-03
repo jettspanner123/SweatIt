@@ -79,16 +79,15 @@ struct DietScreen: View {
                 
                 
                 // MARK: Search Food button
-                PrimaryNavigationButton(text: "Find Food")
-                    .background(ApplicationLinearGradient.thanosGradient, in: defaultShape)
-                    .overlay(alignment: .leading) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundStyle(.white)
-                            .padding(.horizontal)
-                    }
-                    .onTapWithScaleVibrate(scaleBy: 0.85) {
-                        
-                    }
+                NavigationLink(destination: EmptyView()) {
+                    PrimaryNavigationButton(text: "Custom")
+                        .background(ApplicationLinearGradient.thanosGradient, in: defaultShape)
+                        .overlay(alignment: .leading) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundStyle(.white)
+                                .padding(.horizontal)
+                        }
+                }
             }
             .frame(maxWidth: .infinity)
             

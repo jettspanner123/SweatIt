@@ -503,6 +503,11 @@ struct CoachAttributesCard: View {
                     let workout = try await ApplicationEndpoints.get.getWeeklyWorkoutTimings(forUserId: User.current.currentUser.id)
                     let macros = try await ApplicationEndpoints.get.getWeeklyMacroNutritions(forUserId: User.current.currentUser.id)
                     
+                    
+                    ApplicationHelper.debugHeading(for: "Weekly Calories Burned")
+                    print(self.appStates.weeklyCaloriesBurned)
+                    ApplicationHelper.debugHeading(for: "End Weekly Calories Burned")
+                    
                     withAnimation {
                         self.appStates.weeklyCaloriesBurned = calories
                         self.appStates.weeklyWaterIntake = water

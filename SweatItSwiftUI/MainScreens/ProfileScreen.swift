@@ -146,8 +146,8 @@ struct ProfileScreen: View {
             
             
             
-            //             MARK: Steps graph card
-            AvgStepsThisWeekGraph()
+            // MARK: Steps graph card
+            WeeklyActivityGraph()
             
             
             

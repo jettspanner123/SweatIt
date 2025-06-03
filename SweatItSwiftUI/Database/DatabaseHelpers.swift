@@ -578,6 +578,34 @@ class GET {
         
         return finalReturn
     }
+    
+    public func getWeeklyActivitySummary(forUserId: String) async throws -> Array<Date> {
+        
+        var finalReturn: Array<Date> = []
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                
+                if userId == forUserId {
+                    if let unwrappedDate = dateFormatter.date(from: String(document.documentID.split(separator: "~").last!)) {
+                        if ApplicationHelper.isDateInCurrentWeek(unwrappedDate) {
+                            finalReturn.append(unwrappedDate)
+                        }
+                    }
+                }
+            }
+            
+            
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        return finalReturn
+    }
 }
 
 
