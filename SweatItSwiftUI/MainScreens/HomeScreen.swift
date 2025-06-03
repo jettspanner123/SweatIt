@@ -109,7 +109,7 @@ struct HomeScreen: View {
         ScrollContentView {
             
             // MARK: Steps Taken card
-            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ 12000", textColor: .white, wantInformationView: false, value: Double(self.currentDayStepCount)) {}
+            InformationCard(image: "Boot", title: "Steps", text: String(self.currentDayStepCount), secondaryText: "/ \(self.appStates.dailyNeeds.dailySteps)", textColor: .white, wantInformationView: false, value: Double(self.currentDayStepCount)) {}
                 .background(defaultShape.fill(ApplicationLinearGradient.blueGradient).opacity(0.85))
                 .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
@@ -323,34 +323,35 @@ struct HomeScreen: View {
                 
             }
             .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
-           
+            .onChange(of: self.currentDayStepCount) {
+                self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount
+            }
+            .onChange(of: self.consumedCalories) {
+                self.appStates.dailyEvents.caloriesIngestedForTheDay = self.consumedCalories
+            }
+            .onChange(of: self.burnedCalores) {
+                self.appStates.dailyEvents.caloriesBurnedForTheDay = self.burnedCalores
+            }
+            .onChange(of: self.burnedCalores) {
+                Task {
+                    try await ApplicationEndpoints.post.setCaloriesBurnedForTheDay(forUserId: User.current.currentUser.id, withCalories: self.burnedCalores)
+                }
+            }
+            .onChange(of: self.appStates.dailyEvents.workoutsDone) {
+                print("When the shit is encountered............brr.rrrrrrrr")
+                Task {
+                    var workoutTiming_t: Double = .zero
+                    for workout in self.appStates.dailyEvents.workoutsDone {
+                        workoutTiming_t += workout.timeTaken
+                    }
+                    
+                    try await ApplicationEndpoints.post.setWorkoutTimingsForTheDay(forUserId: User.current.currentUser.id, workoutTiming: workoutTiming_t)
+                }
+            }
+            
             
         }
-        .onChange(of: self.currentDayStepCount) {
-            self.appStates.dailyEvents.stepsTaken = self.currentDayStepCount
-        }
-        .onChange(of: self.consumedCalories) {
-            self.appStates.dailyEvents.caloriesIngestedForTheDay = self.consumedCalories
-        }
-        .onChange(of: self.burnedCalores) {
-            self.appStates.dailyEvents.caloriesBurnedForTheDay = self.burnedCalores
-        }
-        .onChange(of: self.burnedCalores) {
-            Task {
-                try await ApplicationEndpoints.post.setCaloriesBurnedForTheDay(forUserId: User.current.currentUser.id, withCalories: self.burnedCalores)
-            }
-        }
-        .onChange(of: self.appStates.dailyEvents.workoutsDone) {
-            print("When the shit is encountered............brr.rrrrrrrr")
-            Task {
-                var workoutTiming_t: Double = .zero
-                for workout in self.appStates.dailyEvents.workoutsDone {
-                    workoutTiming_t += workout.timeTaken
-                }
-                
-                try await ApplicationEndpoints.post.setWorkoutTimingsForTheDay(forUserId: User.current.currentUser.id, workoutTiming: workoutTiming_t)
-            }
-        }
+        
         .onAppear {
             Task {
                 self.currentDayStepCount = await self.healthManager.getStepsToday()

@@ -15,7 +15,7 @@ struct PastStatisticsScreen: View {
     
     var datesToShow: Array<Date> = (0...6).reversed().map { Date().addingTimeInterval(TimeInterval(ONE_DAY * -$0))}
     @State var weeklyEvents: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
-   
+    
     @State var currentSelectedDate: String = ApplicationHelper.formatDateToHumanReadableWithoutTime(date: .now)
     @State var showAllFoodAndMeals: Bool = false
     @State var currentSelectedFoodItem: Optional<Food_t> = nil
@@ -54,61 +54,63 @@ struct PastStatisticsScreen: View {
             ScrollContentView {
                 
                 
-                ScrollViewReader { scrollProxy in
-                    
-                    
-                    // MARK: THis is the horizontal scrol date picker
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            
-                            Divider()
-                                .frame(width: 10)
-                                .frame(maxHeight: .infinity)
-                            
-                            ForEach(self.appStates.weeklyDailyEvents.sorted(by: { $0.key > $1.key }), id: \.value) { key, value in
-                                DateShowCard(date: key, currentSelectedDate: self.$currentSelectedDate)
-                            }
-                            
-                            Divider()
-                                .frame(width: 10)
-                                .frame(maxHeight: .infinity)
-                                .id("lastObservableObject")
-                                .tag("lastObservableObject")
-                            
-                        }
-                    }
-                    .onAppear {
-                        withAnimation(.spring(duration: 1)) {
-                            scrollProxy.scrollTo("lastObservableObject", anchor: .trailing)
-                        }
-                    }
-                }
-                
-                
-                
-                // MARK: Activities on that day
-                SecondaryHeading(title: "Activities")
-                    .padding(.top, 25)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                 
                 
                 if let currentSelectedDayData {
                     
                     
+                    ScrollViewReader { scrollProxy in
+                        
+                        
+                        // MARK: THis is the horizontal scrol date picker
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                
+                                Divider()
+                                    .frame(width: 10)
+                                    .frame(maxHeight: .infinity)
+                                
+                                ForEach(self.appStates.weeklyDailyEvents.sorted(by: { $0.key > $1.key }), id: \.value) { key, value in
+                                    DateShowCard(date: key, currentSelectedDate: self.$currentSelectedDate)
+                                }
+                                
+                                Divider()
+                                    .frame(width: 10)
+                                    .frame(maxHeight: .infinity)
+                                    .id("lastObservableObject")
+                                    .tag("lastObservableObject")
+                                
+                            }
+                        }
+                        .onAppear {
+                            withAnimation(.spring(duration: 1)) {
+                                scrollProxy.scrollTo("lastObservableObject", anchor: .trailing)
+                            }
+                        }
+                    }
+                    
+                    
+                    
+                    // MARK: Activities on that day
+                    SecondaryHeading(title: "Activities")
+                        .padding(.top, 25)
+                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    
+                    
                     // MARK: Calores burned and ingested
                     HStack {
-                       
+                        
                         InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", currentSelectedDayData.caloriesBurnedForTheDay), secondaryText: "", textColor: .white, wantInformationView: false, content: {
                             
                         })
                         .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient).opacity(0.85))
                         .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesBurnedForTheDay)))
-
+                        
                         
                         InformationCard(image: "Food", title: "Consumed", text: String(format: "%.f kCal", currentSelectedDayData.caloriesIngestedForTheDay), secondaryText: "", textColor: .white, wantInformationView: false, content: {})
                             .background(defaultShape.fill(ApplicationLinearGradient.greenGradient).opacity(0.85))
                             .contentTransition(.numericText(value: Double(currentSelectedDayData.caloriesIngestedForTheDay)))
-
+                        
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
@@ -154,7 +156,7 @@ struct PastStatisticsScreen: View {
                         .padding(.top, 25)
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     
-                   
+                    
                     if currentSelectedDayData.workoutsDone.isEmpty {
                         VStack(spacing: 0) {
                             
@@ -185,7 +187,9 @@ struct PastStatisticsScreen: View {
                         }
                         .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
                     }
-                
+                    
+                } else {
+                    NotFoundView(text: "No Past Activities!")
                 }
             }
         }

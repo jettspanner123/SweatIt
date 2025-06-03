@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct AvgStepsPerWeek: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     
     func getReducedValue(_ value: Double, maxValue: Double = 1000) -> Double {
@@ -19,9 +20,6 @@ struct AvgStepsPerWeek: View {
         guard total != 0 else { return 0 } // Avoid division by zero
         return value / total
     }
-    
-    @State var weeklyData: Array<DailyEvents_t> = DailyEvents.current.weeklyEvents
-    
     
     @State var weeklyStepsTaken: Dictionary<Date, Int> = [:]
     
@@ -43,7 +41,7 @@ struct AvgStepsPerWeek: View {
                 
                 Spacer()
                 
-                Text("\(self.avgStepsTaken) / 12,000")
+                Text("\(self.avgStepsTaken) / \(self.appStates.dailyNeeds.dailySteps)")
                     .font(.custom(ApplicationFonts.oswaldRegular, size: 20))
                     .foregroundStyle(.white.opacity(0.75))
                     .contentTransition(.numericText(value: Double(self.avgStepsTaken)))
@@ -62,19 +60,20 @@ struct AvgStepsPerWeek: View {
             
             
            
-            GeometryReader {
+            if !self.weeklyStepsTaken.isEmpty {
+                GeometryReader {
                 let readerSize = $0.size
                 
                 HStack {
-                    ForEach(self.weeklyData, id: \.id) { dayData in
-                        let height = self.calculatePercentage(value: Double(dayData.stepsTaken), total: 15000) * readerSize.height * 0.8
+                    ForEach(self.weeklyStepsTaken.sorted(by: >), id: \.key) { key, value in
+                        let height = self.calculatePercentage(value: Double(value), total: 15000) * readerSize.height * 0.8
                         
                         HStack {
                             
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: height)
-                        .background(.appBlueDark.opacity(self.getReducedValue(Double(dayData.stepsTaken), maxValue: 15000) - 0.1), in: RoundedRectangle(cornerRadius: 8))
+                        .background(.appBlueDark.opacity(self.getReducedValue(Double(value), maxValue: 15000) - 0.1), in: RoundedRectangle(cornerRadius: 8))
                         .frame(maxHeight: .infinity, alignment: .bottom)
                     }
                 }
@@ -95,8 +94,9 @@ struct AvgStepsPerWeek: View {
                         .background(.appBlueDark.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                 }
             }
+            }
         }
-        .frame(maxWidth: .infinity, minHeight: 250, alignment: .topLeading)
+        .frame(maxWidth: .infinity, minHeight: self.weeklyStepsTaken.isEmpty ? 75 : 250, alignment: .topLeading)
         .padding()
         .background(ApplicationLinearGradient.blueGradient, in: defaultShape)
         .onAppear {

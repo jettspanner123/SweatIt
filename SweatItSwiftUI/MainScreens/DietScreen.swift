@@ -187,32 +187,11 @@ struct DietScreen: View {
             
             
             
-            
-            
-            
             // MARK: IF not food items yet
             if self.appStates.dailyEvents.mealsHad.isEmpty {
-                VStack {
-                    VStack {
-                        Image(systemName: "fork.knife")
-                            .resizable()
-                            .frame(width: 50, height: 65)
-                            .foregroundStyle(.white.opacity(0.25))
-                        
-                        Text("No Food Consumed Yet!")
-                            .font(.system(size: 15, weight: .regular, design: .rounded))
-                            .foregroundStyle(.white.opacity(0.25))
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.vertical, 35)
-                    
-                }
-                .applicationDropDownButton()
+                NotFoundView(text: "No Food Consumed")
+                    .padding(.bottom)
             }
-            
-            
-            
-            
             
             
             
