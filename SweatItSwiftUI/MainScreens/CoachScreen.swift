@@ -117,8 +117,9 @@ struct CoachScreen: View {
                     .transition(.blurReplace)
             }
             
-            ForEach(self.appStates.recommendedFoodItems, id: \.id) { foodItem in
-                FoodRecommendationCard()
+            let uniqueItems = Dictionary(grouping: self.appStates.recommendedFoodItems, by: \.id).compactMap { $0.value.first }
+            ForEach(uniqueItems.shuffled().prefix(3), id: \.id) { foodItem in
+                FoodRecommendationViewCard(food: foodItem)
             }
         }
     }
@@ -126,17 +127,48 @@ struct CoachScreen: View {
 
 
 struct FoodRecommendationViewCard: View {
+    var food: FoodItem
+    
+    func getIcon() -> String {
+        switch self.food.foodType {
+        case "Junk 💩":
+            return "🍔"
+        case "Clean 🥦":
+            return "🥦"
+        default:
+            return "🥤"
+        }
+    }
+    
     var body: some View {
         HStack {
+            HStack {
+                Text(self.getIcon())
+                    .font(.system(size: 30))
+            }
+            .frame(width: 70, height: 70)
+            .background(.white.opacity(0.08), in: Circle())
+            .overlay {
+                Circle()
+                    .stroke(.white.opacity(0.1), lineWidth: 1)
+            }
             
+            VStack {
+                Text(self.food.foodName)
+                    .font(.system(size: 15))
+                    .takeMaxWidthLeading()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 75)
+        .padding()
         .background(.darkBG.opacity(0.54), in: defaultShape)
         .overlay {
             defaultShape
                 .stroke(.white.opacity(0.08), lineWidth: 1)
         }
+        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
     }
 }
 

@@ -487,11 +487,13 @@ struct CoachAttributesCard: View {
                 }
             } else {
                 Text("Calories Ingested 🥦")
-                ForEach(self.weeklyCaloriesBurned.sorted(by: <), id: \.key) { key, value in
+                ForEach(self.weeklyMacroNutrients.sorted(by: { $0.key < $1.key }), id: \.key) { key, value in
                     let dayIndex = Calendar.current.dateComponents([.weekday], from: key).weekday!
                     let day = Calendar.current.weekdaySymbols[dayIndex - 1]
-                    Text("\(day): [\(String(format: "%.f kCal", value))]")
+                    Text("\(day): [\(String(format: "%.f kCal", value.caloriesForTheDay))]")
                 }
+                
+                
             }
             
         }

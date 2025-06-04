@@ -103,6 +103,31 @@ class ApplicationHelper: ObservableObject {
     
     @Published var isDataLoading: Bool = true
     
+    public static func convertFoodItemToScannedFood(_ item: FoodItem) -> ScannedFood_t? {
+        guard let foodType = Extras.FoodType(rawValue: item.foodType),
+              let mealType = Extras.MealType(rawValue: item.mealType) else {
+            return nil // Fallback in case of invalid enum strings
+        }
+        
+        return ScannedFood_t(
+            foodName: item.foodName,
+            foodDescription: item.foodDescription,
+            foodQuantity: item.foodQuantity,
+            calories: item.calories,
+            protein: item.protein,
+            carbs: item.carbs,
+            fats: item.fats,
+            caloriesPerGram: item.caloriesPerGram,
+            foodType: foodType,
+            foodImage: item.foodImage,
+            protienPerGram: item.protienPerGram,
+            carbsPerGram: item.carbsPerGram,
+            fatsPerGram: item.fatsPerGram,
+            mealType: mealType
+        )
+        
+    }
+    
     class MotionManager: ObservableObject {
         private let motionManager = CMMotionManager()
         

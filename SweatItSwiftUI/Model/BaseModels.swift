@@ -332,3 +332,71 @@ struct DailyNeeds_t {
     }
 }
 
+struct FoodItem: Codable {
+    var id: String = UUID().uuidString
+    let foodName: String
+    let foodDescription: String
+    let foodType: String
+    let foodImage: String
+    let foodQuantity: Double
+    let calories: Double
+    let protein: Double
+    let carbs: Double
+    let fats: Double
+    let protienPerGram: Double
+    let carbsPerGram: Double
+    let fatsPerGram: Double
+    let caloriesPerGram: Double
+    let mealType: String
+    
+    enum CodingKeys: String, CodingKey {
+        case foodName
+        case foodDescription
+        case foodType
+        case foodImage
+        case foodQuantity
+        case calories
+        case protein
+        case carbs
+        case fats
+        case protienPerGram
+        case carbsPerGram
+        case fatsPerGram
+        case caloriesPerGram = "calories_per_gram"
+        case mealType
+    }
+}
+
+struct ScannedFood_t: Codable {
+    var foodName: String
+    var foodDescription: String
+    var foodQuantity: Double
+    var calories: Double
+    var protein: Double
+    var carbs: Double
+    var fats: Double
+    var caloriesPerGram: Double
+    var foodType: Extras.FoodType
+    var foodImage: String
+    var protienPerGram: Double
+    var carbsPerGram: Double
+    var fatsPerGram: Double
+    var mealType: Extras.MealType
+    
+    enum CodingKeys: String, CodingKey {
+        case foodName
+        case foodDescription
+        case foodQuantity
+        case calories
+        case protein
+        case carbs
+        case fats
+        case caloriesPerGram = "calories_per_gram"
+        case foodType
+        case foodImage
+        case protienPerGram
+        case carbsPerGram
+        case fatsPerGram
+        case mealType
+    }
+}

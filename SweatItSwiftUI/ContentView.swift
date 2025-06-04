@@ -71,6 +71,23 @@ struct ContentView: View {
         }
     }
     
+    func extractValidJSONString(from input: String) -> String {
+        var cleaned = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Remove Markdown-style ```json or ``` wrappers
+        if cleaned.hasPrefix("```json") {
+            cleaned = String(cleaned.dropFirst(7))
+        }
+        if cleaned.hasPrefix("```") {
+            cleaned = String(cleaned.dropFirst(3))
+        }
+        if cleaned.hasSuffix("```") {
+            cleaned = String(cleaned.dropLast(3))
+        }
+
+        return cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
     private func fetchAIFoodRecommendation() -> Void {
         struct ScannedFood_t: Codable {
             var foodName: String
@@ -135,18 +152,15 @@ struct ContentView: View {
                 
                 let response = try await model.generateContent(prompt)
                 responesText = response.text ?? "No response received."
-                let cleanedResponse = self.cleanJSONString(from: responesText)
-                print(responesText)
+                let cleanedResponse = self.extractValidJSONString(from: responesText)
+                print(cleanedResponse)
                 
-                if let cleanedResponse {
-                    print(cleanedResponse)
-                    let jsonData = Data(cleanedResponse.utf8)
-                    let decodedItems = try JSONDecoder().decode([FoodItem].self, from: jsonData)
-                }
+                let foodJSONData = Data(cleanedResponse.utf8)
+                let decodedFood = try JSONDecoder().decode([FoodItem].self, from: foodJSONData)
                 
                 
                 withAnimation {
-                    self.appStates.recommendedFoodItems = []
+                    self.appStates.recommendedFoodItems = decodedFood
                 }
                 
                 
@@ -391,23 +405,5 @@ struct FullScreenLoadingView: View {
         .zIndex(ApplicationBounds.dialogBoxZIndex)
         .ignoresSafeArea()
     }
-}
-
-struct FoodItem: Codable {
-    var id: String = UUID().uuidString
-    let foodName: String
-    let foodDescription: String
-    let foodType: String
-    let foodImage: String
-    let foodQuantity: Double
-    let calories: Double
-    let protein: Double
-    let carbs: Double
-    let fats: Double
-    let protienPerGram: Double
-    let carbsPerGram: Double
-    let fatsPerGram: Double
-    let calories_per_gram: Double
-    let mealType: String
 }
 
