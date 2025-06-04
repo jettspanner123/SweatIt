@@ -9,6 +9,7 @@ import SwiftUI
 import Charts
 
 struct CoachScreen: View {
+    @EnvironmentObject var appStates: ApplicationStates
     
     
     enum CardType: String {
@@ -37,10 +38,8 @@ struct CoachScreen: View {
                 
             }
             .onAppear {
-                ApplicationHelper.debugHeading(for: "Coach Screen")
                 Task {
                     self.weeklyExericseList = try await ApplicationEndpoints.get.getWeeklyExerciseList(forUserId: User.current.currentUser.id)
-                    print("WeeklyExerciseLIst: ", self.weeklyExericseList)
                 }
             }
             
@@ -109,7 +108,34 @@ struct CoachScreen: View {
             }
             .padding(.top)
             
-            SecondaryHeading(title: "AI Food Questionnare")
+            SecondaryHeading(title: "AI Food Recommendation")
+                .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                .padding(.top, 25)
+            
+            if self.appStates.recommendedFoodItems.isEmpty {
+                NotFoundView(text: "No Recommendations")
+                    .transition(.blurReplace)
+            }
+            
+            ForEach(self.appStates.recommendedFoodItems, id: \.id) { foodItem in
+                FoodRecommendationCard()
+            }
+        }
+    }
+}
+
+
+struct FoodRecommendationViewCard: View {
+    var body: some View {
+        HStack {
+            
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 75)
+        .background(.darkBG.opacity(0.54), in: defaultShape)
+        .overlay {
+            defaultShape
+                .stroke(.white.opacity(0.08), lineWidth: 1)
         }
     }
 }

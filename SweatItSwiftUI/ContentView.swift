@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import AVKit
+@preconcurrency import GoogleGenerativeAI
 
 class AnimatedNamespaceCoordinator: ObservableObject {
     public var current = AnimatedNamespaceCoordinator()
@@ -16,6 +17,13 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 
 struct ContentView: View {
+    
+    let model: GenerativeModel
+    
+    init() {
+        let apiKey = "AIzaSyAnqRlW22bqKvIKWNgzKCT3UgbHK8vqlhw"
+        model = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: apiKey)
+    }
     
     @EnvironmentObject var appStates: ApplicationStates
     
@@ -38,20 +46,132 @@ struct ContentView: View {
     func cleanResponse(jsonString: String) -> String {
         if jsonString.hasPrefix("```json") {
             let index = jsonString.index(jsonString.startIndex, offsetBy: 8) // 5 chars to skip "json:"
-            let toIndex = jsonString.index(jsonString.endIndex, offsetBy: -5)
+            let toIndex = jsonString.index(jsonString.endIndex, offsetBy: -6)
             return String(jsonString[index...toIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
         }
         return jsonString
     }
     
+    func cleanJSONString(from input: String) -> String? {
+        // Convert string to Data
+        guard let data = input.data(using: .utf8) else { return nil }
+        
+        // Try to decode it into a generic JSON object
+        do {
+            let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
+            
+            // Convert it back to a clean JSON string with no formatting
+            let cleanedData = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+            
+            // Return compact JSON string
+            return String(data: cleanedData, encoding: .utf8)
+        } catch {
+            print("Error cleaning JSON string:", error)
+            return nil
+        }
+    }
+    
+    private func fetchAIFoodRecommendation() -> Void {
+        struct ScannedFood_t: Codable {
+            var foodName: String
+            var foodDescription: String
+            var foodQuantity: Double
+            var calories: Double
+            var protein: Double
+            var carbs: Double
+            var fats: Double
+            var caloriesPerGram: Double
+            var foodType: Extras.FoodType
+            var foodImage: String
+            var protienPerGram: Double
+            var carbsPerGram: Double
+            var fatsPerGram: Double
+            var mealType: Extras.MealType
+            
+            enum CodingKeys: String, CodingKey {
+                case foodName
+                case foodDescription
+                case foodQuantity
+                case calories
+                case protein
+                case carbs
+                case fats
+                case caloriesPerGram = "calories_per_gram"
+                case foodType
+                case foodImage
+                case protienPerGram
+                case carbsPerGram
+                case fatsPerGram
+                case mealType
+            }
+        }
+        
+        
+        
+        
+        Task {
+            withAnimation {
+                self.appStates.foodRecommendationLoading = true
+            }
+            
+            print("Food Recommendation Loading: true")
+            
+            let weeklyFoodItems: Array<Food_t> = try await ApplicationEndpoints.get.getAllFoodItems(forUserId: User.current.currentUser.id)
+            var prompt: String = """
+            Generate a strict JSON object with foodName as non-empty string of max 5 words, 
+            foodDescription as non-empty of atleast 50 words and max 75 words and foodType which is also a non-empty string and can be either of these [`Junk 💩`, `Clean 🥦`, `Beverage 🥛`], just like the others foodImage shoudld be empty string,foodQuantity as a double value representing grams, calories, protein, carbs, fats, protienPerGram, carbsPerGram, fatsPerGram and calories_per_gram as double values, mealType which is also a non-empty string and can be either of these [`Breakfast ☕️`, `Lunch 🍽️`, `Beverage 🥛`, `Dinner 🍝`, ``Snack 🍿] if the image is of food, just give out null if the image is not a food item — and return only the JSON object without extra text and if there is no food item just return null no other text.
+            Make sure that the food you are generating will be based on the these food items that i'm giving you through json, make sure that the food you recommend matches with these food item, my matheches i mean some what similar to these food items: [
+            """
+            
+            var responesText: String = ""
+            
+            do {
+                
+                for foodItem in weeklyFoodItems {
+                    prompt.append("'\(foodItem.foodName)', ")
+                }
+                
+                prompt.append("],please generate around 5-6 food items ,make sure that there are no aditional text after or before the response.")
+                
+                let response = try await model.generateContent(prompt)
+                responesText = response.text ?? "No response received."
+                let cleanedResponse = self.cleanJSONString(from: responesText)
+                print(responesText)
+                
+                if let cleanedResponse {
+                    print(cleanedResponse)
+                    let jsonData = Data(cleanedResponse.utf8)
+                    let decodedItems = try JSONDecoder().decode([FoodItem].self, from: jsonData)
+                }
+                
+                
+                withAnimation {
+                    self.appStates.recommendedFoodItems = []
+                }
+                
+                
+            } catch {
+                responesText = "Error: \(error.localizedDescription)"
+                print("Failed to fetch food Items")
+            }
+            
+            print("Food Recommendation Loading: false")
+            withAnimation {
+                self.appStates.foodRecommendationLoading = false
+            }
+        }
+        
+        
+    }
+    
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-//                if self.isUserLoggedIn == false {
-//                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-//                        .zIndex(99999)
-//                        .transition(ScaleBlurOffsetTransition())
-//                }
+                //                if self.isUserLoggedIn == false {
+                //                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                //                        .zIndex(99999)
+                //                        .transition(ScaleBlurOffsetTransition())
+                //                }
                 
                 if self.appStates.isDataLoading && self.isUserLoggedIn {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
@@ -210,6 +330,9 @@ struct ContentView: View {
                 try await ApplicationEndpoints.post.autoUpdateCurrentUserDailyEvents(for: self.appStates.dailyEvents)
             }
         }
+        .onAppear {
+            self.fetchAIFoodRecommendation()
+        }
         
     }
 }
@@ -248,7 +371,7 @@ struct FullScreenLoadingView: View {
                     .offset(y: 8)
                 
                 
-                Text("Analizing Food Data....")
+                Text("Analizing Food Data")
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(.white)
                     .padding(10)
@@ -270,4 +393,21 @@ struct FullScreenLoadingView: View {
     }
 }
 
+struct FoodItem: Codable {
+    var id: String = UUID().uuidString
+    let foodName: String
+    let foodDescription: String
+    let foodType: String
+    let foodImage: String
+    let foodQuantity: Double
+    let calories: Double
+    let protein: Double
+    let carbs: Double
+    let fats: Double
+    let protienPerGram: Double
+    let carbsPerGram: Double
+    let fatsPerGram: Double
+    let calories_per_gram: Double
+    let mealType: String
+}
 

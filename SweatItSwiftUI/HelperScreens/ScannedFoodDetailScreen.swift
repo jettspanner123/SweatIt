@@ -241,8 +241,6 @@ struct ScannedFoodDetailScreen: View {
         .sensoryFeedback(.impact, trigger: self.foodQuantity)
         .onAppear {
             let foodDataJson = self.cleanResponse(jsonString: self.appStates.scannedFoodDetail)
-            print("--------")
-            print(foodDataJson)
             let decoder = JSONDecoder()
             
             if let foodJsonData = foodDataJson.data(using: .utf8) {

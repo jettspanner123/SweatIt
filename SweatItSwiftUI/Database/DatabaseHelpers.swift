@@ -499,6 +499,12 @@ class GET {
     }
     
     public func getCustomWorkouts(forUserId: String) async throws -> Array<Workout_t> {
+        
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
         var finalReturn: Array<Workout_t> = []
         do {
             let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .userCustomWorkouts).getDocuments(source: .server)
@@ -520,6 +526,11 @@ class GET {
     }
     
     public func getWeeklyExerciseList(forUserId: String) async throws -> Array<Exercise_t> {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
         var finalReturn: Array<Exercise_t> = []
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -552,6 +563,11 @@ class GET {
     }
     
     public func getWeeklyDailyEvents(forUserId: String) async throws -> Dictionary<Date, DailyEvents_t> {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
         var finalReturn: Dictionary<Date, DailyEvents_t> = [:]
         let DateFormatter = DateFormatter()
         DateFormatter.dateFormat = "yyyy-MM-dd"
@@ -580,6 +596,11 @@ class GET {
     }
     
     public func getWeeklyActivitySummary(forUserId: String) async throws -> Array<Date> {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
         
         var finalReturn: Array<Date> = []
         let dateFormatter = DateFormatter()
@@ -601,6 +622,39 @@ class GET {
             }
             
             
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        return finalReturn
+    }
+    
+    public func getAllFoodItems(forUserId: String) async throws -> Array<Food_t> {
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        var finalReturn: Array<Food_t> = []
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .dailyEvents).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                
+                if userId == forUserId {
+                    let dailyEvernt_t = try document.data(as: DailyEvents_t.self)
+                    
+                    for meals in dailyEvernt_t.mealsHad {
+                        for foodItem in meals.foodItems {
+                            finalReturn.append(foodItem)
+                        }
+                    }
+                }
+                
+            }
         } catch {
             GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
         }

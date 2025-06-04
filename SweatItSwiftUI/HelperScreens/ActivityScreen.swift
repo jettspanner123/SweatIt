@@ -56,30 +56,14 @@ struct ActivityScreen: View {
                 
                 // MARK: Calories Burned and water consumed
                 HStack {
-                    InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.burnedCalores), secondaryText: "", textColor: .white, wantInformationView: true, content: {
+                    InformationCard(image: "FireLogo", title: "Burned", text: String(format: "%.f kCal", self.burnedCalores), secondaryText: "", textColor: .white, wantInformationView: false, content: {
                         
                     })
                     .background(defaultShape.fill(ApplicationLinearGradient.orangeGradient))
-                    .contextMenu {
-                        if self.appStates.dailyEvents.workoutsDone.isEmpty {
-                            VStack {
-                                Text("No workouts done yet! 🥺")
-                                    .font(.custom(ApplicationFonts.oswaldRegular, size: 15))
-                            }
-                        }
-                        
-                        if self.caloriesBurnedByWalking != .zero {
-                            Text(String(format: "%.1f kCal From Walking", self.caloriesBurnedByWalking))
-                        }
-                        
-                        ForEach(self.appStates.dailyEvents.workoutsDone, id: \.id) { workout in
-                            Text("\(workout.workoutName): [\(String(format: "%.f kCal", workout.caloriesBurned))]")
-                        }
-                    }
                     
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "Water", title: "Water", text: String(format: "%.f ml", self.appStates.dailyEvents.waterIntakeForTheDay), secondaryText: "", textColor: .white, wantInformationView: true) {
+                    InformationCard(image: "Water", title: "Water", text: String(format: "%.f ml", self.appStates.dailyEvents.waterIntakeForTheDay), secondaryText: "", textColor: .white, wantInformationView: false) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.blueGradient))
@@ -95,14 +79,14 @@ struct ActivityScreen: View {
                 
                 // MARK: Workout done and calories consumed
                 HStack {
-                    InformationCard(image: "Dumbbell", title: "Workout", text: ApplicationHelper.formatSeconds(seconds: Int(self.workoutTiming)), secondaryText: "", textColor: .appBloodRedDark, wantInformationView: true) {
+                    InformationCard(image: "Dumbbell", title: "Workout", text: ApplicationHelper.formatSeconds(seconds: Int(self.workoutTiming)), secondaryText: "", textColor: .appBloodRedDark, wantInformationView: false) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.whiteGradient))
                     
                     
                     // MARK: Calories Burned card
-                    InformationCard(image: "FireLogo", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: true) {
+                    InformationCard(image: "FireLogo", title: "Consumed", text: String(format: "%.f kCal", self.consumedCalories), secondaryText: "", textColor: .white, wantInformationView: false) {
                         
                     }
                     .background(defaultShape.fill(ApplicationLinearGradient.greenGradient))

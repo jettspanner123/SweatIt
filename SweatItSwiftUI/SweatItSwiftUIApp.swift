@@ -105,6 +105,10 @@ class ApplicationStates: ObservableObject {
     @Published var weeklyWorkoutTiming: Dictionary<Date, Double> = [:]
     @Published var weeklyMacroNutrients: Dictionary<Date, (protein: Double, carbs: Double, fats: Double, caloriesForTheDay: Double)> = [:]
     @Published var weeklyDailyEvents: Dictionary<Date, DailyEvents_t> = [:]
+    
+    @Published var recommendedFoodItems: Array<FoodItem> = []
+    @Published var foodRecommendationLoading: Bool = false
+    @Published var foodRecommendationError: Bool = false
 }
 
 @main

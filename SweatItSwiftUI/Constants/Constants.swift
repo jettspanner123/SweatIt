@@ -120,6 +120,15 @@ class ApplicationHelper: ObservableObject {
         
     }
     
+    public static func cleanResponse(jsonString: String) -> String {
+        if jsonString.hasPrefix("```json") {
+            let index = jsonString.index(jsonString.startIndex, offsetBy: 8) 
+            let toIndex = jsonString.index(jsonString.endIndex, offsetBy: -5)
+            return String(jsonString[index...toIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return jsonString
+    }
+    
     
     public static func debugHeading(for str: String) -> Void {
         print("--------------------\(str)--------------------")
