@@ -11,18 +11,29 @@ struct FoodCard: View {
     var food: Food_t
     var isViewCard: Bool = false
     
+    func getIcon() -> String {
+        switch self.food.foodType {
+        case .junk:
+            return ["🍔","🍖", "🍕","🌭", "🌮", "🍟"].shuffled().first!
+        case .clean:
+            return ["🥦", "🌽", "🥑", "🥕", "🍄"].shuffled().first!
+        case .beverage:
+            return ["🥤", "🥛", "🧋", "☕️", "🍷"].shuffled().first!
+        }
+    }
+    
     var body: some View {
         HStack {
             
             // MARK: Image VIew
             HStack {
-                Image("rice")
-                    .resizable()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .opacity(0.5)
+                Text(self.getIcon())
+                    .font(.system(size: 35))
+                
             }
-            .frame(maxHeight: .infinity)
-            .frame(width: 120)
+            .frame(width: 75, height: 75)
+            .background(.white.opacity(0.08), in: Circle())
+            .padding([.leading, .top, .bottom])
             
             // MARK: Content view
             VStack(spacing: 5) {
@@ -112,4 +123,9 @@ struct FoodCard: View {
             .padding(25)
         }
     }
+}
+
+#Preview {
+    FoodCard(food: Food.current.friedChicken, isViewCard: true)
+        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
 }

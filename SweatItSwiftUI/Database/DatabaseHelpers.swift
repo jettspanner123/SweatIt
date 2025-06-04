@@ -660,6 +660,35 @@ class GET {
         }
         return finalReturn
     }
+    
+    
+    public func getAlreadyRecommendedFoodItems(forUserId: String) async throws -> Array<Food_t> {
+        
+        var finalReturn: Array<Food_t> = []
+        GetMethodStore.current.startLoading()
+        
+        defer {
+            GetMethodStore.current.endLoading()
+        }
+        
+        
+        do {
+            let snapshot: QuerySnapshot = try await ApplicationDatabase.getDatabase(for: .foodRecommendations).getDocuments(source: .server)
+            
+            for document in snapshot.documents {
+                let userId: String = String(document.documentID.split(separator: "~").first!)
+                
+                if userId == forUserId {
+                    let food_t: Food_t = try document.data(as: Food_t.self)
+                    finalReturn.append(food_t)
+                }
+            }
+        } catch {
+            GetMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+        
+        return finalReturn
+    }
 }
 
 
@@ -870,6 +899,20 @@ class POST {
         }
     }
     
+    public func addFoodRecommendation(forUserId: String, withFood: Food_t) async throws -> Void {
+        PostMethodStore.current.startLoading()
+        
+        defer {
+            PostMethodStore.current.endLoading()
+        }
+        
+        do {
+            let foodRecommendationReference: DocumentReference = ApplicationDatabase.getDatabase(for: .foodRecommendations).document("\(forUserId)~\(withFood.id)")
+            try await foodRecommendationReference.setData(from: withFood)
+        } catch {
+            PostMethodStore.current.toggleErrorState(with: .dataNotLoaded)
+        }
+    }
 }
 
 class UPDATE {

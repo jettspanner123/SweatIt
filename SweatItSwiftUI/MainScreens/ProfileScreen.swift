@@ -127,7 +127,7 @@ struct ProfileScreen: View {
                 
                 CustomDivider()
                 
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: RecommendationScreen()) {
                     CustomListNavigationButton(image: "hand.thumbsup.fill", name: "Recommendations")
                 }
             }

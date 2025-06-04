@@ -18,12 +18,6 @@ class AnimatedNamespaceCoordinator: ObservableObject {
 
 struct ContentView: View {
     
-    let model: GenerativeModel
-    
-    init() {
-        let apiKey = "AIzaSyAnqRlW22bqKvIKWNgzKCT3UgbHK8vqlhw"
-        model = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: apiKey)
-    }
     
     @EnvironmentObject var appStates: ApplicationStates
     
@@ -89,6 +83,8 @@ struct ContentView: View {
     }
     
     private func fetchAIFoodRecommendation() -> Void {
+        
+        let model: GenerativeModel = GenerativeModel(name: "gemini-1.5-flash-latest", apiKey: "AIzaSyAnqRlW22bqKvIKWNgzKCT3UgbHK8vqlhw")
         struct ScannedFood_t: Codable {
             var foodName: String
             var foodDescription: String
@@ -131,7 +127,6 @@ struct ContentView: View {
                 self.appStates.foodRecommendationLoading = true
             }
             
-            print("Food Recommendation Loading: true")
             
             let weeklyFoodItems: Array<Food_t> = try await ApplicationEndpoints.get.getAllFoodItems(forUserId: User.current.currentUser.id)
             var prompt: String = """
@@ -148,7 +143,7 @@ struct ContentView: View {
                     prompt.append("'\(foodItem.foodName)', ")
                 }
                 
-                prompt.append("],please generate around 5-6 food items ,make sure that there are no aditional text after or before the response.")
+                prompt.append("],please generate 3 food items, none of those food items should have the same food type ,make sure that there are no aditional text after or before the response.")
                 
                 let response = try await model.generateContent(prompt)
                 responesText = response.text ?? "No response received."
@@ -169,13 +164,22 @@ struct ContentView: View {
                 print("Failed to fetch food Items")
             }
             
-            print("Food Recommendation Loading: false")
             withAnimation {
                 self.appStates.foodRecommendationLoading = false
             }
         }
         
-        
+    }
+    
+    func getAlreadyRecommendedFoodItems() -> Void {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            Task {
+                let temp: Array<Food_t> = try await ApplicationEndpoints.get.getAlreadyRecommendedFoodItems(forUserId: User.current.currentUser.id)
+                withAnimation {
+                    self.appStates.alreadyRecommendedFoodItems = temp
+                }
+            }
+        }
     }
     
     var body: some View {
@@ -346,6 +350,7 @@ struct ContentView: View {
         }
         .onAppear {
             self.fetchAIFoodRecommendation()
+            self.getAlreadyRecommendedFoodItems()
         }
         
     }
@@ -373,37 +378,5 @@ struct ScaleAndBlurTransition: Transition {
     
 }
 
-struct FullScreenLoadingView: View {
-    
-    
-    var body: some View {
-        VStack {
-            VStack {
-                ProgressView()
-                    .tint(.white)
-                    .scaleEffect(1.5)
-                    .offset(y: 8)
-                
-                
-                Text("Analizing Food Data")
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white)
-                    .padding(10)
-                    .offset(y: 8)
-            }
-            .padding()
-            .overlay {
-                defaultShape
-                    .stroke(.white.opacity(0.18))
-            }
-            .background(AppBackgroundBlur(radius: 100, opaque: true))
-            .background(.darkBG.opacity(0.54))
-            .clipShape(defaultShape)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding * 2)
-        .zIndex(ApplicationBounds.dialogBoxZIndex)
-        .ignoresSafeArea()
-    }
-}
+
 
