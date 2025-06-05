@@ -26,6 +26,7 @@ class ApplicationStates: ObservableObject {
 
     @Published var isError: Bool = false
     @Published var isPasswordAndConfirmPasswordMatching: Bool = false
+    @Published var isAskingToSignOut: Bool = false
     @Published var showUsernameNotAvailable: Bool = false
     @Published var showPhoneNumberWrong: Bool = false
     @Published var showEmailIdNotValid: Bool = false

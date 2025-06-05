@@ -185,11 +185,57 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                if self.isUserLoggedIn == false {
-                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-                        .zIndex(99999)
-                        .transition(ScaleBlurOffsetTransition())
+//                if self.isUserLoggedIn == false {
+//                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+//                        .zIndex(99999)
+//                        .transition(ScaleBlurOffsetTransition())
+//                }
+                
+                if self.appStates.isAskingToSignOut {
+                    CustomBackDrop()
+                    DialogBox {
+                        Text("Do you want to sign out?")
+                            .bottomDialogBoxHeading()
+                        
+                        Text("Do you want to sign out from the app?")
+                            .bottomDialogBoxSubHeading()
+                        
+                        Text("This action will sign you out from the current account, you will have to log back in.")
+                            .bottomDialogBoxBodyText()
+                        
+                        HStack {
+                            SimpleButton(content: {
+                              Text("Yes, Sign Out")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }, backgroundLinearGradient: ApplicationLinearGradient.thanosGradient, some: {
+                                withAnimation {
+                                    self.appStates.isAskingToSignOut = false
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    withAnimation {
+                                        self.isUserLoggedIn = false
+                                    }
+                                }
+                            })
+                            
+                            SimpleButton(content: {
+                              Text("Cancel")
+                                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.white)
+                            }, backgroundLinearGradient: ApplicationLinearGradient.redGradient, some: {
+                                withAnimation {
+                                    self.appStates.isAskingToSignOut = false
+                                }
+                            })
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top)
+                    }
+                    
                 }
+                
                 if self.appStates.isDataLoading && self.isUserLoggedIn {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
                         .zIndex(.infinity)
@@ -281,8 +327,8 @@ struct ContentView: View {
                         self.showNotificationCenter = true
                     }
                 }, logoutAction: {
-                    withAnimation(.smooth(duration: 1.5)) {
-                        self.isUserLoggedIn = false
+                    withAnimation {
+                        self.appStates.isAskingToSignOut = true
                     }
                 })
                 .offset(y: self.showNotificationCenter || self.appStates.showCameraScreen || self.showAddAgendaPage ? -50 : 0)
