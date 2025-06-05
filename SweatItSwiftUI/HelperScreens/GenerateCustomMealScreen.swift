@@ -11,12 +11,15 @@ struct FoodTemplate {
     var id: String = UUID().uuidString
     var foodName: String
     var foodDescription: String
+    var foodType: Extras.FoodType
     var quantity: String
 }
 
 struct GenerateCustomMealScreen: View {
     
-    @State var foodTemplates: Array<FoodTemplate> = []
+    @State var foodTemplates: Array<FoodTemplate> = [
+        .init(foodName: "Chicken Stwen", foodDescription: "Find as shit",foodType: .clean ,quantity: "100g")
+    ]
     
     
     @State var isEmptyError: Bool = false
@@ -81,7 +84,9 @@ struct GenerateCustomMealScreen: View {
             ScrollContentView {
                 
                 ForEach(self.foodTemplates, id: \.id) { foodTemplate in
-                    
+                    FoodTemplateViewCard(foodTemplate: foodTemplate)
+                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                        .transition(.offset(y: -UIScreen.main.bounds.width))
                 }
                 FoodTemplateInputCard(foodTemplates: self.$foodTemplates, isEmptyError: self.$isEmptyError, isLessWordsError: self.$isLessWordsError)
                     .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
@@ -102,6 +107,43 @@ struct GenerateCustomMealScreen: View {
             BottomBlur()
                 .offset(y: UIScreen.main.bounds.height - (55 * 2.1))
                 .transition(.offset(y: 400))
+        }
+    }
+}
+
+struct FoodTemplateViewCard: View {
+    
+    var foodTemplate: FoodTemplate
+    
+    func getIcon() -> String {
+        switch self.foodTemplate.foodType {
+        case .junk:
+            return ["🍔","🍖", "🍕","🌭", "🌮", "🍟"].shuffled().first!
+        case .clean:
+            return ["🥦", "🌽", "🥑", "🥕", "🍄"].shuffled().first!
+        case .beverage:
+            return ["🥤", "🥛", "🧋", "☕️", "🍷"].shuffled().first!
+        }
+    }
+    
+    var body: some View {
+        HStack {
+            HStack {
+                
+            }
+            .frame(width: 75, height: 75)
+            .background(.white.opacity(0.08), in: Circle())
+            .overlay {
+                Circle()
+                    .stroke(.white.opacity(0.08))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.darkBG.opacity(0.65), in: defaultShape)
+        .overlay {
+            defaultShape
+                .stroke(.white.opacity(0.08))
         }
     }
 }
@@ -148,7 +190,7 @@ struct FoodTemplateInputCard: View {
         
         
         withAnimation {
-            self.foodTemplates.append(.init(foodName: self.currentFoodName, foodDescription: self.currentFoodDescription, quantity: self.currentFoodQuantity))
+            self.foodTemplates.append(.init(foodName: self.currentFoodName, foodDescription: self.currentFoodDescription,foodType: self.currentSelectedFoodType ,quantity: self.currentFoodQuantity))
             self.currentFoodName = ""
             self.currentFoodDescription = "Description"
             self.currentFoodQuantity = ""
