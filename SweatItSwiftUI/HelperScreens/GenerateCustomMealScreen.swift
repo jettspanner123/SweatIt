@@ -84,13 +84,15 @@ struct GenerateCustomMealScreen: View {
             ScrollContentView {
                 
                 ForEach(self.foodTemplates, id: \.id) { foodTemplate in
-                    FoodTemplateViewCard(foodTemplate: foodTemplate)
-                        .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
+                    FoodTemplateViewCard(foodTemplate: foodTemplate, actualArray: self.$foodTemplates)
                         .transition(.offset(y: -UIScreen.main.bounds.width))
                 }
+                
+                SecondaryHeading(title: "Meal Generator Template")
+                    .padding(.top, 25)
                 FoodTemplateInputCard(foodTemplates: self.$foodTemplates, isEmptyError: self.$isEmptyError, isLessWordsError: self.$isLessWordsError)
-                    .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             }
+            .padding(.horizontal, ApplicationPadding.mainScreenHorizontalPadding)
             
             HStack {
                 BottomBluredButton(text: "Generate Meal", background: ApplicationLinearGradient.redGradient) {
@@ -114,22 +116,32 @@ struct GenerateCustomMealScreen: View {
 struct FoodTemplateViewCard: View {
     
     var foodTemplate: FoodTemplate
+    @Binding var actualArray: Array<FoodTemplate>
     
     func getIcon() -> String {
         switch self.foodTemplate.foodType {
         case .junk:
             return ["🍔","🍖", "🍕","🌭", "🌮", "🍟"].shuffled().first!
         case .clean:
-            return ["🥦", "🌽", "🥑", "🥕", "🍄"].shuffled().first!
+            return ["🌽", "🥑", "🥕", "🍄"].shuffled().first!
         case .beverage:
             return ["🥤", "🥛", "🧋", "☕️", "🍷"].shuffled().first!
         }
     }
     
+    func removeFromArray() -> Void {
+        withAnimation {
+            self.actualArray = self.actualArray.filter { $0.id != self.foodTemplate.id }
+        }
+    }
+    
     var body: some View {
-        HStack {
+        HStack(spacing: 15) {
+            
+            // MARK: Food icon
             HStack {
-                
+                Text(self.getIcon())
+                    .font(.system(size: 30))
             }
             .frame(width: 75, height: 75)
             .background(.white.opacity(0.08), in: Circle())
@@ -137,6 +149,21 @@ struct FoodTemplateViewCard: View {
                 Circle()
                     .stroke(.white.opacity(0.08))
             }
+            
+            
+            // MARK: Food content
+            VStack {
+                Text(self.foodTemplate.foodName)
+                    .font(.system(size: 15, weight: .regular, design: .rounded))
+                    .foregroundStyle(.white)
+                    .takeMaxWidthLeading()
+
+                Text(self.foodTemplate.foodType.rawValue)
+                    .font(.system(size: 12, weight: .regular, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .takeMaxWidthLeading()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
@@ -144,6 +171,24 @@ struct FoodTemplateViewCard: View {
         .overlay {
             defaultShape
                 .stroke(.white.opacity(0.08))
+        }
+        .overlay {
+            HStack {
+                Image(systemName: "trash.fill")
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background(.appBloodRedLight.opacity(0.1), in: RoundedRectangle(cornerRadius: 8))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.white.opacity(0.08), lineWidth: 1)
+                    }
+                    .onTapWithScaleVibrate {
+                        self.removeFromArray()
+                    }
+                    
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+            .padding()
         }
     }
 }

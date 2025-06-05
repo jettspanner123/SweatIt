@@ -21,7 +21,7 @@ struct ContentView: View {
     
     @EnvironmentObject var appStates: ApplicationStates
     
-    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .coach
+    @State var currentPage_t: PageNavigationBar.PageNavigationOptions = .home
     
     @State var showNotificationCenter: Bool = false
     
@@ -185,12 +185,11 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ScreenBuilder {
-                //                if self.isUserLoggedIn == false {
-                //                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
-                //                        .zIndex(99999)
-                //                        .transition(ScaleBlurOffsetTransition())
-                //                }
-                
+                if self.isUserLoggedIn == false {
+                    LoginScreen(isUserLoggedIn: self.$isUserLoggedIn ,showLoginScreen: self.$isUserLoggedIn, showIsland: self.$showIsland)
+                        .zIndex(99999)
+                        .transition(ScaleBlurOffsetTransition())
+                }
                 if self.appStates.isDataLoading && self.isUserLoggedIn {
                     DynamicLoadingScreen(showSplashScreen: self.$showSplashScreen)
                         .zIndex(.infinity)

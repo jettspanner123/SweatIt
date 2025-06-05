@@ -145,9 +145,6 @@ struct SweatItSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-//            OnboardingScreen()
-//            WorkoutEngine(workout: Workout.current.armsWorkout)
-//            RatingsScreen()
         }
         .environmentObject(self.appStates)
         .environmentObject(self.healthManager)
