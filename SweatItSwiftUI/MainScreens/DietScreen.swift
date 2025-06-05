@@ -79,7 +79,7 @@ struct DietScreen: View {
                 
                 
                 // MARK: Search Food button
-                NavigationLink(destination: EmptyView()) {
+                NavigationLink(destination: GenerateCustomMealScreen()) {
                     PrimaryNavigationButton(text: "Custom")
                         .background(ApplicationLinearGradient.thanosGradient, in: defaultShape)
                         .overlay(alignment: .leading) {

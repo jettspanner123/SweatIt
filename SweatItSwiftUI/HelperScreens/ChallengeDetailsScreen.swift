@@ -154,7 +154,7 @@ struct BottomBluredButton: View {
         .frame(height: 40)
         .background(self.background)
         .clipShape(defaultShape)
-        .onTapGesture {
+        .onTapWithScaleVibrate {
             self.action()
         }
     }
